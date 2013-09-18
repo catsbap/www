@@ -1,11 +1,9 @@
 <?php
 
 
-//include the DataObject code with the class to get the connectivity
 require_once("DataObject.class.php");
 
 class Contact extends DataObject {
-	//set up the array keys and initilize each key. Enables the class constructor to validate fields when a each object is created.
 	protected $data = array(
 		"contact_id"=>"",
 		"contact_first_name"=>"",
@@ -17,18 +15,19 @@ class Contact extends DataObject {
 		"contact_mobile_number"=>"",
 		"contact_fax_number"=>"",
 		"contact_id"=>"",
-		"client_id"=>""
+		"client_id"=>"",
+		"primary_contact"=>""
 	);
 	
-	//display all contacts for the client
+	//display all contact data for the client
 	public static function getContacts($client_id) {
 		$conn=parent::connect();
-		$sql="SELECT contact_first_name, contact_last_name FROM " . TBL_CONTACT . " where client_id = " . $client_id;
+		$sql="SELECT * FROM " . TBL_CONTACT . " where client_id = " . $client_id;
 		
 		try {
 			$st = $conn->prepare($sql);
 			$st->execute();
-			$contacts=array();
+			$contact=array();
 			foreach ($st->fetchAll() as $row) {
 				$contact[] = new Contact($row);
 			}
@@ -40,9 +39,27 @@ class Contact extends DataObject {
 			die("query failed here: " . $e->getMessage() . "query is " . $sql);
 		}
 	}
+
+	//the information for the primary contact only
+	public static function getPrimaryContact($client_id) {
+		$conn=parent::connect();
+		$sql="SELECT * FROM " . TBL_CONTACT . " where client_id = :client_id AND contact_primary = " . 1;
+		
+		try {
+			$st = $conn->prepare($sql);
+			$st->bindValue(":client_id", $client_id, PDO::PARAM_INT);
+			$st->execute();
+			$row=$st->fetch();
+			parent::disconnect($conn);
+			if ($row) return new Contact($row);
+		}catch(PDOException $e) {
+			parent::disconnect($conn);
+			die("query failed here: " . $e->getMessage() . "query is " . $sql);
+		}
+	}
 		
 	
-	
+/* 9/15	
 	//return the data for a specific contact based on the client_id.
 	public static function getClient($clientId) {
 		$conn=parent::connect();
@@ -172,8 +189,7 @@ class Contact extends DataObject {
 			die("Query failed on update: " . $e->getMessage());
 		}
 	}
-	
-/*	// OLD function stubs below this line.
+
 	public static function getByUserName($userName) {
 		$conn=parent::connect();
 		$sql = "SELECT * FROM " . TBL_MEMBERS . " WHERE username = :username";

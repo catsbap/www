@@ -4,7 +4,7 @@
 
 //only require the config file once in the app.
 
-require_once("/config/config.php");
+require_once("../config/config.php");
 
 abstract class DataObject  {
 	//the array can be used by objects but not directly accessed. This is the array that holds the individual objects created with their values retrieved from the database.
@@ -24,7 +24,7 @@ abstract class DataObject  {
 		if (array_key_exists($field, $this->data)) {
 			return $this->data[$field];
 		}else{
-			die("field not found");
+			die("field not found, field name is " . $field);
 		}
 	}
 	

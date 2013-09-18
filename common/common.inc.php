@@ -1,6 +1,6 @@
 <?php
 
-//display page header, including CSS (UGH!)
+/*
 function displayPageHeader($pageTitle) {
 ?>
 <!doctype html public "-//w3c//dtd html 1.0 strict//en" "http://www.w3.org/TR/xhtml1-strict.dtd">
@@ -28,11 +28,13 @@ function displayPageFooter() {
 </html>
 <?php
 }
+*/
+
 
 //is the value in the missing field array? If so, highlight the field using the "error" style..
 function validateField($fieldName, $missingFields) {
 	if (in_array($fieldName, $missingFields)) {
-		echo ' class="error"';
+		echo ' class="client-details-label required"';
 	}
 }
 

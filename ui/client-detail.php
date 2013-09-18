@@ -1,3 +1,26 @@
+<?php
+	require_once("../common/common.inc.php");
+	require_once("../classes/Client.class.php");
+	require_once("../classes/Contact.class.php");
+	//get the client_id
+	//for the new UI, keep this as $_GET, but post is here if we need it. 9/15
+	if (isset ($_GET["client_id"])) {
+		$client_id = $_GET["client_id"];
+	} elseif (isset ($_POST["client_id"])) {
+		$client_id = $_POST["client_id"]; 
+	} else {
+		echo "no client identifier provided, cannot find details for emtpy client.";
+		exit;
+	}
+	//retrieve the active contact list for this client
+	list($contacts) = Contact::getContacts($client_id);
+	//retrieve the clients details to display in the UI
+	$client_details = Client::getClient($client_id);
+	if (!isset($client_details)) {
+    	echo "The detailed data for this client is not available. YET! :)";
+		exit;
+	}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,7 +46,7 @@
 		<h1 class="section-nav-title">Manage: </h1>
 		<ul class="section-menu">
 			<li class="section-menu-item"><a class="section-menu-link" href="#">Projects</a></li>
-			<li class="section-menu-item"><a class="section-menu-link" href="clients.html">Clients</a></li>
+			<li class="section-menu-item"><a class="section-menu-link" href="clients.php">Clients</a></li>
 			<li class="section-menu-item"><a class="section-menu-link" href="#">Team</a></li>
 		</ul>
 	</nav>
@@ -37,7 +60,7 @@
 <li class="page-controls-item add-client-button"><a class="add-client-link" href="client-add.html">+ Add Client</a></li>
 				<li class="page-controls-item"><a class="view-client-archive-link" href="client-archives.html">View Archives</a></li>
 -->
-				<li class="page-controls-item"><a class="view-all-link" href="clients.html">View All</a></li>
+				<li class="page-controls-item"><a class="view-all-link" href="clients.php">View All</a></li>
 			</ul>
 		</nav>
 	</header>
@@ -47,32 +70,32 @@
 		</figure>
 		<section class="client-detail l-col-80">
 			<header class="client-details-header">
-				<h1 class="client-details-title">Client/Company Name</h1>
+				<h1 class="client-details-title"><?php echo $client_details->getValue("client_name")?></h1>
 			</header>
 			<ul class="details-list client-details-list">
-				<li class="client-details-item phoneNum">Phone: 555-555-5555</li>
-				<li class="client-details-item email">Email: info@company.com</li>
-				<li class="client-details-item fax">Fax: 555-555-5556</li>
+				<li class="client-details-item phoneNum"><?php echo $client_details->getValue("client_address")?></li>
+				<li class="client-details-item email"><?php echo $client_details->getValue("client_email")?></li>
+				<li class="client-details-item fax"><?php echo $client_details->getValue("client_phone")?></li>
 				<li class="client-details-item address">
-					123 Sugar Dr. <br />
-					Fairwood, VA 22222 <br />
-					United States of America
+					<?php echo $client_details->getValue("client_address")?>
 				</li>
-				<li class="client-details-item currency">Currency: USD</li>
+				<li class="client-details-item currency"><?php echo Client::getCurrencyByIndex($client_details->getValue("client_currency_index"))?></li>
 			</ul>
 		</section>
 		<section class="contact-detail">
 			<header class="details-header contact-details-header">
 				<h1 class="client-details-title">Contacts</h1>
 			</header>
+           <?php foreach ($contacts as $contact) { ?>
 			<ul class="details-list contact-details-list">
-				<li class="contact-details-item name">John Doe (Primary)</li>
-				<li class="contact-details-item phoneNum">555-555-5555</li>
-				<li class="contact-details-item email">jdoe@company.com</li>
-				<li class="contact-details-item fax">555-555-5556</li>
+				<li class="contact-details-item name"><?php echo $contact->getValue("contact_first_name")?></li>
+				<li class="contact-details-item phoneNum"><?php echo $contact->getValue("contact_office_number")?></li>
+				<li class="contact-details-item email"><?php echo $contact->getValue("contact_email")?></li>
+				<li class="contact-details-item fax"><?php echo $contact->getValue("contact_fax_number")?></li>
 			</ul>
+        <?php } ?>
 		</section>
-		<section class="client-projects">
+    	<section class="client-projects">
 			<header class="details-header client-projects-header">
 				<h1 class="client-details-title">Projects</h1>
 			</header>

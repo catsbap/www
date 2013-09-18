@@ -1,10 +1,11 @@
 <?php
 //this is the php file with all of the configuration information for the application.
+//this is a local config file, do not change on dev server.
 
 //dsn used to connect to database
 define ("DB_DSN", "mysql:dbname=time_tracker");
 define ("DB_USERNAME", "root");
-define ("DB_PASSWORD", "bapot3844");
+define ("DB_PASSWORD", "catot3844");
 //how many records should show per page
 define ("PAGE_SIZE", 5);
 //table definitions for client path
