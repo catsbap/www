@@ -239,7 +239,7 @@
 	} else {
 		$client_email=$_POST["client-email"];
 		$client->insertClient($client_email);
-		echo"You have successfully added client " . $client_name . ". You may add an additional client now. ";		
+		echo"You have successfully added client " . $client_email . ". You may add an additional client now. ";		
 		echo"<a href=\"clients.php\">View the full client list</a>";
 		//headers already sent, call the page back with blank attributes.
 		displayClientInsertForm(array(), array(), new Client(array()));
