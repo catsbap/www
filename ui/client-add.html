@@ -29,7 +29,7 @@
 	</nav>
 </header>
 <section id="page-content" class="page-content">
-<header class="page-header">
+	<header class="page-header">
 		<h1 class="page-title">Add New Client</h1>
 		<nav class="page-controls-nav">
 			<ul class="client-page-controls">
@@ -46,8 +46,8 @@
 			<img class="client-logo-img small" src="images/default.jpg" title="Client/Company name logo" alt="Client/Company name logo" />
 			<fieldset class="client-logo-upload">
 				<legend>Upload Client Logo</legend>
-				<input id="client-logo-file" name="client-logo-file" class="client-logo-file" type="file" value="Browse" />
-				<input id="client-logo-upload-btn" name="client-logo-upload-btn" class="client-logo-upload-btn" type="button" value="Upload" /> or <a class="" href="#">Cancel</a>
+				<input id="client-logo-file" name="client-logo-file" class="client-logo-file" type="file" value="Browse" tabindex="21" />
+				<input id="client-logo-upload-btn" name="client-logo-upload-btn" class="client-logo-upload-btn" type="button" value="Upload" tabindex="22" /> or <a class="" href="#">Cancel</a>
 			</fieldset>
 		</figure>
 		<section class="client-detail l-col-80">
@@ -60,21 +60,23 @@
 				<ul class="details-list client-details-list">
 					<li class="client-details-item name">
 						<label for="client-name" class="client-details-label required">Client's name:</label>
-						<input id="client-name" name="client-name" class="client-name-input" type="text" tabindex="1" value="" /><br />
-						<label for="contact-info-sync" class="client-details-label">Client and contact the same:</label>
-						<input id="contact-info-sync" name="contact-info-sync" class="contact-info-sync-input" type="checkbox" tabindex="11" value="info-sync" />
+						<input id="client-name" name="client-name" class="client-contact-info-input" type="text" tabindex="1" value="" />
 					</li>
 					<li class="client-details-item phoneNum">
 						<label for="client-phone" class="client-details-label">Phone number:</label>
-						<input id="client-phone" name="client-phone" class="client-phone-input" type="text" tabindex="2" value="" />
+						<input id="client-phone" name="client-phone" class="client-contact-info-input" type="text" tabindex="2" value="" />
 					</li>
 					<li class="client-details-item email">
 						<label for="client-email" class="client-details-label">Email address:</label>
-						<input id="client-email" name="client-email" class="client-email-input" type="text" tabindex="3" value="" />
+						<input id="client-email" name="client-email" class="client-contact-info-input" type="text" tabindex="3" value="" />
 					</li>
 					<li class="client-details-item fax">
 						<label for="client-fax" class="client-details-label">Fax number:</label>
-						<input id="client-fax" name="client-fax" class="client-fax-input" type="text" tabindex="4" value="" />
+						<input id="client-fax" name="client-fax" class="client-contact-info-input" type="text" tabindex="4" value="" />
+					</li>
+					<li class="client-details-item info-sync">
+						<label for="contact-info-sync" class="client-details-label">Use same info for contact:</label>
+						<input id="contact-info-sync" name="contact-info-sync" class="contact-info-sync-input" type="checkbox" tabindex="4" value="info-sync" />
 					</li>
 					<li class="client-details-item address">
 						<label for="client-streetAddress" class="client-details-label">Street Address:</label>
@@ -158,13 +160,13 @@
 					</li>
 					<li class="client-details-item submit-client">
 						<label for="client-add-btn" class="client-details-label">All done?</label>
-						<input id="client-add-btn" name="client-add-btn" class="client-add-btn" type="button" value="+Add Client" /> or
-						<a class="" href="#">Cancel</a>
+						<input id="client-add-btn" name="client-add-btn" class="client-add-btn" type="button" value="+Add Client" tabindex="11" /> or
+						<a class="" href="#" tabindex="11">Cancel</a>
 					</li>
 				</ul>
 			</fieldset>
 		</section>
-		<section class="contact-detail">
+		<section id="contact-detail" class="contact-detail">
 			<header class="details-header contact-details-header">
 				<h1 class="client-details-title">Contacts</h1>
 			</header>
@@ -174,34 +176,31 @@
 				<ul class="details-list contact-details-list">
 					<li class="contact-details-item name">
 						<label for="contact-name" class="contact-details-label required">Your contact's name:</label>
-						<input id="contact-name" name="contact-name" class="contact-name-input" type="text" tabindex="9" value="" /><br />
+						<input id="contact-name" name="contact-name" class="contact-contact-info-input" type="text" tabindex="12" value="" /><br />
 						<label for="contact-primary" class="contact-details-label">This the primary contact: </label>
-						<input id="contact-primary" name="contact-primary" class="contact-primary-input" type="checkbox" tabindex="10" value="primary" />
+						<input id="contact-primary" name="contact-primary" class="contact-info-input" type="checkbox" checked="checked" tabindex="13" value="primary" />
 					</li>
 					<li class="contact-details-item phoneNum">
-						<label for="contact-info-sync" class="contact-details-label">Client and contact the same:</label>
-						<input id="contact-info-sync" name="contact-info-sync" class="contact-info-sync-input" type="checkbox" tabindex="11" value="info-sync" /><br />
 						<label for="contact-officePhone" class="contact-details-label">Office phone:</label>
-						<input id="contact-officePhone" name="contact-officePhone" class="contact-officePhone-input" type="text" tabindex="12" value="" /><br />
+						<input id="contact-officePhone" name="contact-officePhone" class="contact-contact-info-input" type="text" tabindex="14" value="" /><br />
 						<label for="contact-mobilePhone" class="contact-details-label">Mobile phone:</label>
-						<input id="contact-mobilePhone" name="contact-mobilePhone" class="contact-mobilePhone-input" type="text" tabindex="13" value="" />
+						<input id="contact-mobilePhone" name="contact-mobilePhone" class="contact-info-input" type="text" tabindex="15" value="" />
 					</li>
 					<li class="contact-details-item email">
 						<label for="contact-email" class="contact-details-label">Email:</label>
-						<input id="contact-email" name="contact-email" class="contact-email-input" type="text" tabindex="14" value="" />
+						<input id="contact-email" name="contact-email" class="contact-contact-info-input" type="text" tabindex="16" value="" />
 					</li>
 					<li class="contact-details-item fax">
 						<label for="contact-fax" class="contact-details-label">Fax:</label>
-						<input id="contact-fax" name="contact-fax" class="contact-fax-input" type="text" tabindex="15" value="" />
+						<input id="contact-fax" name="contact-fax" class="contact-contact-info-input" type="text" tabindex="17" value="" />
 					</li>
 					<li class="contact-details-item submit-contact">
 						<label for="contact-add-btn" class="contact-details-label">All done?</label>
-						<input id="contact-add-btn" name="contact-add-btn" class="contact-add-btn" type="button" value="+Add Contact" /> or
-						<a class="" href="#">Cancel</a>
+						<input id="contact-add-btn" name="contact-add-btn" class="contact-add-btn" type="button" value="+Add Contact" tabindex="18" /> or <a id="cancel-add-contact-link" class="cancel-action-link" href="#" tabindex="19">Cancel</a>
 					</li>
 					<li class="contact-details-item submit-additional">
-						<label for="contact-add-btn" class="contact-details-label">Need to add more contacts?</label>
-						<a href="#" class="">Add another contact</a>
+						<label for="add-additional-link" class="contact-details-label">Need to add more contacts?</label>
+						<a id="add-additional-link" href="#" class="" tabindex="20">Add another contact</a>
 					</li>
 				</ul>
 			</fieldset>
