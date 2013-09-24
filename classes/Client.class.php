@@ -190,11 +190,15 @@ class Client extends DataObject {
 				$st->bindValue(":client_phone", $this->data["client_phone"], PDO::PARAM_INT);
 				$st->bindValue(":client_fax", $this->data["client_fax"], PDO::PARAM_INT);
 				$st->bindValue(":client_currency_index", $this->data["client_currency_index"], PDO::PARAM_INT);
+<<<<<<< HEAD
+				$st->bindValue(":client_logo_link", "images/" . $this->data["client_logo_link"], PDO::PARAM_STR);
+=======
 				if ($this->data["client_logo_link"]) {
 					$st->bindValue(":client_logo_link", "images/" . $this->data["client_logo_link"], PDO::PARAM_STR);
 				} else {
 					$st->bindValue(":client_logo_link", "images/default.jpg", PDO::PARAM_STR);
 				}
+>>>>>>> upstream/master
 				$st->execute();
 				parent::disconnect($conn);
 			} catch (PDOException $e) {

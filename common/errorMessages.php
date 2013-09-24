@@ -16,7 +16,10 @@ function getErrorMessage($client_currency_index, $errorMessage, $errorType) {
 			$errorArray["client_city"]["required"] = "You did not fill out the client city field.";
 			$errorArray["client_zip"]["required"] = "You did not fill out the client zip field.";
 			$errorArray["client_logo_link"]["required"] = "You didn't upload a file.";
+<<<<<<< HEAD
+=======
 			$errorArray["contact_name"]["required"] = "Please enter a contact for this client. All clients must have at least one contact.";
+>>>>>>> upstream/master
 			//errorType "invalid input"
 			$errorArray["client_email"]["invalid_input"] = "Please check you entered a valid email address.";
 			$errorArray["client_phone"]["invalid_input"] = "Please check you entered a valid phone number in format XXX-XXX-XXXX.";
