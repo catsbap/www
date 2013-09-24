@@ -7,7 +7,7 @@
 	External resources: Google Web Fonts: Merriweather Sans 400, Merriweather Sans 400 Italic, Merriweather Sans 700, Merriweather Sans 700 Italics
 	
 	Version 1.0
-	Last updated: 2013-09-11
+	
 	
 	Notes:
 		Uses SMACSS methodology for file structure
@@ -104,17 +104,18 @@ textarea:focus {
 	border-color: #404065;
 }
 
+
+
 textarea {
 	padding-left: 3px;
 	width: 95%;
 }
 
-input[type=text] {
-	/*padding: 3px;*/
+input[type=file] {
+	padding: .75em 0;
 }
 input[type=submit],
-input[type=button],
-input[type=file] {
+input[type=button] {
 	position: relative;
 	text-align: center;
 	font-weight: 700;
@@ -437,7 +438,6 @@ input[type=submit]:focus {
 	padding: 0 1em 2em 0;
 	float: left;
 	overflow: auto;
-
 }
 .client-logo-thumbnail {
 	position: relative;
@@ -448,6 +448,19 @@ input[type=submit]:focus {
 	position: relative;
 	margin: 0 auto;
 }
+.client-logo-upload {
+	padding: .5em 1em 1em 1em;
+}
+.client-logo-title {
+	font-size: 1em;
+	font-weight: 700;
+}
+legend.client-logo-title {
+	position: relative;
+	visibility: hidden;
+	margin-bottom: -1em;;
+}
+
 .client-info-list {
 	position: relative;
 	list-style: none;

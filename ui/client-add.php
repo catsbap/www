@@ -58,11 +58,7 @@
 				} 
 ?>
 <!--DISPLAY CLIENT INSERT WEB FORM--->
-<<<<<<< HEAD
-<?php function displayClientInsertForm($errorMessages, $missingFields, $client) { 
-=======
 <?php function displayClientInsertForm($errorMessages, $missingFields, $client, $contact) { 
->>>>>>> upstream/master
 	
 	//if there are errors in the form display the message
 	if ($errorMessages) {
@@ -80,7 +76,10 @@
 		<figure class="client-logo l-col-20">
 			<img class="client-logo-img small" src="images/default.jpg" title="Client/Company name logo" alt="Client/Company name logo" />
 			<fieldset class="client-logo-upload">
-				<legend>Upload Client Logo</legend>
+				<legend class="client-logo-title">Upload Client Logo</legend>
+				<header class="client-logo-header">
+					<h1 class="client-logo-title">Upload Client Logo</h1>
+				</header>
 				<input id="client-logo-file" name="client-logo-file" class="client-logo-file" type="file" value="Browse" />
 				<input id="client-logo-upload-btn" name="client-logo-upload-btn" class="client-logo-upload-btn" type="button" value="Upload" /> or <a class="" href="#">Cancel</a>
 			</fieldset>
@@ -201,29 +200,6 @@
 						<label for="client-add-btn" class="client-details-label">All done?</label>
 						<input id="client-add-btn" name="client-add-btn" class="client-add-btn" type="button" value="+Add Client" tabindex="11" /> or
 						<a class="" href="#" tabindex="11">Cancel</a>
-<<<<<<< HEAD
-					</li>
--->
-				</ul>
-			</fieldset>
-		<!--
-</section>
-		<section id="contact-detail" class="contact-detail">
-			<header class="details-header contact-details-header">
-				<h1 class="client-details-title">Contacts</h1>
-			</header>
--->
-			<fieldset class="contact-details-entry">
-				<legend class="contact-details-title">Enter contact details:</legend>
-				<h4 class="required">= Required</h4>
-				<ul class="details-list client-details-list">
-					<li class="client-details-item name">
-						<label for="contact-name" class="client-details-label required">Your contact's name:</label>
-						<input id="contact-name" name="contact-name" class="contact-contact-info-input" type="text" tabindex="12" value="" /><br />
-						<label for="contact-primary" class="client-details-label">This the primary contact: </label>
-						<input id="contact-primary" name="contact-primary" class="contact-info-input" type="checkbox" checked="checked" tabindex="13" value="primary" />
-					</li>
-=======
 					</li>
 -->
 				</ul>
@@ -245,7 +221,6 @@
 						<label for="contact-primary" class="client-details-label">This the primary contact: </label>
 						<input id="contact-primary" name="contact-primary" class="contact-info-input" type="checkbox" checked="checked" tabindex="13" value="1" />
 					</li>
->>>>>>> upstream/master
 					<li class="client-details-item phoneNum">
 						<label for="contact-officePhone" class="client-details-label">Office phone:</label>
 						<input id="contact-officePhone" name="contact-officePhone" class="contact-contact-info-input" type="text" tabindex="14" value="" /><br />
@@ -307,18 +282,6 @@
 </form>
 <?php } ?>
 
-<<<<<<< HEAD
-<!--PROCESS THE CLIENT THAT WAS SUBMITTED--->
-<?php function processClient() {
- 	//these are the required fields in this form
-	$requiredFields = array("client_name","client_address","client_state","client_phone","client_city","client_zip","client_email");
-	$missingFields = array();
-	$errorMessages = array();
-	
-		//this is for the photo upload
-	if (isset($_FILES["client-logo-file"]) and $_FILES["client-logo-file"]["error"] == UPLOAD_ERR_OK) {
-		if ( $_FILES["client-logo-file"]["type"] != "image/jpeg") {
-=======
 <!--PROCESS THE CLIENT & THE CONTACT THAT WERE SUBMITTED--->
 <?php function processClient() {
  	//these are the required client fields in this form
@@ -330,7 +293,6 @@
 	if (isset($_FILES["client-logo-file"]) and $_FILES["client-logo-file"]["error"] == UPLOAD_ERR_OK) {
 		if ( $_FILES["client-logo-file"]["type"] != "image/jpeg") {
 			
->>>>>>> upstream/master
 			//I'm hardcoding the client_currency_index, because it's in the wrong place. This should be with the rest of the validation.
 			$errorMessages[] = "<li>" . getErrorMessage("1","client_logo_link", "invalid_file") . "</li>";
 		} elseif ( !move_uploaded_file($_FILES["client-logo-file"]["tmp_name"], "images/" . basename($_FILES["client-logo-file"]["name"]))) {
@@ -354,10 +316,6 @@
 		"client_city" => isset($_POST["client-city"]) ? preg_replace("/[^ \-\_a-zA-Z0-9]/", "", $_POST["client-city"]) : "",
 		"client_currency_index" => isset($_POST["client_currency_index"])? preg_replace("/[^0-9]/", "", $_POST["client_currency_index"]) : "",
 		"client_fax" => isset($_POST["client-fax"]) ? preg_replace("/[^ \-\_a-zA-Z^0-9]/", "", $_POST["client-fax"]) : "",
-<<<<<<< HEAD
-	));
-	
-=======
 	));
 	
 	//create the contact object ($contact)
@@ -372,7 +330,6 @@
 	));
 	
 	
->>>>>>> upstream/master
 //error messages and validation script
 	foreach($requiredFields as $requiredField) {
 		if (preg_match("/client/", $requiredField)) {
@@ -421,22 +378,14 @@
 		$client_email=$_POST["client-email"];
 		$client_name=$client->getValue("client_name");
 		$client_id = $client->getClientId($client_name);
-<<<<<<< HEAD
-		//don't allow duplicate entries in the database.
-=======
 		//don't allow duplicate entries in the database for the client.
->>>>>>> upstream/master
 		if ($client_id[0]) {
 			echo "Client " . $client_id[0] . " is already in the database. Please try again.";
 		} else {
 			$client->insertClient($client_email);
-<<<<<<< HEAD
-			echo "You have successfully added client " . $client_email . ". You may add an additional client now. ";		
-=======
 			$client_id = $client->getClientId($client_name);
 			$contact->insertContact($client_id[0]);
 			echo "You have successfully added client " . $client_email . "with client id " . $client_id[0] . ". You may add an additional client now. ";		
->>>>>>> upstream/master
 			echo"<a href=\"clients.php\">View the full client list</a>";
 		}
 		//headers already sent, call the page back with blank attributes.

@@ -1,7 +1,7 @@
 $(document).ready( function() {
-	var infoSyncBtn = $( '#contact-info-sync' );
+	var $infoSyncBtn = $( '#contact-info-sync' );
 
-	infoSyncBtn.click( function() {
+	$infoSyncBtn.click( function() {
 		
 		var clientInfo = $( '.client-contact-info-input' );
 		var contactInfo = $( '.contact-contact-info-input' );
@@ -19,6 +19,7 @@ $(document).ready( function() {
 			});
 		}
 	});
+	
 	
 	/*
 var $cancelContact = $( '<li class="client-details-item cancel-additional"></li>' );
@@ -38,7 +39,7 @@ var $cancelContact = $( '<li class="client-details-item cancel-additional"></li>
 			}
 	*/
 			
-			evt.preventDefault();
+/*			evt.preventDefault();
 		})
 		.appendTo( $cancelContact );
 */
