@@ -103,9 +103,6 @@ input[type=password]:focus,
 textarea:focus {
 	border-color: #404065;
 }
-
-
-
 textarea {
 	padding-left: 3px;
 	width: 95%;
@@ -122,7 +119,7 @@ input[type=button] {
 	font-size: .825em;
 	width: 8em;
 	padding: .25em;
-	color: #FAF9FF;
+	/* color: #FAF9FF; */
 	background-color: #A9BFF5;
 	border: 1px dotted #193E73;
 }
@@ -449,7 +446,13 @@ input[type=submit]:focus {
 	margin: 0 auto;
 }
 .client-logo-upload {
-	padding: .5em 1em 1em 1em;
+	padding: .5em .25em;
+	margin: 0;
+}
+.client-logo-file {
+	position: relative;
+	width: 90%;
+	margin: .5em .25em;
 }
 .client-logo-title {
 	font-size: 1em;
@@ -467,12 +470,6 @@ legend.client-logo-title {
 	margin: 0em;
 	padding: 0em;
 }
-.client-info-name {}
-.client-info-name-link {}
-.client-info-contact {}
-.client-info-contact-link {}
-.client-info-active-projects {}
-.client-info-active-projects-link {}
 
 .client-details-header {
 	position: relative;
