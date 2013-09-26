@@ -18,8 +18,10 @@
 			#193E73 (Dusk)
 			#A9BFF5 (Sky)
 			#D6E2E0 (Cumulus)
-			#F0F0F5 (Cdontrail)
+			#F0F0F5 (Contrail)
 			#FAF9FF (Cirrus)
+			#D22F12 (Setting Sun)
+			#FFBE12 (Rising Sun)
 			
 */
 
@@ -116,20 +118,40 @@ input[type=button] {
 	position: relative;
 	text-align: center;
 	font-weight: 700;
-	font-size: .825em;
-	width: 8em;
-	padding: .25em;
+	font-size: .75em;
+	width: auto;
+	padding: .25em .5em;
 	/* color: #FAF9FF; */
 	background-color: #A9BFF5;
 	border: 1px dotted #193E73;
+	cursor: pointer;
 }
+input[type=button]:hover,
+input[type=submit]:hover {
+	background-color: #FFBE12;
+}
+
 input[type=submit]:focus {
-	background: none;
-	background-color: #FF9;
+	/* background: none; */
+	background-color: #D22F12;
 } /* does this work? */
 
+.link-btn {
+	position: relative;
+	text-align: center;
+	font-weight: 700;
+	width: auto;
+	padding: .25em .5em;
+	color: #FAF9FF;
+	background-color: #A9BFF5;
+	border: 1px dotted #193E73;
+}
+.link-btn:hover {
+	background-color: #FFBE12;
+}
+
 .required {
-	color: #DB4523;
+	color: #D22F12;
 }
 .required:before {
 	content: "* "
@@ -347,6 +369,7 @@ input[type=submit]:focus {
 }
 
 
+
 /* !Content modules */
 .page-header {
 	position: relative;
@@ -402,8 +425,8 @@ input[type=submit]:focus {
 	position: relative;
 	text-align: center;
 	font-weight: 700;
-	width: 8em;
-	padding: .25em;
+	width: auto;
+	padding: .25em .5em;
 	color: #FAF9FF;
 	background-color: #A9BFF5;
 	border: 1px dotted #193E73;
@@ -512,7 +535,10 @@ legend.client-details-title {
 .client-details-item.submit-client {
 	margin: 1.125em 0;
 }
- 
+input[type=button].client-delete-btn:hover {
+	background-color: #D22F12;
+	/* color:#ff8e8e */
+}
 .contact-detail {
 	position: relative;
 	margin: 1.5em 0 3em 0;

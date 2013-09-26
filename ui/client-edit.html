@@ -40,7 +40,7 @@
 		<h1 class="page-title">Edit Client Details</h1>
 		<nav class="page-controls-nav">
 			<ul class="client-page-controls">
-				<li class="page-controls-item add-client-button"><a class="add-client-link" href="client-add.html">+ Add Client</a></li>
+				<li class="page-controls-item link-btn"><a class="add-client-link" href="client-add.html">+ Add Client</a></li>
 				<li class="page-controls-item"><a class="view-client-archive-link" href="client-archives.html">View Archives</a></li>
 				<li class="page-controls-item"><a class="view-all-link" href="clients.html">View All</a></li>
 			</ul>
@@ -166,9 +166,17 @@
 							<option selected="selected" value="USD">United States Dollar</option>
 						</select><br />
 					</li>
+					<li class="client-details-item client-archive">
+						<label for="client-archive" class="client-details-label">Archive client?</label>
+						<input id="client-archive" name="client-archive" class="client-archive-input" type="checkbox" tabindex="10" value="1" />
+					</li>
+					<li class="client-details-item delete-client">
+						<label for="client-delete-btn" class="client-details-label">Delete Client?</label>
+						<input id="client-delete-btn" name="client-delete-btn" class="client-delete-btn" type="button" value="- Delete Client" tabindex="11" />
+					</li>
 					<li class="client-details-item submit-client">
 						<label for="client-save-btn" class="client-details-label">All done?</label>
-						<input id="client-save-btn" name="client-save-btn" class="client-save-btn" type="button" value="+Save Changes" tabindex="11" /> or
+						<input id="client-save-btn" name="client-save-btn" class="client-save-btn" type="button" value="+ Save Changes" tabindex="11" /> or
 						<a class="" href="#" tabindex="11">Cancel</a>
 					</li>
 				</ul>
@@ -181,7 +189,7 @@
 			<fieldset class="contact-details-entry">
 				<!-- <legend class="contact-details-title">Edit contact details:</legend> -->
 				<header class="contact-details-header">
-					<h1 class="contact-details-title">Edit client details:</h1>
+					<h1 class="contact-details-title">Edit contact details:</h1>
 					<h4 class="required">= Required</h4>
 				</header>
 				<!-- <h4 class="required">= Required</h4> -->
@@ -212,17 +220,13 @@
 						<a id="add-additional-link" href="#" class="" tabindex="20">Add another contact</a>
 					</li>
 					
-					<li class="contact-details-item submit-contact">
-						<label for="contact-save-btn" class="contact-details-label">All done?</label>
-						<input id="contact-save-btn" name="contact-save-btn" class="contact-save-btn" type="button" value="+Save Contact" tabindex="18" /> or <a id="cancel-add-contact-link" class="cancel-action-link" href="#" tabindex="19">Cancel</a>
-					</li>
 				</ul>
 			</fieldset>
-			<fieldset class="client-details-entry">
-				<ul class="details-list client-details-submit">
-					<li class="client-details-item submit-client">
-						<label for="client-add-btn" class="client-details-label">All done?</label>
-						<input id="client-add-btn" name="client-add-btn" class="client-add-btn" type="button" value="+Add Client" tabindex="11" /> or
+			<fieldset class="contact-details-entry">
+				<ul class="details-list contact-details-submit">
+					<li class="client-details-item submit-contact">
+						<label for="contact-save-btn" class="client-details-label">All done?</label>
+						<input id="contact-save-btn" name="contact-save-btn" class="contact-save-btn" type="button" value="+ Save Contact" tabindex="11" /> or
 						<a class="" href="#" tabindex="11">Cancel</a>
 					</li>
 				</ul>
