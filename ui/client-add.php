@@ -194,22 +194,8 @@
     					<?php } ?>
                         </select><br />
 					</li>
-					<!--
-<li class="client-details-item submit-client">
-						<label for="client-add-btn" class="client-details-label">All done?</label>
-						<input id="client-add-btn" name="client-add-btn" class="client-add-btn" type="button" value="+Add Client" tabindex="11" /> or
-						<a class="" href="#" tabindex="11">Cancel</a>
-					</li>
--->
 				</ul>
 			</fieldset>
-		<!--
-</section>
-		<section id="contact-detail" class="contact-detail">
-			<header class="details-header contact-details-header">
-				<h1 class="client-details-title">Contacts</h1>
-			</header>
--->
 			<fieldset class="contact-details-entry">
 				<legend class="contact-details-title">Enter contact details:</legend>
 				<h4 class="required">= Required</h4>
@@ -234,18 +220,6 @@
 						<label for="contact-fax" class="client-details-label">Fax:</label>
 						<input id="contact-fax" name="contact-fax" class="contact-contact-info-input" type="text" tabindex="17" value="" />
 					</li>
-					
-					<li class="client-details-item submit-additional">
-						<label for="add-additional-link" class="client-details-label">Need to add more contacts?</label>
-						<a id="add-additional-link" href="#" class="" tabindex="20">Add another contact</a>
-					</li>
-					
-					<!--
-<li class="contact-details-item submit-contact">
-						<label for="contact-add-btn" class="contact-details-label">All done?</label>
-						<input id="contact-add-btn" name="contact-add-btn" class="contact-add-btn" type="button" value="+Add Contact" tabindex="18" /> or <a id="cancel-add-contact-link" class="cancel-action-link" href="#" tabindex="19">Cancel</a>
-					</li>
--->
 				</ul>
 			</fieldset>
 			<fieldset class="client-details-entry">
