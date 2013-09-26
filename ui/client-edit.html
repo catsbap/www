@@ -186,7 +186,7 @@
 			<header class="details-header contact-details-header">
 				<h1 class="client-details-title">Contacts</h1>
 			</header>
-			<fieldset class="contact-details-entry">
+			<fieldset id="contact-details" class="contact-details-entry">
 				<!-- <legend class="contact-details-title">Edit contact details:</legend> -->
 				<header class="contact-details-header">
 					<h1 class="contact-details-title">Edit contact details:</h1>
@@ -195,28 +195,28 @@
 				<!-- <h4 class="required">= Required</h4> -->
 				<ul class="details-list client-details-list">
 					<li class="client-details-item name">
-						<label for="contact-name" class="client-details-label required">Your contact's name:</label>
-						<input id="contact-name" name="contact-name" class="contact-contact-info-input" type="text" tabindex="12" value="" /><br />
-						<label for="contact-primary" class="client-details-label">This the primary contact: </label>
+						<label for="contact-name" class="contact-details-label required">Your contact's name:</label>
+						<input id="contact-name" name="contact-name" class="contact-info-input" type="text" tabindex="12" value="" /><br />
+						<label for="contact-primary" class="contact-details-label">This the primary contact: </label>
 						<input id="contact-primary" name="contact-primary" class="contact-info-input" type="checkbox" checked="checked" tabindex="13" value="1" />
 					</li>
 					<li class="client-details-item phoneNum">
-						<label for="contact-officePhone" class="client-details-label">Office phone:</label>
-						<input id="contact-officePhone" name="contact-officePhone" class="contact-contact-info-input" type="text" tabindex="14" value="" /><br />
-						<label for="contact-mobilePhone" class="client-details-label">Mobile phone:</label>
+						<label for="contact-officePhone" class="contact-details-label">Office phone:</label>
+						<input id="contact-officePhone" name="contact-officePhone" class="contact-info-input" type="text" tabindex="14" value="" /><br />
+						<label for="contact-mobilePhone" class="contact-details-label">Mobile phone:</label>
 						<input id="contact-mobilePhone" name="contact-mobilePhone" class="contact-info-input" type="text" tabindex="15" value="" />
 					</li>
 					<li class="client-details-item email">
-						<label for="contact-email" class="client-details-label">Email:</label>
-						<input id="contact-email" name="contact-email" class="contact-contact-info-input" type="text" tabindex="16" value="" />
+						<label for="contact-email" class="contact-details-label">Email:</label>
+						<input id="contact-email" name="contact-email" class="contact-info-input" type="text" tabindex="16" value="" />
 					</li>
 					<li class="client-details-item fax">
-						<label for="contact-fax" class="client-details-label">Fax:</label>
-						<input id="contact-fax" name="contact-fax" class="contact-contact-info-input" type="text" tabindex="17" value="" />
+						<label for="contact-fax" class="contact-details-label">Fax:</label>
+						<input id="contact-fax" name="contact-fax" class="contact-info-input" type="text" tabindex="17" value="" />
 					</li>
 					
 					<li class="client-details-item add-additional">
-						<label for="add-additional-link" class="client-details-label">Need to add more contacts?</label>
+						<label for="add-additional-link" class="contact-details-label">Need to add more contacts?</label>
 						<a id="add-additional-link" href="#" class="" tabindex="20">Add another contact</a>
 					</li>
 					
@@ -225,7 +225,7 @@
 			<fieldset class="contact-details-entry">
 				<ul class="details-list contact-details-submit">
 					<li class="client-details-item submit-contact">
-						<label for="contact-save-btn" class="client-details-label">All done?</label>
+						<label for="contact-save-btn" class="contact-details-label">All done?</label>
 						<input id="contact-save-btn" name="contact-save-btn" class="contact-save-btn" type="button" value="+ Save Contact" tabindex="11" /> or
 						<a class="" href="#" tabindex="11">Cancel</a>
 					</li>

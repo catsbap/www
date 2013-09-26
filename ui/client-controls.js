@@ -1,3 +1,4 @@
+;
 $(document).ready( function() {
 	var $infoSyncBtn = $( '#contact-info-sync' );
 
@@ -17,6 +18,21 @@ $(document).ready( function() {
 			contactInfo.each( function( index) {
 				$( this ).val( "" );
 			});
+		}
+	});
+	
+	var $contactCtr = 0;
+	var incrementIDs = function( i, attr ) {
+		return attr += "-" + $contactCtr;
+	};
+	
+	var $contactInputs = $( '#contact-details .contact-details-label, #contact-details .contact-detals-input' ).not( ':last' );
+	$contactInputs.each( function( index ) {
+		if ( $( this ).is( 'input' ) ) {
+			$( this ).attr( 'id', incrementIDs );
+		} else if ( $( this ).is( 'label' ) ) {
+			$( this ).attr( 'for', incrementIDs );
+			console.log($(this).attr("for"));
 		}
 	});
 	
@@ -44,7 +60,6 @@ var $cancelContact = $( '<li class="client-details-item cancel-additional"></li>
 		.appendTo( $cancelContact );
 */
 	
-/*
 
 	$( '#add-additional-link' ).click( function( evt ) {
 		var $newContactDetailsForm = $( '.contact-details-entry' )
@@ -68,7 +83,7 @@ var $cancelContact = $( '<li class="client-details-item cancel-additional"></li>
 		
 		evt.preventDefault();
 	});
-*/
+
 	
 	
 	
