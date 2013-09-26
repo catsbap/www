@@ -227,29 +227,14 @@
 					<li class="client-details-item submit-client">
 						<label for="client-add-btn" class="client-details-label">All done?</label>
 						<!--modified field to be of type submit instead of button-->
-                        <input id="client-add-btn" name="client-add-btn" class="client-add-btn" type="submit" value="+Add Client" tabindex="11"/> 
+                        <input id="client-add-btn" name="client-add-btn" class="client-add-btn" type="submit" value="+ Add Client" tabindex="11"/> 
 						<!--input id="client-add-btn" name="client-add-btn" class="client-add-btn" type="button" value="+Add Client" tabindex="11" /-->
 						<!--end change--> 
-						<a class="" href="#" tabindex="11">Cancel</a>
+						 or <a class="" href="#" tabindex="11">Cancel</a>
 					</li>
 				</ul>
 			</fieldset>
 		</section>
-		<!--
-<section class="client-projects">
-			<header class="details-header client-projects-header">
-				<h1 class="client-details-title">Projects</h1>
-			</header>
-			<h1 class="client-projects-title active">Active Projects</h1>
-			<ul class="details-list client-projects-list active">
-				<li class="client-projects-list-item">Atomic Cupcakes</li>
-			</ul>
-			<h1 class="client-projects-title archive">Archived Projects</h1>
-			<ul class="details-list client-projects-list archive">
-				<li class="client-projects-list-item">Atomic Cupcakes 'Coming Soon' Campaign</li>
-			</ul>
-		</section>
--->
 	</section>
 </section>
 </form>
