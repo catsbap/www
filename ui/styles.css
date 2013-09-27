@@ -156,7 +156,9 @@ input[type=submit]:focus {
 .required:before {
 	content: "* "
 }
-
+.disabled {
+	display: none;
+}
 
 /* !LAYOUT 
 **************************************************/

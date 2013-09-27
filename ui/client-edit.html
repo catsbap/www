@@ -196,34 +196,36 @@
 				<ul class="details-list client-details-list">
 					<li class="client-details-item name">
 						<label for="contact-name" class="contact-details-label required">Your contact's name:</label>
-						<input id="contact-name" name="contact-name" class="contact-info-input" type="text" tabindex="12" value="" /><br />
+						<input id="contact-name" name="contact-name" class="contact-info-input" type="text" value="" /><br />
 						<label for="contact-primary" class="contact-details-label">This the primary contact: </label>
-						<input id="contact-primary" name="contact-primary" class="contact-info-input" type="checkbox" checked="checked" tabindex="13" value="1" />
+						<input id="contact-primary" name="contact-primary" class="contact-info-input" type="checkbox" checked="checked" value="1" />
 					</li>
 					<li class="client-details-item phoneNum">
 						<label for="contact-officePhone" class="contact-details-label">Office phone:</label>
-						<input id="contact-officePhone" name="contact-officePhone" class="contact-info-input" type="text" tabindex="14" value="" /><br />
+						<input id="contact-officePhone" name="contact-officePhone" class="contact-info-input" type="text" value="" /><br />
 						<label for="contact-mobilePhone" class="contact-details-label">Mobile phone:</label>
-						<input id="contact-mobilePhone" name="contact-mobilePhone" class="contact-info-input" type="text" tabindex="15" value="" />
+						<input id="contact-mobilePhone" name="contact-mobilePhone" class="contact-info-input" type="text" value="" />
 					</li>
 					<li class="client-details-item email">
 						<label for="contact-email" class="contact-details-label">Email:</label>
-						<input id="contact-email" name="contact-email" class="contact-info-input" type="text" tabindex="16" value="" />
+						<input id="contact-email" name="contact-email" class="contact-info-input" type="text" value="" />
 					</li>
 					<li class="client-details-item fax">
 						<label for="contact-fax" class="contact-details-label">Fax:</label>
-						<input id="contact-fax" name="contact-fax" class="contact-info-input" type="text" tabindex="17" value="" />
+						<input id="contact-fax" name="contact-fax" class="contact-info-input" type="text" value="" />
 					</li>
-					
-					<li class="client-details-item add-additional">
-						<label for="add-additional-link" class="contact-details-label">Need to add more contacts?</label>
-						<a id="add-additional-link" href="#" class="" tabindex="20">Add another contact</a>
+					<li class="client-details-item cancel-additional">
+						<label for="cancel-contact-link" class="contact-details-label">Need to remove contact?</label>
+						<a id="cancel-contact-link" class="cancel-action-link" href="#" tabindex="19">Remove contact</a>
 					</li>
-					
 				</ul>
 			</fieldset>
-			<fieldset class="contact-details-entry">
+			<fieldset id="contact-save" class="contact-details-entry">
 				<ul class="details-list contact-details-submit">
+					<li class="client-details-item add-additional">
+						<label for="add-additional-link" class="contact-details-label">Need to add more contacts?</label>
+						<a id="add-additional-link" href="#" class="">Add another contact</a>
+					</li>
 					<li class="client-details-item submit-contact">
 						<label for="contact-save-btn" class="contact-details-label">All done?</label>
 						<input id="contact-save-btn" name="contact-save-btn" class="contact-save-btn" type="button" value="+ Save Contact" tabindex="11" /> or
