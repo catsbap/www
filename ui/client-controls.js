@@ -30,25 +30,45 @@ $(document).ready( function() {
 		return attr += "-" + contactCtr;
 	};
 	
+	$( '#contact-primary' ).click( function( evt ) {
+		var $primeContacts = $( '.contact-details-entry input[type="checkbox"]' );
+		$primeContacts.each( function( index ) {
+			$( this ).prop( 'checked', false );
+		})
+		$( this ).prop( 'checked', true );
+	});
+	
 	var $contactInputs = $( '#contact-details' );
 	$contactInputs.attr( 'id', incrementIDs )
-			.find( 'input, a' )
-			.each( function( index ) {
-				$( this ).attr( 'id', incrementIDs );
-			})
-			.end()
-			.find( 'label' )
-			.each( function( index ) {
-				$( this ).attr( 'for', incrementIDs );
-			});
+		.find( 'input, a' )
+		.each( function( index ) {
+			$( this ).attr( 'id', incrementIDs );
+		})
+		.end()
+		.find( 'label' )
+		.each( function( index ) {
+			$( this ).attr( 'for', incrementIDs );
+	});
 
 	var $cancelContact = $( '.cancel-additional' )
 		.click( function( evt ) {
+			var $updatePrime;
 			if ( $( this ).parents( '.contact-details-entry' ).siblings( '.contact-details-entry' ).not( '#contact-save' ).length < 2 ) {
 				$( '.cancel-additional' )
 					.addClass( 'disabled' )
 					.parents( '.contact-details-entry' )
 					.find( 'input[type=checkbox]' )
+					.prop( 'checked', true );
+			}
+			if ( $( this ).parents( '.contact-details-entry' ).find( 'input[type="checkbox"]' ).prop( 'checked' ) ) {
+				if ( $( this ).parents( '.contact-details-entry' ).prev( '.contact-details-entry' ).length > 0 ) {
+					$updatePrime = $( this ).parents( '.contact-details-entry' ).prev( '.contact-details-entry' );
+				} else if ( $( this ).parents( '.contact-details-entry' ).next( '.contact-details-entry' ).length > 0 ) {
+					$updatePrime = $( this ).parents( '.contact-details-entry' ).next( '.contact-details-entry' );
+				} else {
+					$updatePrime = $( '.contact-details-entry' ).first();
+				}
+				$updatePrime.find( 'input[type=checkbox]' )
 					.prop( 'checked', true );
 			}
 			$( this ).parents( '.contact-details-entry' ).nextAll().not( '#contact-save' )
