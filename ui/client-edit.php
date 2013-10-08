@@ -305,7 +305,7 @@
 						*/
 						//whether or not the radio button is checked comes from the database, it should not be hard-coded to be default on.
 						?>
-						<input id="contact-primary" name="contact-primary[<?php echo $i?>]" class="contact-info-input" type="checkbox" <?php setChecked($contacts, "contact_primary", "1") ?>" />
+						<input id="contact-primary" name="contact-primary[<?php echo $i?>]" class="contact-info-input" type="checkbox" <?php setChecked($contacts, "contact_primary", "1") ?> />
 
 					</li>
 					<li class="client-details-item phoneNum">
