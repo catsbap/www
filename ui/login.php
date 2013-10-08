@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <?php
 
 	require_once("../common/common.inc.php");
@@ -19,7 +20,6 @@ function displayForm($errorMessages, $missingFields, $person) {
 			echo $errorMessage;
 		}
 	} else {?>
-	<!DOCTYPE html>
 
 <html lang="en">
 <head>
