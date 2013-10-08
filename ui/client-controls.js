@@ -101,8 +101,10 @@ $(document).ready( function() {
 					})
 				})
 			$( this ).parents( '.contact-details-entry' ).remove();
-		})
-		.addClass( 'disabled' );
+		});
+		if ( $cancelContact.length <= 1 ) {
+			$cancelContact.addClass( 'disabled' );
+		}
 
 	$( '#add-additional-link' ).click( function( evt ) {
 		contactCtr = $( '.contact-details-entry' ).not( '#contact-save' ).length;

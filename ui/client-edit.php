@@ -330,7 +330,7 @@
 			</fieldset>
 			<?php 
 			$i++;
-			echo $i;
+			//echo $i;
 			//$counter = $i;
 			} 
 			//error_log("here is the counter variable: " . $counter++ );
