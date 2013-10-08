@@ -261,6 +261,24 @@
 			<header class="details-header contact-details-header">
 				<h1 class="client-details-title">Contacts</h1>
 			</header>
+		<!--there are multiple contacts. loop through them.--->
+				<!--this is SO going to break the UI!-->
+				<!--need to figure out how to get these things into an array.-->
+				<!--these values ARE part of the post, but there could be many of them.-->
+				<!--we need to call them into an array of objects, not just an object.-->
+				<!--the object does not hold any values when it is sent back.-->
+				<?php
+				//error_log("Setting up the input fields in the HTML");
+				//error_log(print_r($contact,true));
+				error_log("the post variable is:");
+				error_log(print_r($_POST,true));
+				//error_log(gettype($contact));
+				if (!isset($contact)) {
+				$contact = new Contact(array());
+				}
+				$i = 0;
+				foreach ($contact as $contacts) {
+					?>
 			<fieldset id="contact-details" class="contact-details-entry">
 				<!-- <legend class="contact-details-title">Edit contact details:</legend> -->
 				<header class="contact-details-header">
@@ -269,24 +287,6 @@
 				</header>
 				<!-- <h4 class="required">= Required</h4> -->
 				<ul class="details-list client-details-list">
-				<!--there are multiple contacts. loop through them.--->
-						<!--this is SO going to break the UI!-->
-						<!--need to figure out how to get these things into an array.-->
-						<!--these values ARE part of the post, but there could be many of them.-->
-						<!--we need to call them into an array of objects, not just an object.-->
-						<!--the object does not hold any values when it is sent back.-->
-						<?php
-						//error_log("Setting up the input fields in the HTML");
-						//error_log(print_r($contact,true));
-						error_log("the post variable is:");
-						error_log(print_r($_POST,true));
-						//error_log(gettype($contact));
-						if (!isset($contact)) {
-						$contact = new Contact(array());
-						}
-						$i = 0;
-						foreach ($contact as $contacts) {
-							?>
 						<li class="client-details-item name">
 						<label for="contact-name" class="contact-details-label required">Your contact's name:</label>
 						<input id="contact-name" name="contact-name[]" class="contact-info-input" type="text" value="<?php echo $contacts->getValueEncoded("contact_name")?>" /><br />
@@ -328,6 +328,13 @@
 					</li>
 				</ul>
 			</fieldset>
+			<?php 
+			$i++;
+			echo $i;
+			//$counter = $i;
+			} 
+			//error_log("here is the counter variable: " . $counter++ );
+			?>
 			<fieldset id="contact-save" class="contact-details-entry">
 				<ul class="details-list contact-details-submit">
 					<li class="client-details-item add-additional">
@@ -338,13 +345,6 @@
 						<label for="contact-save-btn" class="contact-details-label">All done?</label>
 						<input id="contact-save-btn" name="contact-save-btn" class="contact-save-btn" type="submit" value="+ Save Contact" tabindex="11" /> or
 						<a class="" href="#" tabindex="11">Cancel</a>
-						<?php 
-						$i++;
-						echo $i;
-						//$counter = $i;
-						} 
-						//error_log("here is the counter variable: " . $counter++ );
-						?>
 					</li>
 				</ul>
 			</fieldset>
