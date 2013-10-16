@@ -16,43 +16,17 @@ function displayForm($errorMessages, $missingFields, $person) {
 			echo $errorMessage;
 		}
 	} else {
+	
+		include('header.php'); //add header.php to page
+		
 		?>
 		<!DOCTYPE html>
 
-<html lang="en">
-<head>
-	<title>Manage</title>
-	<meta charset="utf-8" />
-	<link href='http://fonts.googleapis.com/css?family=Merriweather+Sans:400,400italic,700,700italic' rel='stylesheet' type='text/css' />
-	<link href="styles.css" rel="stylesheet" type="text/css" />
-	<script src="libraries/jquery-1.10.2.min.js" type="text/javascript"></script>
-</head>
-
-<body>
-<header id="site-header" class="site-header">
-	<h1 class="site-title">Time Tracker</h1>
-	<nav id="site-nav" class="site-nav">
-		<ul id="site-menu" class="site-menu">
-			<li class="site-menu-item"><a class="site-menu-link" href="#">Timesheets</a></li>
-			<li class="site-menu-item"><a class="site-menu-link" href="#">Reports</a></li>
-			<li class="site-menu-item"><a class="site-menu-link" href="#">Invoices</a></li>
-			<li class="site-menu-item"><a class="site-menu-link" href="manage.html">Manage</a></li>
-		</ul>
-	</nav>
-	<nav id="section-nav" class="section-nav manage">
-		<h1 class="section-nav-title">Manage: </h1>
-		<ul class="section-menu">
-			<li class="section-menu-item"><a class="section-menu-link" href="projects.php">Projects</a></li>
-			<li class="section-menu-item"><a class="section-menu-link" href="clients.php">Clients</a></li>
-			<li class="section-menu-item"><a class="section-menu-link" href="#">Team</a></li>
-		</ul>
-	</nav>
-</header>
-<section id="page-content" class="page-content">
+	<section id="page-content" class="page-content">
 
         <p>Thanks for joining us at Time Tracker!</p>
         <p>To register, please fill in your details below and click Send Details.</p>
-        <p>Fields marked with an asterisk (*) are required.</p>
+        <p class="required">= required.</p>
  	<?php
 	}
 	?>
@@ -60,17 +34,17 @@ function displayForm($errorMessages, $missingFields, $person) {
     <form action = "register.php" method="post" style="margin-bottom:50px;">
     <div style="width:30em;">
     <input type="hidden" name="action" value="register"/>
-    <label for="username"<?php validateField("person_username", $missingFields)?>>Choose a username *</label>
+    <label for="username"<?php validateField("person_username", $missingFields)?> class="required">Choose a username</label>
     <input type="text" name="username" id="username" value="<?php echo $person->getValueEncoded("person_username")?>" /><br/>
-    <label for="password1"<?php if($missingFields) echo ' class="error"'?>>Choose a password * </label>
+    <label for="password1"<?php if($missingFields) echo ' class="error"'?> class="required">Choose a password</label>
     <input type="password" name="password1" id="password1" value="" /><br/>
-    <label for="password2"<?php if($missingFields) echo ' class="error"'?>>Retype password * </label>
+    <label for="password2"<?php if($missingFields) echo ' class="error"'?> class="required">Retype password</label>
     <input type="password" name="password2" id="password2" value="" /><br/>
-    <label for="emailAddress"<?php validateField("person_email", $missingFields)?>>Email Address *</label>
+    <label for="emailAddress"<?php validateField("person_email", $missingFields)?> class="required">Email Address</label>
     <input type="text" name="emailAddress" id="emailAddress" value="<?php echo $person->getValueEncoded("person_email")?>" /><br/>
- 	<label for="firstName"<?php validateField("person_first_name", $missingFields)?>>First name *</label>
+ 	<label for="firstName"<?php validateField("person_first_name", $missingFields)?> class="required">First name</label>
     <input type="text" name="firstName" id="firstName" value="<?php echo $person->getValueEncoded("person_first_name")?>" /><br/>
-    <label for="lastName"<?php validateField("person_last_name", $missingFields)?>>Last name *</label>
+    <label for="lastName"<?php validateField("person_last_name", $missingFields)?> class="required">Last name</label>
     <input type="text" name="lastName" id="lastName" value="<?php echo $person->getValueEncoded("person_last_name")?>" /><br/>
     <div style="clear:both">
     <input type="submit" name="submitButton" id="submitButton" value="Send Details" />
