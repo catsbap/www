@@ -17,8 +17,10 @@ Edit this file for updating links to pages/screens
 	<title>Manage</title>
 	<meta charset="utf-8" />
 	<link href='http://fonts.googleapis.com/css?family=Merriweather+Sans:400,400italic,700,700italic' rel='stylesheet' type='text/css' />
+	<link href="libraries/theme.blueprint.css" rel="stylesheet" type="text/css" /> <!--This should only be loaded for projects.php -->
 	<link href="styles.css" rel="stylesheet" type="text/css" />
 	<script src="libraries/jquery-1.10.2.min.js" type="text/javascript"></script>
+	<script src="libraries/jquery.tablesorter.min.js" type="text/javascript"></script> <!--This should only be loaded for projects.php -->
 </head>
 
 <body>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Manage</title>
+	<meta charset="utf-8" />
+	<link href='http://fonts.googleapis.com/css?family=Merriweather+Sans:400,400italic,700,700italic' rel='stylesheet' type='text/css' />
+	<link href="libraries/theme.blueprint.css" rel="stylesheet" type="text/css" />
+	<link href="styles.css" rel="stylesheet" type="text/css" />
+	<script src="libraries/jquery-1.10.2.min.js" type="text/javascript"></script>
+	<script src="libraries/jquery.tablesorter.min.js" type="text/javascript"></script>
+</head>
+
+<body>
+<header id="site-header" class="site-header">
+	<h1 class="site-title">Time Tracker</h1>
+	<nav id="site-nav" class="site-nav">
+		<ul id="site-menu" class="site-menu">
+			<li class="site-menu-item"><a class="site-menu-link" href="#">Timesheets</a></li>
+			<li class="site-menu-item"><a class="site-menu-link" href="#">Reports</a></li>
+			<li class="site-menu-item"><a class="site-menu-link" href="#">Invoices</a></li>
+			<li class="site-menu-item"><a class="site-menu-link" href="manage.php">Manage</a></li>
+		</ul>
+	</nav>
+	<nav id="section-nav" class="section-nav manage">
+		<h1 class="section-nav-title">Manage: </h1>
+		<ul class="section-menu">
+			<li class="section-menu-item"><a class="section-menu-link" href="projects.php">Projects</a></li>
+			<li class="section-menu-item"><a class="section-menu-link" href="clients.php">Clients</a></li>
+			<li class="section-menu-item"><a class="section-menu-link" href="#">Team</a></li>
+		</ul>
+	</nav>
+</header><section id="page-content" class="page-content">
+	<header class="page-header">
+		<h1 class="page-title">Projects</h1>
+		<nav class="page-controls-nav">
+			<ul class="page-controls-list project">
+				<li class="page-controls-item link-btn"><a class="add-project-link" href="project-add.php">+ Create Project</a></li>
+				<li class="page-controls-item"><a class="view-project-archive-link" href="project_archives.php">View Project Archives</a></li>
+			</ul>
+		</nav>
+	</header>
+	<section class="content">
+		<table id="project-list" class="entity-table projects tablesorter">
+			<thead>
+				<tr>
+					<!-- <td><input id="select-all" name="select-all" type="checkbox" value="all" title="Select all projects" /></td> -->
+					<td>Project</td>
+					<td>Client</td>
+					<td>Hours/Budget</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<!-- <td><input id="select-project" name="select-project" type="checkbox" value="all" title="Select project" /> -->
+					<td><a class="project-info-name-link" href="#" title="View project details">Widgets Website</a></td>
+					<td><a class="client-info-contact-link" href="#" title="View client details">Acme, Inc</a></td>
+					<td>x Hours/y budget</td>
+				</tr>
+				<tr>
+					<!-- <td><input id="select-project" name="select-project" type="checkbox" value="all" title="Select project" /> -->
+					<td><a class="project-info-name-link" href="#" title="View project details">Rabbit/Duck Blog</a></td>
+					<td><a class="client-info-contact-link" href="#" title="View client details">Elmer Fudd</a></td>
+					<td>x Hours/y budget</td>
+				</tr>
+				<tr>
+					<!-- <td><input id="select-project" name="select-project" type="checkbox" value="all" title="Select project" /> -->
+					<td><a class="project-info-name-link" href="#" title="View project details">Atomic Cupcakes eCommerce</a></td>
+					<td><a class="client-info-contact-link" href="#" title="View client details">Atomic Cupcakes</a></td>
+					<td>x Hours/y budget</td>
+				</tr>
+				<tr>
+					<!-- <td><input id="select-project" name="select-project" type="checkbox" value="all" title="Select project" /> -->
+					<td><a class="project-info-name-link" href="#" title="View project details">Haystack Time Tracker</a></td>
+					<td><a class="client-info-contact-link" href="#" title="View client details">Media Barn</a></td>
+					<td>x Hours/y budget</td>
+				</tr>
+				<tr>
+					<!-- <td><input id="select-project" name="select-project" type="checkbox" value="all" title="Select project" /> -->
+					<td><a class="project-info-name-link" href="#" title="View project details">The Lonely Eye</a></td>
+					<td><a class="client-info-contact-link" href="#" title="View client details">Alex Buffalo</a></td>
+					<td>x Hours/y budget</td>
+				</tr>
+			</tbody>
+		</table>
+	</section>
+</section>
+<footer id="site-footer" class="site-footer">
+
+</footer>
+<script src="project-controls.js" type="text/javascript"></script>
+</body>
+</html>
