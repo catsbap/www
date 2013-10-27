@@ -17,7 +17,7 @@
 	<header class="page-header">
 		<h1 class="page-title">Edit Client Details</h1>
 		<nav class="page-controls-nav">
-			<ul class="client-page-controls">
+			<ul class="page-controls-list client">
 				<li class="page-controls-item link-btn"><a class="add-client-link" href="client-add.php">+ Add Client</a></li>
 				<li class="page-controls-item"><a class="view-client-archive-link" href="client-archives.php">View Archives</a></li>
 				<li class="page-controls-item"><a class="view-all-link" href="clients.php">View All</a></li>
@@ -64,22 +64,22 @@
 ?>
 
 	<section class="content">
-	<!--BEGIN FORM-->
-	<form action="client-edit.php" method="post" style="margin-bottom:50px;" enctype="multipart/form-data">
-	<input type="hidden" name="action" value="edit_client">
-	<?PHP
-	//we need to get the client_id into the $_POST so it is there when the user posts the form.
-	//perhaps in the $_SESSION variable?
-	if (isset($_GET["client_id"])) {
-		$client_id = $_GET["client_id"];
-	?>
-		<input type="hidden" name="client_id" value="<?php echo $client_id?>">
-	<?php } 
-	if (isset($_POST["client_id"])) {
-		$client_id = $_POST["client_id"];
-	?>
-		<input type="hidden" name="client_id" value="<?php echo $client_id?>">
-	<?php } ?>
+		<!--BEGIN FORM-->
+		<form action="client-edit.php" method="post" style="margin-bottom:50px;" enctype="multipart/form-data">
+			<input type="hidden" name="action" value="edit_client">
+			<?PHP
+			//we need to get the client_id into the $_POST so it is there when the user posts the form.
+			//perhaps in the $_SESSION variable?
+			if (isset($_GET["client_id"])) {
+				$client_id = $_GET["client_id"];
+			?>
+			<input type="hidden" name="client_id" value="<?php echo $client_id?>">
+		<?php } 
+		if (isset($_POST["client_id"])) {
+			$client_id = $_POST["client_id"];
+		?>
+			<input type="hidden" name="client_id" value="<?php echo $client_id?>">
+		<?php } ?>
 		<figure class="client-logo l-col-20">
 			<img class="client-logo-img small" src="<?php echo $client->getValue("client_logo_link")?>" title="Client/Company name logo" alt="Client/Company name logo" />
 			<fieldset class="client-logo-upload">
@@ -96,38 +96,38 @@
 		<section class="client-detail l-col-80">
 			<fieldset class="client-details-entry">
 				<!-- <legend class="client-details-title">Edit client details:</legend> -->
-				<header class="client-details-header">
-					<h1 class="client-details-title">Edit client details:</h1>
+				<header class="entity-details-header client">
+					<h1 class="entity-details-title client">Edit client details:</h1>
 					<h4 class="required">= Required</h4>
 				</header>
-				<ul class="details-list client-details-list">
-					<li class="client-details-item name">
-						<label for="client-name" <?php validateField("client_name", $missingFields)?> class="client-details-label required">Client's name:</label>
+				<ul class="entity-list entity-details-list client-details-list">
+					<li class="entity-details-item name client">
+						<label for="client-name" <?php validateField("client_name", $missingFields)?> class="entity-details-label client required">Client's name:</label>
 						<input id="client-name" name="client-name" class="client-contact-info-input" type="text" tabindex="1" value="<?php echo $client->getValueEncoded("client_name")?>" />
 					</li>
-					<li class="client-details-item phoneNum">
-						<label for="client-phone" <?php validateField("client_phone", $missingFields)?> class="client-details-label">Phone number:</label>
+					<li class="entity-details-item phoneNum client">
+						<label for="client-phone" <?php validateField("client_phone", $missingFields)?> class="entity-details-label client">Phone number:</label>
 						<input id="client-phone" name="client-phone" class="client-contact-info-input" type="text" tabindex="2" value="<?php echo $client->getValueEncoded("client_phone")?>" />
 					</li>
-					<li class="client-details-item email">
-						<label for="client-email" <?php validateField("client_email", $missingFields)?> class="client-details-label">Email address:</label>
+					<li class="entity-details-item email client">
+						<label for="client-email" <?php validateField("client_email", $missingFields)?> class="entity-details-label client">Email address:</label>
 						<input id="client-email" name="client-email" class="client-contact-info-input" type="text" tabindex="3" value="<?php echo $client->getValueEncoded("client_email")?>" />
 					</li>
-					<li class="client-details-item fax">
-						<label for="client-fax" <?php validateField("client_fax", $missingFields)?> class="client-details-label">Fax number:</label>
+					<li class="entity-details-item fax client">
+						<label for="client-fax" <?php validateField("client_fax", $missingFields)?> class="entity-details-label client">Fax number:</label>
 						<input id="client-fax" name="client-fax" class="client-contact-info-input" type="text" tabindex="4" value="<?php echo $client->getValueEncoded("client_fax")?>" />
 					</li>
-					<li class="client-details-item info-sync">
-						<label for="contact-info-sync" class="client-details-label">Use same info for contact:</label>
+					<li class="entity-details-item info-sync client">
+						<label for="contact-info-sync" class="entity-details-label client">Use same info for contact:</label>
 						<input id="contact-info-sync" name="contact-info-sync" class="contact-info-sync-input" type="checkbox" tabindex="4" value="info-sync" />
 					</li>
-					<li class="client-details-item address">
-						<label for="client-streetAddress" <?php validateField("client_address", $missingFields)?> class="client-details-label">Street Address:</label>
-						<textarea id="client-streetAddress" name="client-streetAddress" class="client-streetAddress-input" tabindex="5"><?php echo $client->getValueEncoded("client_address")?></textarea><br />
-						<label for="client-city" <?php validateField("client_city", $missingFields)?> class="client-details-label">City</label>
+					<li class="entity-details-item address">
+						<label for="client-streetAddress" <?php validateField("client_address", $missingFields)?> class="entity-details-label client">Street Address:</label>
+						<textarea id="client-streetAddress" name="client-streetAddress" class="streetAddress-input" tabindex="5"><?php echo $client->getValueEncoded("client_address")?></textarea><br />
+						<label for="client-city" <?php validateField("client_city", $missingFields)?> class="entity-details-label client">City</label>
 						<input id="client-city" name="client-city" class="client-city-input" type="text" tabindex="6" value="<?php echo $client->getValueEncoded("client_city")?>" /><br />
 						<!--handle state differently, as it is a select field.-->
-						<label for="client-state" <?php validateField("client_state", $missingFields)?> class="client-details-label">State:</label>
+						<label for="client-state" <?php validateField("client_state", $missingFields)?> class="entity-details-label client">State:</label>
 						<select id="client-state" name="client-state" class="client-state-select" tabindex="7">
 							<option selected="selected" value="default">Select state</option>
 							<option value="AL">Alabama</option>
@@ -187,9 +187,9 @@
 							<option value="GU">Guam</option>
 							<option value="MP">Northern Mariana Islands</option>
 						</select><br />
-						<label for="client-zip" <?php validateField("client_zip", $missingFields)?> class="client-details-label">Zip code:</label>
+						<label for="client-zip" <?php validateField("client_zip", $missingFields)?> class="entity-details-label client">Zip code:</label>
 						<input id="client-zip" name="client-zip" class="client-zip-input" type="text" tabindex="8" value="<?php echo $client->getValueEncoded("client_zip")?>" /><br />
-						<label for="client-country" class="client-details-label">Client's country:</label>
+						<label for="client-country" class="entity-details-label client">Client's country:</label>
 						<select id="client-country" name="client-country" class="client-country-select" tabindex="9">
 							<option value="">Select client's country...</option>
 							<option selected="selected" value="US">United States of America</option>
@@ -199,8 +199,8 @@
 						//get the currencies from the table to populate the drop down.
 						$currency = Client::getCurrency();
 					?>
-					<li class="client-details-item currency">
-						<label for="client-currency" class="client-details-label">Preferred currency:</label>
+					<li class="entity-details-item currency client">
+						<label for="client-currency" class="entity-details-label client">Preferred currency:</label>
 						<select name="client_currency_index" id="client_currency_index" size="1">    
 						<?php foreach ($currency as $currencies) { ?>
    							<option value="<?php echo $currencies["client_currency_index"] ?>"<?php setSelected($client, "client_currency_index", $currencies["client_currency_index"]) ?>><?php echo $currencies["client_preferred_currency"]?></option>
@@ -209,22 +209,22 @@
 						<!-- <select id="client-currency" name="client-currency" class="client-currency-select" tabindex="10">
 							<option value="">Select currency</option>
 							<option selected="selected" value="USD">United States Dollar</option> -->
-						</select><br />
+						</select>
 					</li>
 					<!--leave these alone for now. Keep this UI as a single form, but these values have no errors associated with them
 					so they can be straight updates.-->
-					<li class="client-details-item client-archive">
-						<label for="client-archive" class="client-details-label">Archive client?</label>
+					<li class="entity-details-item client-archive client">
+						<label for="client-archive" class="entity-details-label client">Archive client?</label>
 						<input id="client-archive" name="client-archive" class="client-archive-input" type="checkbox" tabindex="10" value="1" />
 					</li>
-					<li class="client-details-item delete-client">
-						<label for="client-delete-btn" class="client-details-label">Delete Client?</label>
+					<li class="entity-details-item delete-btn client">
+						<label for="client-delete-btn" class="entity-details-label client">Delete Client?</label>
 						<input id="client-delete-btn" name="client-delete-btn" class="client-delete-btn" onclick="window.open('delete.php?client_id=<?php echo $client_id ?>','myWindow','width=200,height=200,left=250%,right=250%,scrollbars=no')" type="button" value="- Delete Client" tabindex="11" />
 					</li>
-					<li class="client-details-item submit-client">
-						<label for="client-save-btn" class="client-details-label">All done?</label>
+					<li class="entity-details-item submit-btn client">
+						<label for="client-save-btn" class="entity-details-label client">All done?</label>
 						<input id="client-save-btn" name="client-save-btn" class="client-save-btn" type="submit" value="+ Save Changes" tabindex="11" /> or
-						<a class="" href="#" tabindex="11"><a href="javascript:history.go(-1)">Cancel</a>
+						<a class="" href="#" tabindex="11"><a href="clients.php">Cancel</a>
 					</li>
 				</ul>
 			</fieldset>

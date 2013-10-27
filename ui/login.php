@@ -1,20 +1,26 @@
-<!-- Include AJAX Framework -->
-
-<link rel='stylesheet' type='text/css' href='ajax-login.css' />
-<script type='text/javascript' src='../Libraries/jquery-1.10.2.min.js'></script>
-<script type='text/javascript' src='ajax-login.js'></script>
-<script src="ajax/ajax_framework.js" language="javascript"></script>
 <?php 	include('header.php'); //add header.php to page 
 	//I'm just trying this out. User is redirected here if checklogin in common.inc.php fails.
 	//this calls the javascript function check_login() which is in the ajax-login.js file in this directory. 
 	
 ?>
+<div id="page-content" class="page-content">
+	<header class="page-header">
+		<h1 class="page-title">Log in to use Time Tracker</h1>
+	</header>
+	<div class="content">
+		<form id="user-login" action="" method="post"> <!--event handling dealt with in js file-->
+			<ul class="details-list">
+				<li class="details-item username"><label for="username" class="entity-details-label">User name: </label><input name="username" type="text" id="username" value=""/></li>
+				<li class="details-item password"><label for="password" class="entity-details-label">Password: </label><input name="password" type="password" id="password" value=""/></li>
+				<li class="details-item username"><label for="Submit" class="entity-details-label">Ready? </label><input type="submit" name="Submit" value="Login"/></li>
+			</ul>
+		</form>
+	</div>
+</div>
+<footer id="site-footer" class="site-footer">
 
-<!-- Form: the action="javascript:login()"call the javascript function "login" into ajax_framework.js -->
-<form action="javascript:check_login()" method="post">
-<h2>Please log in to Time Tracker.</h2>
-<label class='error' id='error' style='display: none; font-size: 12px;'></label>
-<input name="username" type="text" id="username" value=""/><br/>
-<input name="password" type="password" id="password" value=""/><br/>
-<input type="submit" name="Submit" value="Login"/>
-</form>
+</footer>
+<script type='text/javascript' src='ajax-login.js'></script>
+
+</body>
+</html>

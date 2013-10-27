@@ -22,15 +22,15 @@
 	<header class="page-header">
 		<h1 class="page-title">Clients</h1>
 		<nav class="page-controls-nav">
-			<ul class="client-page-controls">
-				<li class="page-controls-item add-client-button"><a class="add-client-link" href="client-add.php">+ Add Client</a></li>
+			<ul class="page-controls-list client">
+				<li class="page-controls-item link-btn"><a class="add-client-link" href="client-add.php">+ Add Client</a></li>
 				<!--<li class="page-controls-item add-client-button"><a class="add-client-link" href="client-add.html">+ Add Client</a></li>-->
 				<li class="page-controls-item"><a class="view-client-archive-link" href="client-archives.php">View Archives</a></li>
 			</ul>
 		</nav>
 	</header>
 	<section class="content">
-		<ul id="client-list" class="client-list">
+		<ul id="client-list" class="entity-list client">
 		<?php foreach ($clients as $client) { 
 				//RETRIEVE THE CLIENT ID
 				$client_id = Client::getClientId($client->getValueEncoded("client_name"));
@@ -50,34 +50,21 @@
 				//DISPLAY ONLY ACTIVE CLIENTS, ARCHIVED CLIENTS ARE ON THE ARCHIVE PAGE.
 				if ($archive_flag != 1) {
 				?>
-			<li class="client-list-item l-col-33">
+			<li class="entity-list-item client l-col-33">
 				<img class="client-logo-thumbnail thumbnail" src="<?php echo $client->getValueEncoded("client_logo_link")?>" title="Client Logo" alt="Client Logo" />
-				<ul class="client-info-list">
-					<li class="client-info-name"><a class="client-info-name-link" href="<?php echo "client-detail.php?client_id=" . $client_id[0]?>" title="View client details"><?php echo $client->getValueEncoded("client_name")?></a></li>
-					<li class="client-info-contact">Contact: <a class="client-info-contact-link" href="#" title="View contact details"><?php echo $primary_contact->getValue("contact_name") ?></a></li>
-					<li class="client-info-active-projects">X Active <a class="client-info-active-projects-link" href="#" title="View active projects">Projects</a></li>
-					<form action="clients.php" method="post" style="margin-bottom:50px;">
-						<button id="client-archive-btn" name="client-archive-btn" class="client-archive-btn" type="submit" value="<?php echo $client_id[0] ?>" tabindex="11">Archive Client</button></form> 			
+				<ul class="entity-info-list client">
+					<li class="entity-info-item client"><a class="client-info-name-link" href="<?php echo "client-detail.php?client_id=" . $client_id[0]?>" title="View client details"><?php echo $client->getValueEncoded("client_name")?></a></li>
+					<li class="entity-info-item client">Contact: <a class="client-info-contact-link" href="#" title="View contact details"><?php echo $primary_contact->getValue("contact_name") ?></a></li>
+					<li class="entity-info-item client">X Active <a class="client-info-active-projects-link" href="#" title="View active projects">Projects</a></li>
+					<!--
+<form action="clients.php" method="post" style="margin-bottom:50px;">
+						<button id="client-archive-btn" name="client-archive-btn" class="client-archive-btn" type="submit" value="<?php echo $client_id[0] ?>" tabindex="11">Archive Client</button></form>
+--> 			
 			<?php	} ?>
 				</ul>		
 			</li>
 <?php } ?>
-<!--			<li class="client-list-item l-col-33">
-				<img class="client-logo-thumbnail" src="images/default.jpg" title="Client Logo" alt="Client Logo" />
-				<ul class="client-info-list">
-					<li class="client-info-name"><a class="client-info-name-link" href="client-detail.html" title="View client details">Client/Company Name</a></li>
-					<li class="client-info-contact">Contact: <a class="client-info-contact-link" href="#" title="View contact details">Contact Name</a></li>
-					<li class="client-info-active-projects">X Active <a class="client-info-active-projects-link" href="#" title="View active projects">Projects</a></li>
-				</ul>		
-			</li>
-			<li class="client-list-item l-col-33">
-				<img class="client-logo-thumbnail" src="images/default.jpg" title="Client Logo" alt="Client Logo" />
-				<ul class="client-info-list">
-					<li class="client-info-name"><a class="client-info-name-link" href="client-detail.html" title="View client details">Client/Company Name</a></li>
-					<li class="client-info-contact">Contact: <a class="client-info-contact-link" href="#" title="View contact details">Contact Name</a></li>
-					<li class="client-info-active-projects">X Active <a class="client-info-active-projects-link" href="#" title="View active projects">Projects</a></li>
-				</ul>		
-			</li>-->
+
 		</ul>
 	</section>
 </section>

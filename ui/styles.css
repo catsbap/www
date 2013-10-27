@@ -155,8 +155,14 @@ input[type=submit]:focus {
 	color: #FAF9FF;
 }
 .link-btn a:hover,
-.link-btn a:visited {
+.link-btn a:active {
 	color: #193E73;
+}
+.submit-btn {
+	margin: 1.125em 0;
+}
+input[type=button].delete-btn:hover {
+	background-color: #D22F12;
 }
 .required {
 	color: #D22F12;
@@ -166,6 +172,22 @@ input[type=submit]:focus {
 }
 .disabled {
 	display: none;
+}
+.error {
+	position: relative;
+	color: #D22F12;
+	background-color: #e59e9e;
+	margin: 1em;
+	padding: 1em;
+	border: #D22F12;
+}
+.success {
+	position: relative;
+	color: #046506;
+	background-color: #a9e69f;
+	margin: 1em;
+	padding: 1em;
+	border: #046506;
 }
 
 /* !LAYOUT 
@@ -389,20 +411,39 @@ input[type=submit]:focus {
 }
 .page-title {
 	position: relative;
-	width: 75%;
-	float: left;
+}
+.page-sub-title {
+	font-size: 1.125em;
 }
 .page-controls-nav {
 	position: relative;
-	width: 25%;
+	overflow: auto;
+	/* width: 25%; */
+	float: right;
+}
+.page-controls-list {
+	position: relative;
+	overflow: auto;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+.page-controls-item {
+	position: relative;
+	margin: 0em .5em;
+	padding: .25em;
+	font-size: .8em;
 	float: left;
+}
+.entity-detail .page-controls-item {
+	margin-left: 1.625em;
 }
 .content {
 	position: relative;
 	width: 100%;
 	margin: 1em 0;
 	overflow: auto;
-	clear: left;
+	clear: both;
 }
 
 .details-list {
@@ -417,20 +458,12 @@ input[type=submit]:focus {
 	padding: .125em .5em;
 }
 
-.page-controls-list {
-	position: relative;
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
-.page-controls-item {
-	position: relative;
-	margin: 0em .5em;
-	padding: .25em;
-	font-size: .8em;
-	float: left;
-}
 
+
+.entity-detail {
+	position: relative;
+	margin: .25em 0 1em 0;
+}
 .entity-list {
 	position: relative;
 	list-style: none;
@@ -444,33 +477,63 @@ input[type=submit]:focus {
 	padding: .5em;
 	/* border: 1px solid #D4E8F5; */
 }
-/* !Content Manage Client modules */
-/*
-.add-client-button {
-	position: relative;
-	text-align: center;
-	font-weight: 700;
-	width: auto;
-	padding: .25em .5em;
-	color: #FAF9FF;
-	background-color: #A9BFF5;
-	border: 1px dotted #193E73;
-}
-*/
-
-.client-list {
+.entity-info-list {
 	position: relative;
 	list-style: none;
 	margin: 0em;
 	padding: 0em;
 }
-.client-list-item {
+.entity-details-sub-header {
 	position: relative;
-	float: left;
-	margin: 0em;
-	padding: .5em;
-	/* border: 1px solid #D4E8F5; */
+	margin: 0 0 1em 0;
+	border-bottom: 1px solid #A9BFF5;
 }
+.entity-details-title {
+	font-size: 1.25em;
+	font-weight: 700;
+}
+legend.entity-details-title {
+	position: relative;
+	visibility: hidden;
+	margin-bottom: -1em;
+}
+.entity-sub-title {
+	font-size: 1.125em;
+}
+.entity-details-entry {
+	padding: .5em 1em 1em 1em;
+}
+.entity-details-list {
+	margin-left: 1.5em;
+}
+.entity-details-item {
+	margin: .325em 0;
+}
+.entity-details-block {
+	margin: .325em 0 .325em 1.5em;
+}
+textarea.entity-details-block {
+	vertical-align: text-top;
+	margin: .5em 0;
+	width: 60%;
+
+}
+.entity-details-item.address {
+	margin: 1.125em 0;
+}
+.entity-details-item.address .streetAddress-input {
+	vertical-align: text-top;
+	margin: .5em 0;
+	width: 60%;
+}
+.entity-details-label {
+	position: relative;
+	display: inline-block;
+	width: 25%;
+	text-align: right;
+	margin: 0 .5em 0 0;
+}
+/* !Content Manage Client modules */
 .client-logo {
 	position: relative;
 	padding: 0 1em 2em 0;
@@ -505,13 +568,8 @@ legend.client-logo-title {
 	margin-bottom: -1em;
 }
 
-.client-info-list {
-	position: relative;
-	list-style: none;
-	margin: 0em;
-	padding: 0em;
-}
 
+/*
 .client-details-header {
 	position: relative;
 	margin: 0 0 1em 0;
@@ -540,9 +598,11 @@ legend.client-details-title {
 	margin: .5em 0;
 	width: 60%;
 }
+*/
 .client-state-select {
 	margin: .5em 0;
 }
+/*
 .client-details-label {
 	position: relative;
 	display: inline-block;
@@ -550,13 +610,15 @@ legend.client-details-title {
 	text-align: right;
 	margin: 0 .5em 0 0;
 }
+*/
+/*
 .client-details-item.submit-client {
 	margin: 1.125em 0;
 }
 input[type=button].client-delete-btn:hover {
 	background-color: #D22F12;
-	/* color:#ff8e8e */
 }
+*/
 .contact-detail {
 	position: relative;
 	margin: 1.5em 0 3em 0;

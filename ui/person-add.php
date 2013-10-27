@@ -9,6 +9,7 @@
 		//$_SESSION["redirect"] = $_SERVER["PHP_SELF"];
 		//header( 'Location: ../usercake/login.php' ) ;
 	//}
+	include('header.php'); //add header.php to page
 	//checkLogin();
 
 	
@@ -20,7 +21,19 @@
 				displayPersonInsertForm(array(), array(), new Person(array()));
 		} 
 ?>
-
+<section id="page-content" class="page-content">
+	<header class="page-header">
+		<h1 class="page-title">Add Person</h1>
+		<nav class="page-controls-nav">
+			<ul class="page-controls-list project">
+				<!--
+<li class="page-controls-item add-client-button"><a class="add-client-link" href="client-add.html">+ Add Client</a></li>
+				<li class="page-controls-item"><a class="view-client-archive-link" href="client-archives.html">View Archives</a></li>
+-->
+				<li class="page-controls-item"><a class="view-all-link" href="projects.php">View All</a></li>
+			</ul>
+		</nav>
+	</header>
 
 <!--DISPLAY PROJECT INSERT WEB FORM--->
 <?php function displayPersonInsertForm($errorMessages, $missingFields, $person) { 
@@ -223,6 +236,5 @@ include('header.php'); //add header.php to page
 <footer id="site-footer" class="site-footer">
 
 </footer>
-<script src="client-controls.js" type="text/javascript"></script>
 </body>
 </html>

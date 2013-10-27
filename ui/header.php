@@ -18,9 +18,12 @@ Edit this file for updating links to pages/screens
 	<meta charset="utf-8" />
 	<link href='http://fonts.googleapis.com/css?family=Merriweather+Sans:400,400italic,700,700italic' rel='stylesheet' type='text/css' />
 	<link href="libraries/theme.blueprint.css" rel="stylesheet" type="text/css" /> <!--This should only be loaded for projects.php -->
+	<link href="libraries/custom-theme/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css" /> <!--This should only be loaded for projects.php -->
 	<link href="styles.css" rel="stylesheet" type="text/css" />
 	<script src="libraries/jquery-1.10.2.min.js" type="text/javascript"></script>
 	<script src="libraries/jquery.tablesorter.min.js" type="text/javascript"></script> <!--This should only be loaded for projects.php -->
+	<script src="libraries/jquery.tablesorter.widgets.min.js" type="text/javascript"></script> <!--This should only be loaded for projects.php -->
+	<script src="libraries/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script> <!--This should only be loaded for projects.php -->
 </head>
 
 <body>
@@ -39,7 +42,7 @@ Edit this file for updating links to pages/screens
 		<ul class="section-menu">
 			<li class="section-menu-item"><a class="section-menu-link" href="projects.php">Projects</a></li>
 			<li class="section-menu-item"><a class="section-menu-link" href="clients.php">Clients</a></li>
-			<li class="section-menu-item"><a class="section-menu-link" href="people.php">Team</a></li>
+			<li class="section-menu-item"><a class="section-menu-link" href="people.php">People</a></li>
 			<li class="section-menu-item"><a class="section-menu-link" href="tasks.php">Tasks</a></li>
 		</ul>
 	</nav>

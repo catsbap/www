@@ -8,20 +8,15 @@
 		//header( 'Location: http://localhost:8888/time_tracker/usercake/login.php' ) ;
 	//}
 	
-	
+	include('header.php'); //add header.php to page
 	?>
-	<!DOCTYPE html>
-<?php include('header.php'); //add header.php to page ?>
-
-<body>
 <section id="page-content" class="page-content">
 	<header class="page-header">
 		<h1 class="page-title">People</h1>
 		<nav class="page-controls-nav">
-			<ul class="client-page-controls">
-				<li class="page-controls-item add-client-button"><a class="add-client-link" href="person-add.php">+ Add Person</a></li>
-				<!--<li class="page-controls-item add-client-button"><a class="add-client-link" href="person-add.html">+ Add Client</a></li>-->
-				<li class="page-controls-item"><a class="view-client-archive-link" href="project_archives.php">View Project Archives</a></li>
+			<ul class="page-controls-list project">
+				<li class="page-controls-item link-btn"><a class="add-person-link" href="person-add.php">+ Add Person</a></li>
+				<!-- <li class="page-controls-item"><a class="view-client-archive-link" href="project_archives.php">View Project Archives</a></li> -->
 			</ul>
 		</nav>
 	</header>

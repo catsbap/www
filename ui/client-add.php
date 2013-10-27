@@ -18,7 +18,7 @@
 	<header class="page-header">
 		<h1 class="page-title">Add New Client</h1>
 		<nav class="page-controls-nav">
-			<ul class="client-page-controls">
+			<ul class="page-controls-list client">
 				<!--
 <li class="page-controls-item add-client-button"><a class="add-client-link" href="client-add.html">+ Add Client</a></li>
 				<li class="page-controls-item"><a class="view-client-archive-link" href="client-archives.html">View Archives</a></li>

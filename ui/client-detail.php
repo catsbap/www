@@ -31,13 +31,13 @@
 <header class="page-header">
 		<h1 class="page-title">Client Details</h1>
 		<nav class="page-controls-nav">
-			<ul class="client-page-controls">
+			<ul class="page-controls-list client">
 				<!--
 <li class="page-controls-item add-client-button"><a class="add-client-link" href="client-add.html">+ Add Client</a></li>
 				<li class="page-controls-item"><a class="view-client-archive-link" href="client-archives.html">View Archives</a></li>
 -->
 				<!-- I am just putting this here because I need to send the client id into the client-edit php file.-->
-				<li class="page-controls-item"><a class="view-all-link" href="client-edit.php?client_id=<?php echo $client_id?>">Edit This Client</a></li>
+				<li class="page-controls-item link-btn"><a class="view-all-link" href="client-edit.php?client_id=<?php echo $client_id?>">Edit Client</a></li>
 <!--end-->
 <li class="page-controls-item"><a class="view-all-link" href="clients.php">View All</a></li>
 			</ul>
