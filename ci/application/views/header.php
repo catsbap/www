@@ -6,7 +6,7 @@
 	<link href='http://fonts.googleapis.com/css?family=Merriweather+Sans:400,400italic,700,700italic' rel='stylesheet' type='text/css' />
 	<link href="/time_tracker/ui/libraries/theme.blueprint.css" rel="stylesheet" type="text/css" /> <!--This should only be loaded for projects.php -->
 	<link href="/time_tracker/ui/libraries/custom-theme/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css" /> <!--This should only be loaded for projects.php -->
-	<link href="/time_tracker/ui/styles.css" rel="stylesheet" type="text/css" />
+	<link href="../../../ui/styles.css" rel="stylesheet" type="text/css" />
 	<script src="/time_tracker/ui/libraries/jquery-1.10.2.min.js" type="text/javascript"></script>
 	<script src="/time_tracker/ui/libraries/jquery.tablesorter.min.js" type="text/javascript"></script> <!--This should only be loaded for projects.php -->
 	<script src="/time_tracker/ui/libraries/jquery.tablesorter.widgets.min.js" type="text/javascript"></script> <!--This should only be loaded for projects.php -->
