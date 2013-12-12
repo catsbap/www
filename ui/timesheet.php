@@ -155,6 +155,9 @@ function displayTimesheet($timesheet_aggregate) {
 						<td class="week-total"></td>
 						<td></td>
 					</tr>
+					<tr>
+						<td colspan="7"><a href="#" class="ui-button submit-timesheet">Submit For Approval</a></td>
+					</tr>
 				</tfoot>
 				<tbody class="week-view">
 				</tbody>
@@ -175,6 +178,8 @@ function saveTimesheet($processType) {
 	error_log("POST: " . $_POST["timesheetItems"] );
 	$timesheet_items = json_decode($_POST["timesheetItems"]);
 	$delete_items = json_decode($_POST["deleteItems"]);
+	$timesheet_submitted = json_decode($_POST["timesheet_submitted"]);
+	
 	error_log(">>>>>> delete_items: " . count($delete_items));
 	
 	if ($delete_items) {
@@ -223,9 +228,16 @@ function saveTimesheet($processType) {
 			$newtsi->insertTimesheetItem($timesheet_item->person_id, $timesheet_item->timesheet_item_id);
 		}
 	}
+	if ( $timesheet_submitted == 1 ) {
+		Timesheet::submitTimesheet($timesheet_item->timesheet_item_id);
+		$message = " and submitted for approval";
+		error_log("timesheet submitted" );
+	} else {
+		$message = "";
+	}
+	
 
-
-	return "saved timesheet items";
+	return "Timesheet saved" . $message . ".";
 }
  
 function saveTimesheetOld() {

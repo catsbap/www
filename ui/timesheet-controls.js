@@ -16,6 +16,23 @@ var $editEntry = $( '<a class="ui-button edit-entry">Edit</a>' )
 		evt.preventDefault();
 	});
 
+var giveFeedbackMessage = function( content, messageType ) {
+	$( '<p></p>' )
+		.html( content )
+		.addClass( messageType )
+		.insertAfter( '.page-header' )
+		.hide()
+		.delay( 750 )
+		.slideToggle( 'slow' )
+		.delay( 1500 )
+		.slideToggle( 'fast', function() {
+			$( this )
+				.removeClass()
+				.remove();
+			})
+}
+
+
 
 
 var $timerBtn = $( '<a class="ui-button timer">Start</a>' )
@@ -111,6 +128,7 @@ function getTimesheet( id, week ) {
 			//console.log( data );
 			timesheet = $.parseJSON( data );
 			$( "#timesheet-tasks-list" ).data( "timesheet_id", timesheet[0].timesheet_id );
+			$( "#timesheet-tasks-list" ).data( "timesheet_submitted", timesheet[0].timesheet_submitted );
 			//console.log( "saved timesheet_id: " + $( "#timesheet-tasks-list" ).data( "timesheet_id" ) );
 			var tsItems = timesheet[0].timesheet_items;
 			
@@ -142,6 +160,15 @@ function getTimesheet( id, week ) {
 			} else {
 				console.log("no items to display yet");
 			}
+			$( ".ui-button.submit-timesheet span" )
+				.text( function() {
+					console.log($( "#timesheet-tasks-list" ).data( "timesheet_submitted" ));
+					if ( $( "#timesheet-tasks-list" ).data( "timesheet_submitted" ) == 1 ) {
+						return "Re-submit For Approval";
+					} else {
+						return "Submit For Approval";
+					}
+				})
 			toggleTimesheetView( week.currentSelected );
 			//console.log("done");
 		})
@@ -157,6 +184,7 @@ function getTimesheet( id, week ) {
 function saveTimesheet( elem, deleteRow ) {
 	var $tsTable = $( elem ).find( 'tbody' );
 	var tsId = $( "#timesheet-tasks-list" ).data( "timesheet_id" );
+	var tsSubmitted = $( "#timesheet-tasks-list" ).data( "timesheet_submitted" );
 	console.log("saving to timesheet_id: " + tsId )
 	var personId = $( "#timesheet-tasks-list" ).data( "person_id" );
 	var dates = [];
@@ -214,9 +242,20 @@ function saveTimesheet( elem, deleteRow ) {
 			func: "saveTimesheet",
 			proc_type: "A",
 			timesheetItems: JSON.stringify( tsItems ),
-			deleteItems: JSON.stringify( deleteItems )
+			deleteItems: JSON.stringify( deleteItems ),
+			timesheet_submitted: tsSubmitted
 		})
 		.done( function( data ) {
+			//giveFeedbackMessage( data, "success" );
+			$( ".ui-button.submit-timesheet span" )
+			.text( function() {
+				console.log($( "#timesheet-tasks-list" ).data( "timesheet_submitted" ));
+				if ( $( "#timesheet-tasks-list" ).data( "timesheet_submitted" ) == 1 ) {
+					return "Re-submit For Approval";
+				} else {
+					return "Submit For Approval";
+				}
+			})
 			console.log("done: " + data);
 		})
 		.fail( function( data ) {
@@ -605,6 +644,15 @@ $( function() {
 			
 			evt.preventDefault();
 		});
+		
+	$( ".ui-button.submit-timesheet" )
+		.button()
+		.click( function( evt ) {
+			$( "#timesheet-tasks-list" ).data( "timesheet_submitted", 1 );
+			saveTimesheet( $( '#timesheet-tasks-list' ) );
+			
+			evt.preventDefault();
+		})
 	
 	$( "#time-display" )
 		.buttonset()
