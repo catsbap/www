@@ -51,6 +51,7 @@ if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"] != "") {
 	<script src="libraries/jquery.tablesorter.widgets.min.js" type="text/javascript"></script> <!--This should only be loaded for projects.php -->
 	<script src="libraries/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script> <!--This should only be loaded for projects.php -->
 	<script src="libraries/purl.js" type="text/javascript"></script> <!--This should only be loaded for projects.php -->
+	<script src="libraries/numeral.min.js"></script>
 </head>
 
 <body>
