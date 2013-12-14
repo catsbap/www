@@ -59,35 +59,19 @@ background-color: aqua;
 	<tr><td>
 	<b><h3>Hours Tracked</h3></b><br>
 	<?php 
-	print_r($project_hours_sum);
+	print_r($total_time);
 	?>
 	</td><td><td><h5>Billable Hours</h5><h3><?php 
-	//if (!$sum_project_billable_hours) {
-	//	echo 0;
-	//} else {
-	//	echo $sum_project_billable_hours[0]->timesheet_hours;
-	//}
-	print_r($project_billable_hours_sum);
+	print_r($billable_time);
 	?>
 	<br>
 	<h5>Unbillable Hours</h5><h3><?php 
-	if (!$project_hours_sum) {
-		echo "0";
-	} elseif (!$project_hours_sum) {
-		echo intval($project_hours_sum) - 0;
-	} else {
-		echo intval($project_hours_sum - intval($project_billable_hours_sum) . ".00");
-	}
+		echo "ert";
 	?>
 	</h3></h3></td><td>
 	<h5>Billable Amount</h5><h3>
 	<?php 
-	//figure this out on Monday
-	//$billable_amount = $project_url['project_billable_hours'];
-	//$billable_amount = $project_url[6]['project_total_rate'];
-	print_r($project_billable_sum) . ".00";
-	echo ".00";
-	//echo "$ " . $billable_amount?></h3></td></td></tr>
+	print_r($billable_rate) . ".00"?></h3></td></td></tr>
 
 	
 	</td></tr>
@@ -101,7 +85,7 @@ background-color: aqua;
 		foreach ($value as $val) {
 			if ($val || $val == "0.00") {
 				echo "<td>$val</td>";
-				if ($i%4 == 2) {
+				if ($i%4 == 3) {
 					echo "</tr><tr>";
 				}
 			}

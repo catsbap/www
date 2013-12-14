@@ -57,7 +57,6 @@ class Report extends CI_Controller {
 	    
 	    //we'll try doing this here instead of in the view (which is probably right!!)
 		//build the anchors dynamically to return to the view.
-		//testing
 		
 		//hours tracked
 		$all_data = $this->Report_model->getAllHours($this->todate, $this->fromdate);
@@ -115,7 +114,7 @@ class Report extends CI_Controller {
 		
 		//top view common code
 		//this is aggregated at the very top level, so
-		//roll everything up.
+		//roll everything up and call the top view model to diaplay it.
 		$rate = "";
 		foreach ($rate_temp['billable_time'] as $ratetemp) {
 			$rate = $rate + $ratetemp;
@@ -142,8 +141,9 @@ class Report extends CI_Controller {
 		
 		$this->input->get('page');
 		if ($this->input->get('page') == "clients") {
-		
+		////////////////////////
 		//****CLIENT DATA*****//
+		///////////////////////
 		$this->data['view'] = "client_report";
 		$client_url = array();
 		$client_url[]['client_billable_rate'] = array();
@@ -158,6 +158,7 @@ class Report extends CI_Controller {
 				if ($clients['client_id'] == $rate_temp['client_id'][$key]) {		
 					
 					$anchored_client_url = $this->timetrackerurls->generate_client_url($clients['client_id'], $clients['client_name'], $this->data['controller'], $this->data['view']);
+					
 					$running_total_time = $rate_temp['total_time'][$key] + $running_total_time;
 					$running_billable_time = $rate_temp['billable_time'][$key] + $running_billable_time;
 					$running_billable_rate = money_format('%i', $rate_temp['billable_rate'][$key] + $running_billable_rate);
@@ -235,7 +236,8 @@ class Report extends CI_Controller {
 		
 			$this->data['task_url'] = $task_url;
 			$data = $this->data;
-			$this->load->view('task_view', $data);				
+			$this->load->view('task_view', $data);
+			//****PERSON DATA******//			
 		} elseif ($this->input->get('page') == "staff") {
 			$this->data['view'] = "person_report";
 			$person_url = array();

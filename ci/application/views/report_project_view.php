@@ -53,60 +53,50 @@ background-color: aqua;
 			<h3 class="page-title"><?php echo date_format(new DateTime($_GET['fromdate']), "F j, Y");?> to <?php echo date_format(new DateTime($_GET['todate']), "F j, Y");?></h3>
 		</header>
 	<table width="100%" style="border:1px solid;">
-	<tr><td><?php echo $picker;
-		print_r($project_hours_query);
+	<tr><td><?php echo $picker;?>
+	<tr><td><?php echo $project_name[0]->project_name;
 	?>
 	</td></tr>
 	<tr><td>
 	<b>Hours Tracked</b><br>
 	<?php 
-	//foreach ($sumquery as $timesheet_hours) {
-	//	echo $timesheet_hours->timesheet_hours;
-	//}
-	//if (empty($sumquery)) echo "0";
+	print_r($total_time);
 	?>
 	</td><td><b>Billable Hours</b><br>
-	<?php //print_r($billablequery)
-	//foreach ($billablequery as $timesheet_hours) {
-	//	if (!$timesheet_hours) { 
-	//		echo "0";
-	//	} else {
-	//		echo $timesheet_hours->timesheet_hours;
-	//	}
-	//}
+	<?php print_r($billable_time);
 	?>
-	<!--/td><td>Billable Amount</td><td>Uninvoiced Amount</td></tr>
-	<tr><td><h3><a href="http://localhost:8888/time_tracker/ci/index.php/report_controller/client_report?fromdate=<?php echo $_GET['fromdate']?>&todate=<?php echo $_GET['todate']?>">Clients</a></h3></td>
-	</td><td><h1>Projects</h1></td><td><h3>Tasks</h3></td><td><h3>Staff</h3></td></tr>
-	<tr><td><hr></td></tr>
-	<tr><td><b>Name</b><br>
-				<?php
-		foreach ($projectquery as $projects) {
-		echo $projects->project_name;
-		echo "<br>";
-	}
+	<h5>Unbillable Hours</h5><h3><?php 
+		echo "ert";
 	?>
-	</td><td><b>Clients</b><br>
-	<?php
-//		foreach ($projectquery as $clients) {
-//		echo $clients->client_name;
-//		echo "<br>";
-//	}
-	?>
-	
-	
-	</td><td><b>Hours</b><br>
-		<?php
-//		foreach ($projecthoursquery as $projecthours) {
-//		echo $projecthours->timesheet_hours;
-//		echo "<br>";
-//	}
-	?>
+	</h3></td><td>
+	<h5>Billable Amount</h5><h3>
+	<?php 
+	print_r($billable_rate) . ".00";
+	echo ".00";?></h3></td></td></tr>
 
-	</td><td>Billable Hours</td><td>Billable Amount</td></tr-->
+	
+	</td></tr>
 	<tr><td colspan="4">	<div id="menucss"><?php echo $menu ?></div>
 </td></tr>
 	<tr><td><h5>Name</h5></td><td><h5>Hours</h5></td><td><h5>Billable Hours</h5></td><td><h5>Billable Amount</h5></td></tr>
+	<?php 
+	$i = 0;
+	foreach ($task_url as $key=>$value) {
+		//print_r($project_url);
+		foreach ($value as $val) {
+			if ($val || $val == "0.00") {
+				echo "<td>$val</td>";
+				if ($i%4 == 3) {
+					echo "</tr><tr>";
+				}
+			}
+			$i++;
+		}
+	}
+	echo "<BR><BR>";
+	//error_log(print_r($client_url,true));
+?>
+
 	</table>
 	</div>
 	<footer id="site-footer" class="site-footer">

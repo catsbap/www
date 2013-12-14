@@ -40,7 +40,7 @@ class TimeTrackerUrls{
 		return $anchor;
 	}
 	
-	function generate_person_url($person_id = "", $person_name="", $controller, $view) {
+	function generate_person_url($person_id = "", $person_first_name="", $controller, $view) {
 		$obj =& get_instance();
 		$base = $obj->config->item('base_url');
 		$obj->load->helper('url');
@@ -49,7 +49,7 @@ class TimeTrackerUrls{
 		$todate = $_GET['todate'];
 		$kind = 'week';
 		$page = $_GET['page'];
-		$anchor = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&person_id=$person_id&page=$page", "$person_name");
+		$anchor = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&person_id=$person_id&page=$page", "$person_first_name");
 		return $anchor;
 	}
 

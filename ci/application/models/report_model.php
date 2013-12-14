@@ -134,6 +134,32 @@ class Report_model extends CI_Model {
 		return $query->result();
 	}
 	
+	function getProjectName($project_id) {
+		$query = $this->db->select('project.project_name');
+		$query = $this->db->from('project');
+		$query = $this->db->where('project.project_id =', $project_id);
+		$query = $this->db->get();	
+		return $query->result();
+	}
+	
+	function getTaskName($task_id) {
+		$query = $this->db->select('task.task_name');
+		$query = $this->db->from('task');
+		$query = $this->db->where('task.task_id =', $task_id);
+		$query = $this->db->get();	
+		return $query->result();
+	}
+	
+	function getPersonName($task_id) {
+		$query = $this->db->select('person.person_first_name');
+		$query = $this->db->from('person');
+		$query = $this->db->join('project_person', 'project_person.person_id = person.person_id');
+		$query = $this->db->join('project_task', 'project_task.project_id = project_person.project_id');		
+		$query = $this->db->where('project_task.task_id =', $task_id);
+		$query = $this->db->get();	
+		return $query->result();
+	}
+	
 	function getClients($to, $from) {
 		$rows = array();
 		$clientquery = $this->db->select('client.client_name');
@@ -308,8 +334,56 @@ class Report_model extends CI_Model {
 		return $rows;	
 	}
 	
-	//NOT SURE WE'RE GOING TO USE THIS
-
+	function getTasksByProject($to, $from, $project_id) {
+		$rows = array();
+		$projectquery = $this->db->select('task.task_name');
+		$projectquery = $this->db->select('task.task_id');
+		//$projectquery = $this->db->select('client.client_name');
+		//$projectquery = $this->db->select('client.client_id');
+		$projectquery = $this->db->from('task');
+		$projectquery = $this->db->select_sum('timesheet_item.timesheet_hours');
+		$projectquery = $this->db->join('project_task', 'project_task.task_id = task.task_id');
+		$projectquery = $this->db->join('timesheet_item', 'timesheet_item.task_id = project_task.task_id');
+		$projectquery = $this->db->where('project_task.project_id =', $project_id);
+		$projectquery = $this->db->where('timesheet_item.timesheet_date <=', $to);
+		$projectquery = $this->db->where('timesheet_item.timesheet_date >=', $from);
+		//$projectquery = $this->db->group_by('client.client_name');
+		$projectquery = $this->db->group_by('task.task_name');
+		$projectquery = $this->db->having('count(*) > 0');
+		$projectquery = $this->db->get();	
+		foreach($projectquery->result_array() as $row)
+		{    
+        $rows[] = $row; //add the fetched result to the result array;
+		}
+		return $rows;	
+	}
+	
+		function getPersonsByTask($to, $from, $task_id) {
+		$rows = array();
+		$projectquery = $this->db->select('person.person_first_name');
+		$projectquery = $this->db->select('person.person_id');
+		//$projectquery = $this->db->select('client.client_name');
+		//$projectquery = $this->db->select('client.client_id');
+		$projectquery = $this->db->from('person');
+		$projectquery = $this->db->select_sum('timesheet_item.timesheet_hours');
+		$projectquery = $this->db->join('project_person', 'project_person.person_id = person.person_id');
+		$projectquery = $this->db->join('project_task', 'project_task.project_id = project_person.project_id');
+		$projectquery = $this->db->join('timesheet_item', 'timesheet_item.task_id = project_task.task_id');
+		$projectquery = $this->db->where('project_task.task_id =', $task_id);
+		$projectquery = $this->db->where('timesheet_item.timesheet_date <=', $to);
+		$projectquery = $this->db->where('timesheet_item.timesheet_date >=', $from);
+		//$projectquery = $this->db->group_by('client.client_name');
+		$projectquery = $this->db->group_by('person.person_first_name');
+		$projectquery = $this->db->having('count(*) > 0');
+		$projectquery = $this->db->get();	
+		foreach($projectquery->result_array() as $row)
+		{    
+        $rows[] = $row; //add the fetched result to the result array;
+		}
+		return $rows;	
+	}
+	
+	
 	
 	function getProjects($to, $from) {
 		$rows = array();
@@ -353,31 +427,6 @@ class Report_model extends CI_Model {
 		return $rows;	
 	}
 	
-	//THIS IS THE THING TO WORK ON ON TUESDAY 12/10
-	function getTasksByProject($to, $from, $client_id) {
-		$rows = array();
-		$projectquery = $this->db->select('task.task_name');
-		$projectquery = $this->db->select('task.task_id');
-		//$projectquery = $this->db->select('client.client_name');
-		//$projectquery = $this->db->select('client.client_id');
-		$projectquery = $this->db->from('task');
-		$projectquery = $this->db->select_sum('timesheet_item.timesheet_hours');
-		$projectquery = $this->db->join('project', 'project.project_id = project.client_id');
-		$projectquery = $this->db->join('timesheet_item', 'project.project_id = timesheet_item.project_id');
-		$projectquery = $this->db->where('client.client_id =', $client_id);
-		$projectquery = $this->db->where('timesheet_item.timesheet_date <=', $to);
-		$projectquery = $this->db->where('timesheet_item.timesheet_date >=', $from);
-		//$projectquery = $this->db->group_by('client.client_name');
-		$projectquery = $this->db->group_by('project.project_name');
-		$projectquery = $this->db->having('count(*) > 0');
-		$projectquery = $this->db->get();	
-		foreach($projectquery->result_array() as $row)
-		{    
-        $rows[] = $row; //add the fetched result to the result array;
-		}
-		return $rows;	
-	}
-	
 	//this is just a test to see how to load data into objects. 
 	function getTaskObject() {
 		$taskquery = $this->db->select('*');
@@ -392,6 +441,7 @@ class Report_model extends CI_Model {
 	}
 	
 	//what if we get ALL data
+	//YEAH!!
 	function getAllHours($to, $from) {
 		$rows = array(); //will hold all results
 		$projecthoursquery = $this->db->select('client.client_id');
