@@ -10,6 +10,7 @@ class Report_controller extends CI_Controller {
 	function __construct() {
 		//this is common code to all of these objects.
 		parent::__construct();
+		$this->load->library('javascript');
 		$this->fromdate = $this->input->get('fromdate');
 		$this->todate = $this->input->get('todate');
 		//get the information for the page we're viewing.
@@ -101,6 +102,7 @@ class Report_controller extends CI_Controller {
 				
 				$this->data['rate_temp'] = $rate_temp;
 			}
+		//print_r($rate_temp);
 		
 		//this aggregates everything up to the top level, not sure we need this here.
 		$rate = "";
@@ -122,7 +124,7 @@ class Report_controller extends CI_Controller {
 		$this->data['billable_rate'] = $rate;
 	}
 	
-	
+	//*SHOWS THE PROJECTS
 	function client_report() {
 		$rate_temp = $this->data['rate_temp'];
 		$this->load->model('Report_model', '', TRUE);
@@ -183,6 +185,7 @@ class Report_controller extends CI_Controller {
 		$this->load->view('report_client_view', $data);
 	}
 	
+	//**SHOWS THE TASKS
 	function project_report() {
 		$rate_temp = $this->data['rate_temp'];
 		$this->load->model('Report_model', '', TRUE);
@@ -198,9 +201,12 @@ class Report_controller extends CI_Controller {
 			$running_billable_rate = '';
 			$anchored_task_url = '';
 			foreach($rate_temp['task_id'] as $key=>$val) {
-				if ($tasks['task_id'] == $rate_temp['task_id'][$key]) {		
+				if (($tasks['task_id'] == $rate_temp['task_id'][$key]) && ($tasks['project_id'] == $rate_temp['project_id'][$key])) {		
 					
 					$anchored_task_url = $this->timetrackerurls->generate_task_url($tasks['task_id'], $tasks['task_name'], $this->data['controller'], $this->data['view']);
+					////*****THIS MIGHT WORK!!!*************
+					//try putting the code into a library to just show code, not another view.
+					$this->task_report($tasks['task_id']);
 					$running_total_time = $rate_temp['total_time'][$key] + $running_total_time;
 					$running_billable_time = $rate_temp['billable_time'][$key] + $running_billable_time;
 					$running_billable_rate = money_format('%i', $rate_temp['billable_rate'][$key] + $running_billable_rate);
@@ -238,19 +244,21 @@ class Report_controller extends CI_Controller {
 		$this->data['task_url'] = $task_url;
 		$this->data['project_name'] = $this->Report_model->getProjectName($_GET["project_id"]);
 		$data = $this->data;
+				
 		$this->load->view('header_view');
 		$this->load->view('report_project_view', $data);
 	}
 	
-	function task_report() {
+	////***SHOWS THE PEOPLE
+	function task_report($task_id) {
+		//FIGURE OUT HOW TO GET THE CLIENT TO SHOW UP JUST AS A DROPDOWN.		
 		$rate_temp = $this->data['rate_temp'];
 		$this->load->model('Report_model', '', TRUE);
 		$this->data['controller'] = "report_controller";
 		$this->data['view'] = "person_report";
 		
-		//get all of the tasks for this time for the given project id, in the URL.
-		$personquery = $this->Report_model->getPersonsByTask($this->todate, $this->fromdate, $this->task_id);
-		//print_r($personquery);
+		//get all of the persons for this task for the given project id, in the URL.
+		$personquery = $this->Report_model->getPersonsByTask($this->todate, $this->fromdate, $task_id);
 		$person_url = array();
 		foreach ($personquery as $persons) {	
 			$running_total_time = '';
@@ -258,12 +266,12 @@ class Report_controller extends CI_Controller {
 			$running_billable_rate = '';
 			$anchored_person_url = '';
 			foreach($rate_temp['person_id'] as $key=>$val) {
-				if ($persons['person_id'] == $rate_temp['person_id'][$key]) {	
+				if (($persons['person_id'] == $rate_temp['person_id'][$key]) && ($persons['task_id'] == $rate_temp['task_id'][$key]) && ($persons['project_id'] == $rate_temp['project_id'][$key])) {
 					
 					$anchored_person_url = $this->timetrackerurls->generate_person_url($persons['person_id'], $persons['person_first_name'], $this->data['controller'], $this->data['view']);
 					$running_total_time = $rate_temp['total_time'][$key] + $running_total_time;
-					$running_billable_time = $rate_temp['billable_time'][$key] + $running_billable_time;
-					$running_billable_rate = money_format('%i', $rate_temp['billable_rate'][$key] + $running_billable_rate);
+					$running_billable_time = $rate_temp['billable_time'] [$key] + $running_billable_time;
+					$running_billable_rate = money_format('%i', $rate_temp['billable_rate'] [$key] + $running_billable_rate);
 				}
 			}
 						
@@ -296,10 +304,10 @@ class Report_controller extends CI_Controller {
 		}
 
 		$this->data['person_url'] = $person_url;
-		$this->data['task_name'] = $this->Report_model->getTaskName($_GET["task_id"]);
+		$this->data['task_name'] = $this->Report_model->getTaskName($task_id);
 		$data = $this->data;
-		$this->load->view('header_view');
-		$this->load->view('report_task_view', $data);
+		print_r($data);
+		//$this->load->view('report_task_view', $data);
 	}
 
 	
