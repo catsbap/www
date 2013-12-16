@@ -150,6 +150,15 @@ class Report_model extends CI_Model {
 		return $query->result();
 	}
 	
+	////WE NEED THIS FUNCTION FOR THE PERSON LIBRARY AND DROP DOWN IN TASKS
+	function getTaskId($task_name) {
+		$query = $this->db->select('task.task_id');
+		$query = $this->db->from('task');
+		$query = $this->db->where('task.task_name =', $task_name);
+		$query = $this->db->get();	
+		return $query->result();
+	}
+	
 	function getPersonName($task_id) {
 		$query = $this->db->select('person.person_first_name');
 		$query = $this->db->from('person');

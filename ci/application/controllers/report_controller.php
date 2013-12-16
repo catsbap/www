@@ -11,6 +11,7 @@ class Report_controller extends CI_Controller {
 		//this is common code to all of these objects.
 		parent::__construct();
 		$this->load->library('javascript');
+		//$this->load->library('jquery');
 		$this->fromdate = $this->input->get('fromdate');
 		$this->todate = $this->input->get('todate');
 		//get the information for the page we're viewing.
@@ -187,6 +188,10 @@ class Report_controller extends CI_Controller {
 	
 	//**SHOWS THE TASKS
 	function project_report() {
+		//jquery/js stuff//
+		$this->data['library_src'] = $this->jquery->script();
+		$this->data['script_foot'] = $this->jquery->_compile();
+		//
 		$rate_temp = $this->data['rate_temp'];
 		$this->load->model('Report_model', '', TRUE);
 		$this->data['controller'] = "report_controller";
@@ -200,23 +205,25 @@ class Report_controller extends CI_Controller {
 			$running_billable_time = '';
 			$running_billable_rate = '';
 			$anchored_task_url = '';
+			$task_id = array();
 			foreach($rate_temp['task_id'] as $key=>$val) {
 				if (($tasks['task_id'] == $rate_temp['task_id'][$key]) && ($tasks['project_id'] == $rate_temp['project_id'][$key])) {		
-					
 					$anchored_task_url = $this->timetrackerurls->generate_task_url($tasks['task_id'], $tasks['task_name'], $this->data['controller'], $this->data['view']);
-					////*****THIS MIGHT WORK!!!*************
-					//try putting the code into a library to just show code, not another view.
-					$this->task_report($tasks['task_id']);
+					//get the task ID to pass of to the person url
+					$task_id[] = $rate_temp['task_id'][$key];
 					$running_total_time = $rate_temp['total_time'][$key] + $running_total_time;
 					$running_billable_time = $rate_temp['billable_time'][$key] + $running_billable_time;
 					$running_billable_rate = money_format('%i', $rate_temp['billable_rate'][$key] + $running_billable_rate);
 				}
 			}
-						
+			
 			$task_url[]['task_url'] = $anchored_task_url;
 			$task_url[]['task_total_hours'] = $running_total_time;
 			$task_url[]['task_billable_hours'] = $running_billable_time;
 			$task_url[]['task_total_rate'] = $running_billable_rate;
+			foreach ($task_id as $task) {
+				$task_url[]['task_id'] = $task;
+			}			
 		}
 		
 		$rate = "";
@@ -240,11 +247,14 @@ class Report_controller extends CI_Controller {
 			$this->data['billable_time'] = $task_billable_hours;
 			$this->data['billable_rate'] = $task_total_rate;
 		}
-
+		$this->data['rate_temp'];
 		$this->data['task_url'] = $task_url;
 		$this->data['project_name'] = $this->Report_model->getProjectName($_GET["project_id"]);
 		$data = $this->data;
-				
+		
+		$this->javascript->click('#button', "alert('Hello!');");
+		$this->javascript->external();
+		$this->javascript->compile();
 		$this->load->view('header_view');
 		$this->load->view('report_project_view', $data);
 	}
@@ -306,7 +316,7 @@ class Report_controller extends CI_Controller {
 		$this->data['person_url'] = $person_url;
 		$this->data['task_name'] = $this->Report_model->getTaskName($task_id);
 		$data = $this->data;
-		print_r($data);
+		//print_r($data);
 		//$this->load->view('report_task_view', $data);
 	}
 

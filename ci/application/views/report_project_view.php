@@ -45,7 +45,35 @@ background-color: aqua;
 }
 
 </style>
-
+<?php echo $library_src;?>
+<?php echo $script_foot;?>
+<script>$(document).ready(function() { 
+    $("#button").click(function(){
+        //id = $(this).val();
+        //if ( id == 1 )    { 
+                //$("#").show();
+                $( "#198" ).fadeIn( "slow" );
+                
+                function callback() {
+					setTimeout(function() {
+						$("#198").removeAttr( "style" ).hide().fadeOut();
+					}, 1000 );
+				};
+        //}
+         //   else if    ( id == 2 ) {
+           //     $("#Paypal").hide();
+             //   $("#Check").show()
+            //}
+              //  else {
+                //    $("#Paypal").hide();
+                  //  $("#Check").hide();
+                //}
+    });
+    
+    //inicial settings
+    $("#198").hide();
+});
+</script> 
 <body>
 	<div id="page-content" class="page-content">
 		<header class="page-header">
@@ -58,6 +86,8 @@ background-color: aqua;
 	?>
 	</td></tr>
 	<tr><td>
+	<div><button id="button" class="button">click</button></div>
+	<div id="message"></div>
 	<b>Hours Tracked</b><br>
 	<?php 
 	print_r($total_time);
@@ -82,18 +112,21 @@ background-color: aqua;
 	<?php 
 	$i = 0;
 	foreach ($task_url as $key=>$value) {
-		//print_r($project_url);
-		foreach ($value as $val) {
-			if ($val || $val == "0.00") {
-				echo "<td>$val</td>";
-				if ($i%4 == 3) {
-					echo "</tr><tr>";
+		//print_r($task_url);
+		foreach ($value as $key=>$val) {
+			if ($key == 'task_id') {
+				echo "<tr>";
+				$this->timetrackerurls->display_person($value['task_id']);
+				echo "</tr>";
+			} else {
+				if ($val || $val == "0.00") {
+					echo "<td>$val</td>";
 				}
+				$i++;
 			}
-			$i++;
 		}
 	}
-	echo "<BR><BR>";
+						
 	//error_log(print_r($client_url,true));
 ?>
 
