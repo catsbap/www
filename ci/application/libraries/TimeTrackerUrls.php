@@ -36,7 +36,8 @@ class TimeTrackerUrls{
 		$todate = $_GET['todate'];
 		$kind = 'week';
 		$page = $_GET['page'];
-		$anchor = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&task_id=$task_id&page=$page", "$task_name");
+		//$anchor = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&task_id=$task_id&page=$page", "$task_name");
+		$anchor = "<div id='button'><a href=#>$task_name</a></div>";
 		return $anchor;
 	}
 	

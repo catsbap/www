@@ -86,7 +86,6 @@ background-color: aqua;
 	?>
 	</td></tr>
 	<tr><td>
-	<div><button id="button" class="button">click</button></div>
 	<div id="message"></div>
 	<b>Hours Tracked</b><br>
 	<?php 
