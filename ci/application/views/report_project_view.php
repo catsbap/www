@@ -49,6 +49,8 @@ background-color: aqua;
 <?php echo $script_foot;?>
 <script>
 //call a function here to get the project_id.
+//jquery to open the people under the project link. needs to be more specific to the project,
+//right now it is opening all people.
 
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
