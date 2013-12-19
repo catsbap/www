@@ -47,31 +47,26 @@ background-color: aqua;
 </style>
 <?php echo $library_src;?>
 <?php echo $script_foot;?>
-<script>$(document).ready(function() { 
-    $("#button").click(function(){
-        //id = $(this).val();
-        //if ( id == 1 )    { 
-                //$("#").show();
-                $( "#198" ).fadeIn( "slow" );
-                
-                function callback() {
-					setTimeout(function() {
-						$("#198").removeAttr( "style" ).hide().fadeOut();
-					}, 1000 );
-				};
-        //}
-         //   else if    ( id == 2 ) {
-           //     $("#Paypal").hide();
-             //   $("#Check").show()
-            //}
-              //  else {
-                //    $("#Paypal").hide();
-                  //  $("#Check").hide();
-                //}
+<script>
+//call a function here to get the project_id.
+
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+$(document).ready(function() { 
+    
+    project_id = getParameterByName('project_id')  
+    
+    $(".button_" + project_id).click(function(){	
+                $( "." + project_id ).toggle( "slow" );
     });
     
     //inicial settings
-    $("#198").hide();
+    $("." + project_id).hide();
 });
 </script> 
 <body>
@@ -84,6 +79,7 @@ background-color: aqua;
 	<tr><td><?php echo $picker;?>
 	<tr><td><?php echo $project_name[0]->project_name;
 	?>
+	<tr><td><?php echo $breadcrumb ?>
 	</td></tr>
 	<tr><td>
 	<div id="message"></div>
@@ -115,7 +111,8 @@ background-color: aqua;
 		foreach ($value as $key=>$val) {
 			if ($key == 'task_id') {
 				echo "<tr>";
-				$this->timetrackerurls->display_person($value['task_id']);
+				//what if we call the project id here
+				$this->timetrackerurls->display_person($value['task_id'], $project_id);
 				echo "</tr>";
 			} else {
 				if ($val || $val == "0.00") {
