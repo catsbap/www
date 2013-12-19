@@ -55,7 +55,8 @@ background-color: aqua;
 		</header>
 	<table width="100%" border=1px solid>
 	<tr><td><?php echo $picker ?></td></tr>
-	<tr><td><?php echo $client_name[0]->client_name;?>
+	<tr><td><?php echo $client_name[0]->client_name;?></td></tr>
+		<tr><td><?php echo $breadcrumb ?>
 	<tr><td>
 	<b><h3>Hours Tracked</h3></b><br>
 	<?php 
@@ -93,8 +94,8 @@ background-color: aqua;
 		}
 	}
 	echo "<BR><BR>";
-	//error_log(print_r($client_url,true));
 ?>
+<tr><td></td></tr>
 	</table>
 
 	</table>
