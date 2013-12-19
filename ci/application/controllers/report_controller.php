@@ -11,6 +11,11 @@ class Report_controller extends CI_Controller {
 		//this is common code to all of these objects.
 		parent::__construct();
 		$this->load->library('javascript');
+		//load breadcrumb
+		$this->load->library('breadcrumb');
+		//load form helper
+		$this->load->helper('form');
+		
 		//$this->load->library('jquery');
 		$this->fromdate = $this->input->get('fromdate');
 		$this->todate = $this->input->get('todate');
@@ -43,7 +48,13 @@ class Report_controller extends CI_Controller {
 				//get the name of the active page
 				//$this->CI->load->library('uri');
 				$this->active = $this->uri->segment(1);
- 
+				//will this work for the breadcrumb?
+				$url = current_url();
+				$this->data['current_url'] = $url . '?' . $_SERVER['QUERY_STRING'];
+				$this->data['last_url'] = $_SERVER['HTTP_REFERER'];
+						error_log($this->data['last_url']);
+
+					$this->breadcrumb->clear();					
 				//setup the menu and load it ready for display in the view
 				$this->data['menu'] = $this->menu->render($this->menu_pages, $this->active);
 				$this->data['css'] = $this->css;
@@ -125,12 +136,18 @@ class Report_controller extends CI_Controller {
 		$this->data['billable_rate'] = $rate;
 	}
 	
+	
 	//*SHOWS THE PROJECTS
 	function client_report() {
+	//breadcrumb, build up as we go.
+		$this->breadcrumb->add_crumb('Time Report', $this->data['current_url']); // this will be a link
+		$this->data['breadcrumb'] =  $this->breadcrumb->output();
+		//error_log(print_r($this->data['breadcrumb']));
 		$rate_temp = $this->data['rate_temp'];
 		$this->load->model('Report_model', '', TRUE);
 		$this->data['controller'] = "report_controller";
 		$this->data['view'] = "project_report";
+		
 		
 		//get all of the projects for this time for the given client id, in the URL.
 		$projectquery = $this->Report_model->getProjectsByClient($this->todate, $this->fromdate, $this->client_id);
@@ -178,7 +195,7 @@ class Report_controller extends CI_Controller {
 			$this->data['billable_time'] = $project_billable_hours;
 			$this->data['billable_rate'] = $project_total_rate;
 		}
-
+		//error_log(print_r($this->data['breadcrumb'],true));
 		$this->data['project_url'] = $project_url;
 		$this->data['client_name'] = $this->Report_model->getClientName($_GET["client_id"]);
 		$data = $this->data;
@@ -191,7 +208,11 @@ class Report_controller extends CI_Controller {
 		//jquery/js stuff//
 		$this->data['library_src'] = $this->jquery->script();
 		$this->data['script_foot'] = $this->jquery->_compile();
-		//
+		//breadcrumb, build up as we go.
+		$this->breadcrumb->add_crumb('Time Report', $this->data['last_url']); // this will be a link
+		$this->breadcrumb->add_crumb('> This Client', $this->data['current_url']); // this will be a link
+		$this->data['breadcrumb'] =  $this->breadcrumb->output();
+		//error_log(print_r($this->data['breadcrumb']));
 		$rate_temp = $this->data['rate_temp'];
 		$this->load->model('Report_model', '', TRUE);
 		$this->data['controller'] = "report_controller";
@@ -208,7 +229,7 @@ class Report_controller extends CI_Controller {
 			$task_id = array();
 			foreach($rate_temp['task_id'] as $key=>$val) {
 				if (($tasks['task_id'] == $rate_temp['task_id'][$key]) && ($tasks['project_id'] == $rate_temp['project_id'][$key])) {		
-					$anchored_task_url = $this->timetrackerurls->generate_task_url($tasks['task_id'], $tasks['task_name'], $this->data['controller'], $this->data['view']);
+					$anchored_task_url = $this->timetrackerurls->generate_task_url($tasks['project_id'], $tasks['task_name'], $this->data['controller'], $this->data['view']);
 					//get the task ID to pass of to the person url
 					$task_id[] = $rate_temp['task_id'][$key];
 					$running_total_time = $rate_temp['total_time'][$key] + $running_total_time;
@@ -250,11 +271,9 @@ class Report_controller extends CI_Controller {
 		$this->data['rate_temp'];
 		$this->data['task_url'] = $task_url;
 		$this->data['project_name'] = $this->Report_model->getProjectName($_GET["project_id"]);
+		$this->data['project_id'] = $_GET["project_id"];
 		$data = $this->data;
 		
-		$this->javascript->click('#button', "alert('Hello!');");
-		$this->javascript->external();
-		$this->javascript->compile();
 		$this->load->view('header_view');
 		$this->load->view('report_project_view', $data);
 	}
