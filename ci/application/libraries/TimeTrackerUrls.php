@@ -37,7 +37,7 @@ class TimeTrackerUrls{
 		$kind = 'week';
 		$page = $_GET['page'];
 		//$anchor = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&task_id=$task_id&page=$page", "$task_name");
-		$anchor = "<div id='button'><a href=#>$task_name</a></div>";
+		$anchor = "<div class='button_$task_id'><a href=#>$task_name</a></div>";
 		return $anchor;
 	}
 	
@@ -54,7 +54,7 @@ class TimeTrackerUrls{
 		return $anchor;
 	}
 	
-	function display_person($task_id) {
+	function display_person($task_id, $project_id) {
 		$obj =& get_instance();
 		$todate = $obj->input->get('todate');
 		$fromdate = $obj->input->get('fromdate');
@@ -110,7 +110,7 @@ class TimeTrackerUrls{
 		////////just display the person's name.
 		foreach($person_url as $person) {
 			foreach ($person as $key=>$val) {
-				echo "<td><div id='" . $persons['person_id'] . "'>";
+				echo "<td><div class='" . $project_id . "'>";
 				print_r($val);
 				echo "</div></td>";
 			}
