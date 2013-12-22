@@ -14,8 +14,24 @@ class Report extends CI_Controller {
 		parent::__construct();
 		//load the header file
 		//$this->load->helper('header_helper');
+		//load jquery helper.
+		$this->load->library('javascript');
+		$this->data['library_src'] = $this->jquery->script();
+		$this->data['script_foot'] = $this->jquery->_compile();
+		//load form helper
+		$this->load->helper(array('form', 'url'));
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules('type', 'week', 'trim');
+
+		//start to implement types of reports here, this is very heavy handed, we probably want this to be a helper.
+		//THIS SHOULD FOLLOW THE DATE PICKER!
+		$this->type = $this->input->get('type');
 		$this->fromdate = $this->input->get('fromdate');
 		$this->todate = $this->input->get('todate');
+		//
+		$this->fromdate = $this->input->get('fromdate');
+		$this->todate = $this->input->get('todate');
+			
 		$client_id = $this->input->get('client_id');
 		//date picker code
 		$this->load->library('DatePicker');   
@@ -32,10 +48,10 @@ class Report extends CI_Controller {
 		//check this out or delete this if it's not working for us.
 		$this->load->library('menu');
 		$this->menu_pages = array(
-                    "report?fromdate=$this->fromdate&todate=$this->todate&page=clients" => "Clients",
-                    "report?fromdate=$this->fromdate&todate=$this->todate&page=projects" => "Projects",
-                    "report?fromdate=$this->fromdate&todate=$this->todate&page=tasks" => "Tasks",
-                    "report?fromdate=$this->fromdate&todate=$this->todate&page=staff" => "Staff"
+                    "report?fromdate=$this->fromdate&todate=$this->todate&type=$this->type&page=clients" => "Clients",
+                    "report?fromdate=$this->fromdate&todate=$this->todate&type=$this->type&page=projects" => "Projects",
+                    "report?fromdate=$this->fromdate&todate=$this->todate&type=$this->type&page=tasks" => "Tasks",
+                    "report?fromdate=$this->fromdate&todate=$this->todate&type=$this->type&page=staff" => "Staff"
                 );
  
 				//get the name of the active page
@@ -60,6 +76,14 @@ class Report extends CI_Controller {
 		
 		//hours tracked
 		$all_data = $this->Report_model->getAllHours($this->todate, $this->fromdate);
+			if (empty($all_data))
+				{
+					//no data has been tracked yet.
+					$rate_temp['total_time'][] = 0.00;
+					$rate_temp['billable_rate'][] = 0.00;
+					$rate_temp['billable_time'][] = 0.00;
+			//		//return();
+				}
 			$this->data['controller'] = "report_controller";
 			foreach ($all_data as $data) {
 				$billable_time = "";
@@ -99,7 +123,6 @@ class Report extends CI_Controller {
 					$billable_time = "0.00";
 					$billable_rate = "0.00";
 				}
-				$rate_temp[] = array();
 				$rate_temp['total_time'][] = $total_time;
 				$rate_temp['billable_rate'][] = $billable_rate;
 				$rate_temp['client_id'][] = $data['client_id'];
@@ -133,10 +156,16 @@ class Report extends CI_Controller {
 		}
 		$this->data['billable_rate'] = $rate;
 		
+		//put the date in the data variable to get it out of the view!
+		$this->data['from_date'] = $this->fromdate;
+		$this->data['to_date'] = $this->todate;
+		
 		$data = $this->data;
 		$this->load->view('header_view');
 		$this->load->view('top_view', $data);
 		
+		
+		//error_log(print_r($this->data,true));
 		
 		
 		$this->input->get('page');
