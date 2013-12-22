@@ -32,6 +32,7 @@ class Report extends CI_Controller {
 		//THIS IS SUPPOSED TO BE JUST WHATEVER IS IN THE URL!!
 		//this sets up the appropriate date in the UI the first time the user comes into the page.
 		//ideally, we want to update the URL client-side, but this is going to have to work for now.
+		//12-22, wait to implement quarterly and custom.
 		
 		if ($this->type=='semimonthly') {
 			$current_day = date_format(new DateTime($this->input->get('fromdate')), 'd');
