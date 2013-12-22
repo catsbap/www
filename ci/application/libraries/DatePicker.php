@@ -39,8 +39,6 @@ class DatePicker{
 		$controller = $obj->uri->segment(1); 
 		$view = $obj->uri->segment(2);
 		
-		
-		//PULL THIS OUT INTO IT'S OWN FUNCTION SO WE CAN USE IT ELSEWHERE
 		if ($type == "semimonthly") {
 			//turn the fromdate from url into object
 			$date = new DateTime($fromdate);
@@ -62,23 +60,23 @@ class DatePicker{
 			//this code sets up the current semimonthly timeframe
 			//the user is viewing.
 			if ($current_day >= $middle_day) {
-				//we are in the second half of the month. Fast forward.
-				//fromdate is now the first half of the month.
-				
+				//we are in the second half of the month. 				
 				
 				///CURRENT DATE
 				//$date = new DateTime($fromdate);
 				//$fromdate = date_format($date->modify('first day of this month'), 'Y-m-d');
-				echo "<br>current from date you're looking at here<br>";
-				echo $fromdate;
+				//echo "<br>current from date you're looking at here<br>";
+				//echo $fromdate;
+				$todate = $year_of_month . "-" . $month_of_month . "-" . ($middle_day);
+				$fromdate = date_format($last_day_of_month, 'Y-m-d');
 				//this is always the 15th of the month
 				//$todate = $year_of_month . "-" . $month_of_month . "-" . ($middle_day-1);
 				echo "<br>current todate you're looking at<br>";
 				echo $todate;
+				echo $fromdate;
 				
 				
-				
-				//PREVIOUS DATE
+				//PREVIOUS DATE (rewind)
 				$date = new DateTime($fromdate);
 				//this is always the 1st of the month.
 				$picker_fromdate = date_format($date->modify('first day of this month'), 'Y-m-d');
@@ -112,12 +110,12 @@ class DatePicker{
 				///CURRENT DATE
 				//$date = new DateTime($fromdate);
 				//$fromdate = date_format($date->modify('first day of this month'), 'Y-m-d');
-				//echo "<br>current from date you're looking at here<br>";
-				//echo $fromdate;
+				echo "<br>current from date you're looking at here<br>";
+				echo $fromdate;
 				//this is always the 15th of the month
 				//$todate = $year_of_month . "-" . $month_of_month . "-" . ($middle_day-1);
-				//echo "<br>current todate you're looking at<br>";
-				//echo $todate;
+				echo "<br>current todate you're looking at<br>";
+				echo $todate;
 				
 				//PREVIOUS DATE
 				//this is always the last day of the previous month.
@@ -128,10 +126,10 @@ class DatePicker{
 				$date = new DateTime($picker_fromdate);
 				//this is always the last day of last month.
 				$picker_todate = date_format($date->modify('last day of this month'), 'Y-m-d');
-				//echo "<br>previous picker fromdate<br>";
-				//echo $picker_fromdate;
-				//echo "<br>previous picker todate<br>";
-				//echo $picker_todate;
+				echo "<br>previous picker fromdate<br>";
+				echo $picker_fromdate;
+				echo "<br>previous picker todate<br>";
+				echo $picker_todate;
 				$picker = anchor("$base/index.php/$controller/$view?fromdate=$picker_fromdate&todate=$picker_todate&page=$page&type=$type", "<<<<< Previous ||");
 				
 				

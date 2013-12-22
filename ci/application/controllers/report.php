@@ -28,9 +28,33 @@ class Report extends CI_Controller {
 		$this->type = $this->input->get('type');
 		$this->fromdate = $this->input->get('fromdate');
 		$this->todate = $this->input->get('todate');
-		//
-		$this->fromdate = $this->input->get('fromdate');
-		$this->todate = $this->input->get('todate');
+		
+		//THIS IS JUST WHATEVER IS IN THE URL!!
+		//this sets up the appropriate date in the UI the first time the user comes into the page.
+		/*
+		if ($this->type=='semimonthly') {
+			$current_day = date_format(new DateTime($this->fromdate), 'd');
+			$date = new DateTime($this->fromdate);
+			$year_of_month = date_format($date->modify('last day of this month'), 'Y');
+			$month_of_month = date_format($date->modify('last day of this month'), 'm');
+			$middle_day = 16;
+			if ($current_day >= $middle_day) {
+				$date = new DateTime($this->todate);
+				$this->fromdate = $year_of_month . "-" . $month_of_month . "-" . $middle_day;
+				$date = new DateTime($this->fromdate);
+				$last_day_of_month = $date->modify('last day of this month');
+				$this->todate = date_format($last_day_of_month, 'Y-m-d');
+			} else {
+				$date = new DateTime($this->input->get('fromdate'));
+				$date = $date->modify('first day of last month');
+				$this->fromdate = date_format(date_add($date, date_interval_create_from_date_string($middle_day -1 . ' days')), 'Y-m-d');
+				$date = new DateTime($this->fromdate);
+				//this is always the last day of last month.
+				$this->todate = date_format($date->modify('last day of this month'), 'Y-m-d');
+			}
+		
+		}
+		*/
 			
 		$client_id = $this->input->get('client_id');
 		//date picker code
