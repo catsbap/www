@@ -71,9 +71,9 @@ class DatePicker{
 				$fromdate = date_format($last_day_of_month, 'Y-m-d');
 				//this is always the 15th of the month
 				//$todate = $year_of_month . "-" . $month_of_month . "-" . ($middle_day-1);
-				echo "<br>current todate you're looking at<br>";
-				echo $todate;
-				echo $fromdate;
+				//echo "<br>current todate you're looking at<br>";
+				//echo $todate;
+				//echo $fromdate;
 				
 				
 				//PREVIOUS DATE (rewind)
@@ -82,10 +82,10 @@ class DatePicker{
 				$picker_fromdate = date_format($date->modify('first day of this month'), 'Y-m-d');
 				//this is always the 15th of the month.
 				$picker_todate = $year_of_month . "-" . $month_of_month . "-" . ($middle_day-1);
-				echo "<br>previous picker fromdate<br>";
-				echo $picker_fromdate;
-				echo "<br>previous picker todate<br>";
-				echo $picker_todate;
+				//echo "<br>previous picker fromdate<br>";
+				//echo $picker_fromdate;
+				//echo "<br>previous picker todate<br>";
+				//echo $picker_todate;
 				$picker = anchor("$base/index.php/$controller/$view?fromdate=$picker_fromdate&todate=$picker_todate&page=$page&type=$type", "<<<<< Previous ||");
 				
 				
@@ -192,6 +192,28 @@ class DatePicker{
 			$fromdate = $date;
 			$picker .= anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&page=$page&type=$type", " Next >>>>>>");
 		} elseif ($type == 'quarter') { 
+			$date = new DateTime($todate);
+			$q=ceil($date->format("n")/3);
+			$months_start=array('January','April','July','October');
+			$months_end=array('March','June','September','December');
+			$m_start=$months_start[$q-2];
+			$m_end=$months_end[$q-2];
+			$modifier='first day of '.$m_start.' '.$date->format('Y-m-d');
+			$date->modify($modifier);
+			$fromdate = $date->format('Y-m-d');
+			$modifier='last day of '.$m_end.' '.$date->format('Y-m-d');
+			$date->modify($modifier);
+			$todate = $date->format('Y-m-d');
+			$picker = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&page=$page&type=$type", "<<<<< Previous ||");
+			$m_start=$months_start[$q-1];
+			$m_end=$months_end[$q-1];
+			$modifier='first day of '.$m_start.' '.$date->format('Y-m-d');
+			$date->modify($modifier);
+			$fromdate = $date->format('Y-m-d');
+			$modifier='last day of '.$m_end.' '.$date->format('Y-m-d');
+			$date->modify($modifier);
+			$todate = $date->format('Y-m-d');
+			$picker .= anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&page=$page&type=$type", " Next >>>>>>");
 		} elseif ($type == 'week') {
 			$date = new DateTime($todate);
 			$date->modify('-1 week');

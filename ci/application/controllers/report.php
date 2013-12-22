@@ -29,32 +29,50 @@ class Report extends CI_Controller {
 		$this->fromdate = $this->input->get('fromdate');
 		$this->todate = $this->input->get('todate');
 		
-		//THIS IS JUST WHATEVER IS IN THE URL!!
+		//THIS IS SUPPOSED TO BE JUST WHATEVER IS IN THE URL!!
 		//this sets up the appropriate date in the UI the first time the user comes into the page.
-		/*
+		//ideally, we want to update the URL client-side, but this is going to have to work for now.
+		
 		if ($this->type=='semimonthly') {
-			$current_day = date_format(new DateTime($this->fromdate), 'd');
-			$date = new DateTime($this->fromdate);
+			$current_day = date_format(new DateTime($this->input->get('fromdate')), 'd');
+			$date = new DateTime($this->input->get('fromdate'));
 			$year_of_month = date_format($date->modify('last day of this month'), 'Y');
 			$month_of_month = date_format($date->modify('last day of this month'), 'm');
 			$middle_day = 16;
 			if ($current_day >= $middle_day) {
-				$date = new DateTime($this->todate);
+				$date = new DateTime($this->input->get('fromdate'));
 				$this->fromdate = $year_of_month . "-" . $month_of_month . "-" . $middle_day;
-				$date = new DateTime($this->fromdate);
+				$date = new DateTime($this->input->get('fromdate'));
 				$last_day_of_month = $date->modify('last day of this month');
 				$this->todate = date_format($last_day_of_month, 'Y-m-d');
 			} else {
 				$date = new DateTime($this->input->get('fromdate'));
-				$date = $date->modify('first day of last month');
-				$this->fromdate = date_format(date_add($date, date_interval_create_from_date_string($middle_day -1 . ' days')), 'Y-m-d');
+				$date = $date->modify('first day of this month');
+				$this->fromdate = date_format($date, 'Y-m-d');
 				$date = new DateTime($this->fromdate);
 				//this is always the last day of last month.
-				$this->todate = date_format($date->modify('last day of this month'), 'Y-m-d');
+				$this->todate = date_format(date_add($date, date_interval_create_from_date_string($middle_day . ' days')), 'Y-m-d');
 			}
-		
+		} elseif ($this->type=='month') {
+			$first_day = new DateTime($this->input->get('fromdate'));
+			$date = $first_day->modify('first day of this month');
+			$this->fromdate = date_format($date, 'Y-m-d');
+			$date = $first_day->modify('last day of this month');
+			$this->todate = date_format($date, 'Y-m-d');			
+		} elseif ($this->type=="week") {
+			$first_day = new DateTime($this->input->get('fromdate'));
+			$date = $first_day->modify('monday this week');
+			$this->fromdate = date_format($date, 'Y-m-d');
+			$date = $first_day->modify('+6 days');
+			$this->todate = date_format($date, 'Y-m-d');
+		} elseif ($this->type=="year") {
+			$first_day = new DateTime($this->input->get('fromdate'));
+			$date = $first_day->modify('first day of this year');
+			$this->fromdate = date_format($date, 'Y-m-d');
+			$date = $first_day->modify('last day of this year');
+			$this->todate = date_format($date, 'Y-m-d');
 		}
-		*/
+		
 			
 		$client_id = $this->input->get('client_id');
 		//date picker code

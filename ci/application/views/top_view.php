@@ -66,22 +66,23 @@ $(document).ready(function() {
                 //type is. The date is not updated in the URL
                 //until the user selects previous and next.
                 var val = $('#timeframe').val(); //get the value from the timeframe drop down
+                var val = val.split('=')[1];
                 changeUrlValue('type', val)
                 				
 				//this code updates the date field
 				//get the fromdate out of the URL.
-				var fromdate = 'fromdate=' + getVarFromURL('fromdate');
+				//var fromdate = 'fromdate=' + getVarFromURL('fromdate');
 				//alert(fromdate);
 				//get the todate out of the url.
-				var todate = getVarFromURL('todate');
+				//var todate = getVarFromURL('todate');
 				//get the type value from the dropdown
-				var type = $('#timeframe').val();
-				console.log(fromdate);
-				console.log(todate);
-				if (val == 'type=semimonthly') {
-					fromdate = 'fromdate=2013-5-2';
-					changeUrlValue('fromdate',fromdate);
-				}
+				//var type = val;
+				//console.log(fromdate);
+				//console.log(todate);
+				//if (val == 'semimonthly') {
+				//	fromdate = '2013-5-2';
+				//	changeUrlValue('fromdate',fromdate);
+				//}
 		});
 		
 		function getVarFromURL(varName){
@@ -130,7 +131,7 @@ $(document).ready(function() {
 			window.location.href = newUrl; //add the new value to the URL
 			*/	
 			var tmpRegex = new RegExp("(" + name + "=)[a-z]+", 'ig');
-			alert(tmpRegex);
+			//alert(tmpRegex);
 			window.location.href = url.replace(tmpRegex, '$1'+value);
 			//alert(url.replace(tmpRegex, '$1'+value));
 		}
@@ -148,7 +149,7 @@ $(document).ready(function() {
 		</header>
 	<table width="100%" border=1px solid;>
 	<tr><td><form><?php $options = array('type=week' => 'Week', 'type=semimonthly' => 'Semimonthly',
-'type=month' => 'Month', 'type=quarter' => 'Quarter', 'type=year' => 'Year', 'type=custom' => 'Custom',);
+'type=month' => 'Month', 'type=year' => 'Year');
 echo form_dropdown('timeframe', $options, 'type=' . $this->input->get('type'), 'id=timeframe');
 ?></td></tr></form>
 	<tr><td width=25%><h5>Hours Tracked</h5><h3><?php 
