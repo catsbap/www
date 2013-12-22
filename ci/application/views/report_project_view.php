@@ -93,7 +93,7 @@ $(document).ready(function() {
 	<?php print_r($billable_time);
 	?>
 	<h5>Unbillable Hours</h5><h3><?php 
-		echo "ert";
+		echo $total_time-$billable_time;
 	?>
 	</h3></td><td>
 	<h5>Billable Amount</h5><h3>

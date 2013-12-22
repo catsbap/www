@@ -110,12 +110,12 @@ class DatePicker{
 				///CURRENT DATE
 				//$date = new DateTime($fromdate);
 				//$fromdate = date_format($date->modify('first day of this month'), 'Y-m-d');
-				echo "<br>current from date you're looking at here<br>";
-				echo $fromdate;
+				//echo "<br>current from date you're looking at here<br>";
+				//echo $fromdate;
 				//this is always the 15th of the month
 				//$todate = $year_of_month . "-" . $month_of_month . "-" . ($middle_day-1);
-				echo "<br>current todate you're looking at<br>";
-				echo $todate;
+				//echo "<br>current todate you're looking at<br>";
+				//echo $todate;
 				
 				//PREVIOUS DATE
 				//this is always the last day of the previous month.
@@ -126,10 +126,10 @@ class DatePicker{
 				$date = new DateTime($picker_fromdate);
 				//this is always the last day of last month.
 				$picker_todate = date_format($date->modify('last day of this month'), 'Y-m-d');
-				echo "<br>previous picker fromdate<br>";
-				echo $picker_fromdate;
-				echo "<br>previous picker todate<br>";
-				echo $picker_todate;
+				//echo "<br>previous picker fromdate<br>";
+				//echo $picker_fromdate;
+				//echo "<br>previous picker todate<br>";
+				//echo $picker_todate;
 				$picker = anchor("$base/index.php/$controller/$view?fromdate=$picker_fromdate&todate=$picker_todate&page=$page&type=$type", "<<<<< Previous ||");
 				
 				

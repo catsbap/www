@@ -8,9 +8,9 @@ class TimeTrackerUrls{
 		$obj->load->library('session');
 		$fromdate = $_GET['fromdate'];
 		$todate = $_GET['todate'];
-		$kind = 'week';
+		$type=$_GET['type'];
 		$page = $_GET['page'];
-		$anchor = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&client_id=$client_id&page=$page", "$client_name");
+		$anchor = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&client_id=$client_id&page=$page&type=$type", "$client_name");
 		return $anchor;
 	}
 
@@ -21,9 +21,9 @@ class TimeTrackerUrls{
 		$obj->load->library('session');
 		$fromdate = $_GET['fromdate'];
 		$todate = $_GET['todate'];
-		$kind = 'week';
+		$type=$_GET['type'];
 		$page = $_GET['page'];
-		$anchor = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&project_id=$project_id&page=$page", "$project_name");
+		$anchor = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&project_id=$project_id&page=$page&type=$type", "$project_name");
 		return $anchor;
 	}
 	
@@ -34,7 +34,7 @@ class TimeTrackerUrls{
 		$obj->load->library('session');
 		$fromdate = $_GET['fromdate'];
 		$todate = $_GET['todate'];
-		$kind = 'week';
+		$type=$_GET['type'];
 		$page = $_GET['page'];
 		//$anchor = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&task_id=$task_id&page=$page", "$task_name");
 		$anchor = "<div class='button_$task_id'><a href=#>$task_name</a></div>";
@@ -48,9 +48,9 @@ class TimeTrackerUrls{
 		$obj->load->library('session');
 		$fromdate = $_GET['fromdate'];
 		$todate = $_GET['todate'];
-		$kind = 'week';
+		$type=$_GET['type'];
 		$page = $_GET['page'];
-		$anchor = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&person_id=$person_id&page=$page", "$person_first_name");
+		$anchor = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&person_id=$person_id&page=$page&type=$type", "$person_first_name");
 		return $anchor;
 	}
 	
@@ -58,6 +58,7 @@ class TimeTrackerUrls{
 		$obj =& get_instance();
 		$todate = $obj->input->get('todate');
 		$fromdate = $obj->input->get('fromdate');
+		$type=$_GET['type'];
 		$personquery = $obj->Report_model->getPersonsByTask($todate, $fromdate, $task_id);
 		
 		$rate_temp = $obj->data["rate_temp"];

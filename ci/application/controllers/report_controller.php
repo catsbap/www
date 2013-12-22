@@ -17,6 +17,7 @@ class Report_controller extends CI_Controller {
 		$this->load->helper('form');
 		
 		//$this->load->library('jquery');
+		$this->type = $this->input->get('type');
 		$this->fromdate = $this->input->get('fromdate');
 		$this->todate = $this->input->get('todate');
 		//get the information for the page we're viewing.
@@ -30,6 +31,46 @@ class Report_controller extends CI_Controller {
 			$this->person_id = $this->input->get('person_id');
 		}
 		//date picker code
+		if ($this->type=='semimonthly') {
+			$current_day = date_format(new DateTime($this->input->get('fromdate')), 'd');
+			$date = new DateTime($this->input->get('fromdate'));
+			$year_of_month = date_format($date->modify('last day of this month'), 'Y');
+			$month_of_month = date_format($date->modify('last day of this month'), 'm');
+			$middle_day = 16;
+			if ($current_day >= $middle_day) {
+				$date = new DateTime($this->input->get('fromdate'));
+				$this->fromdate = $year_of_month . "-" . $month_of_month . "-" . $middle_day;
+				$date = new DateTime($this->input->get('fromdate'));
+				$last_day_of_month = $date->modify('last day of this month');
+				$this->todate = date_format($last_day_of_month, 'Y-m-d');
+			} else {
+				$date = new DateTime($this->input->get('fromdate'));
+				$date = $date->modify('first day of this month');
+				$this->fromdate = date_format($date, 'Y-m-d');
+				$date = new DateTime($this->fromdate);
+				//this is always the last day of last month.
+				$this->todate = date_format(date_add($date, date_interval_create_from_date_string($middle_day . ' days')), 'Y-m-d');
+			}
+		} elseif ($this->type=='month') {
+			$first_day = new DateTime($this->input->get('fromdate'));
+			$date = $first_day->modify('first day of this month');
+			$this->fromdate = date_format($date, 'Y-m-d');
+			$date = $first_day->modify('last day of this month');
+			$this->todate = date_format($date, 'Y-m-d');			
+		} elseif ($this->type=="week") {
+			$first_day = new DateTime($this->input->get('fromdate'));
+			$date = $first_day->modify('monday this week');
+			$this->fromdate = date_format($date, 'Y-m-d');
+			$date = $first_day->modify('+6 days');
+			$this->todate = date_format($date, 'Y-m-d');
+		} elseif ($this->type=="year") {
+			$first_day = new DateTime($this->input->get('fromdate'));
+			$date = $first_day->modify('first day of this year');
+			$this->fromdate = date_format($date, 'Y-m-d');
+			$date = $first_day->modify('last day of this year');
+			$this->todate = date_format($date, 'Y-m-d');
+		}
+		
 		$this->load->library('DatePicker');   
 		$mypicker = $this->datepicker->show_picker();
 	    $this->data['picker'] = $mypicker;
@@ -39,10 +80,10 @@ class Report_controller extends CI_Controller {
 		$this->css=$this->config->item('css');
 		$this->load->library('menu');
 		$this->menu_pages = array(
-                    "report?fromdate=$this->fromdate&todate=$this->todate&page=clients" => "Clients",
-                    "report?fromdate=$this->fromdate&todate=$this->todate&page=projects" => "Projects",
-                    "report?fromdate=$this->fromdate&todate=$this->todate&page=tasks" => "Tasks",
-                    "report?fromdate=$this->fromdate&todate=$this->todate&page=staff" => "Staff"
+                    "report?fromdate=$this->fromdate&todate=$this->todate&type=$this->type&page=clients" => "Clients",
+                    "report?fromdate=$this->fromdate&todate=$this->todate&type=$this->type&page=projects" => "Projects",
+                    "report?fromdate=$this->fromdate&todate=$this->todate&type=$this->type&page=tasks" => "Tasks",
+                    "report?fromdate=$this->fromdate&todate=$this->todate&type=$this->type&page=staff" => "Staff"
                 );
  
 				//get the name of the active page
