@@ -6,8 +6,8 @@ class Report_model extends CI_Model {
 		parent::__construct();
 	}
 	
-	
-	function sumHours($to, $from) {
+	//CLEAN UP
+	/*function sumHours($to, $from) {
 		$sumquery = $this->db->select_sum('timesheet_hours');
 		$sumquery = $this->db->from('timesheet_item');
 		$sumquery = $this->db->where('timesheet_date <=', $to);
@@ -16,6 +16,7 @@ class Report_model extends CI_Model {
 		$sumquery = $this->db->get();
 		return $sumquery->result();
 	}
+	
 	
 	function billableHours($to, $from) {
 		$billablequery = $this->db->select_sum('timesheet_hours');
@@ -124,7 +125,7 @@ class Report_model extends CI_Model {
 		$hourlyratequery = $this->db->get();	
 		return $hourlyratequery->result();
 	}
-	
+	*/
 	//client queries to be used in the client view, called from report controller
 	function getClientName($client_id) {
 		$query = $this->db->select('client.client_name');
@@ -168,7 +169,7 @@ class Report_model extends CI_Model {
 		$query = $this->db->get();	
 		return $query->result();
 	}
-	
+	/*
 	function getClients($to, $from) {
 		$rows = array();
 		$clientquery = $this->db->select('client.client_name');
@@ -186,7 +187,7 @@ class Report_model extends CI_Model {
         $rows[] = $row; //add the fetched result to the result array;
 		}
 		return $rows;	}
-	
+	*/
 	function getClientHours($to, $from) {
 		$rows = array(); //will hold all results
 		$clienthoursquery = $this->db->select('client.client_name');
@@ -263,7 +264,7 @@ class Report_model extends CI_Model {
 		}
 		return $rows;
 	}
-	
+	/*
 	function getHoursByClientType($to, $from, $client_id) {
 		$rows = array(); //will hold all results
 		$clienthoursquery = $this->db->select('project.project_billable');
@@ -318,7 +319,7 @@ class Report_model extends CI_Model {
 		}
 		return $rows;	
 	}
-	
+	*/
 	function getProjectsByClient($to, $from, $client_id) {
 		$rows = array();
 		$projectquery = $this->db->select('project.project_name');
