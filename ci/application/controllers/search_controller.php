@@ -38,6 +38,8 @@ class Search_controller extends CI_Controller {
 		 $project_name = $this->input->post('projects');
 		 $task_name = $this->input->post('tasks');
 		 $person_name = $this->input->post('people');
+		 //get the activeToggle to determine if we should include only active projects
+		 $activeToggle= $this->uri->segment(5);	 
 		 //lets just do this the long way.
 		 if ($client_name == "") {
 			 $client_name = "%";
@@ -51,7 +53,10 @@ class Search_controller extends CI_Controller {
 		 if ($person_name == "") {
 			 $person_name = "%";
 		 }
-		 $data['results'] = $this->Search_model->getAllHours($this->data['fromdate'],$this->data['todate'],$client_name, $project_name, $task_name, $person_name);
+		 if ($activeToggle == 1) {
+			 $activeToggle = "%";
+		 }
+		 $data['results'] = $this->Search_model->getAllHours($this->data['fromdate'],$this->data['todate'],$client_name, $project_name, $task_name, $person_name, $activeToggle);
 		 //get out the total hours to display in the UI
 		 $running_total = 0;
 		 foreach($data['results'] as $row){
