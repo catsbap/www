@@ -3,6 +3,8 @@
 <head>
 	<title>Manage</title>
 	<meta charset="utf-8" />
+	<script src='http://cdnjs.cloudflare.com/ajax/libs/datejs/1.0/date.min.js' type='text/javascript'></script>
+
 	<link href='http://fonts.googleapis.com/css?family=Merriweather+Sans:400,400italic,700,700italic' rel='stylesheet' type='text/css' />
 	<link href="/time_tracker/ui/libraries/theme.blueprint.css" rel="stylesheet" type="text/css" /> <!--This should only be loaded for projects.php -->
 	<link href="/time_tracker/ui/libraries/custom-theme/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css" /> <!--This should only be loaded for projects.php -->
@@ -20,7 +22,7 @@
 	<nav id="site-nav" class="site-nav">
 		<ul id="site-menu" class="site-menu">
 			<li class="site-menu-item"><a class="site-menu-link" href="/time_tracker/ui/timesheet.php">Timesheets</a></li>
-			<li class="site-menu-item"><a class="site-menu-link" href="/time_tracker/ci/index.php/report?fromdate=<?php echo date("Y-m-d", strtotime("last monday", strtotime(date("Y-m-d"))));?>&todate=<?php echo date("Y-m-d", strtotime("this sunday", strtotime(date("Y-m-d"))));?>&page=clients">Reports</a></li>
+			<li class="site-menu-item"><a class="site-menu-link" href="/time_tracker/ci/index.php/report?fromdate=<?php echo date("Y-m-d", strtotime("last monday", strtotime(date("Y-m-d"))));?>&todate=<?php echo date("Y-m-d", strtotime("this sunday", strtotime(date("Y-m-d"))));?>&page=clients&type=week">Reports</a></li>
 			<li class="site-menu-item"><a class="site-menu-link" href="#">Invoices</a></li>
 			<li class="site-menu-item"><a class="site-menu-link" href="/time_tracker/ui/clients.php">Manage</a></li>
 		<?php //} ?>	
@@ -44,9 +46,9 @@
 	<nav id="section-nav" class="section-nav timesheets">
 		<h1 class="section-nav-title">Reports: </h1>
 		<ul class="section-menu">
-			<li class="section-menu-item"><a class="section-menu-link" href="../report?fromdate=<?php echo date("Y-m-d", strtotime("last monday", strtotime(date("Y-m-d"))));?>&todate=<?php echo date("Y-m-d", strtotime("this sunday", strtotime(date("Y-m-d"))))?>&page=clients">Time</a></li>
+			<li class="section-menu-item"><a class="section-menu-link" href="../index.php/report?fromdate=<?php echo date("Y-m-d", strtotime("last monday", strtotime(date("Y-m-d"))));?>&todate=<?php echo date("Y-m-d", strtotime("this sunday", strtotime(date("Y-m-d"))))?>&page=clients&type=week">Time</a></li>
 			<!--li class="section-menu-item"><a class="section-menu-link" href="#">Expenses</a></li-->
-			<li class="section-menu-item"><a class="section-menu-link" href="#">Detailed Time</a></li>
+			<li class="section-menu-item"><a class="section-menu-link" href="../index.php/search_controller/index/<?php echo date("Y-m-d", strtotime("last monday", strtotime(date("Y-m-d"))));?>/<?php echo date("Y-m-d", strtotime("this sunday", strtotime(date("Y-m-d"))));?>">Detailed Time</a></li>
 			<li class="section-menu-item"><a class="section-menu-link" href="#">Uninvoiced</a></li>
 			<li class="section-menu-item"><a class="section-menu-link" href="#">Project Budget</a></li>
 

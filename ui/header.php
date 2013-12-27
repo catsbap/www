@@ -6,6 +6,11 @@
 
 <?php
 /*
+
+********This header file is being used by the main application. It is not being used by the UI
+********displayed in codeigniter (reports).
+
+
 Header file for all Manage sections. Needs to eventually be able to tell which page is displaying and edit the <title> element and whatever else accordingly. Eventually it should also be able to adjust displayed menu for other sections and states (i.e. logged in or not, user permissions, etc.)
 
 Edit this file for updating links to pages/screens
@@ -61,7 +66,7 @@ if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"] != "") {
 		<ul id="site-menu" class="site-menu">
 			<li class="site-menu-item"><a class="site-menu-link" href="../ui/timesheet.php">Timesheets</a></li>
 			<?php //if ($header_controller_vars->getValueEncoded("person_perm_id") != "Regular User") {?>
-			<li class="site-menu-item"><a class="site-menu-link" href="../ci/index.php/report?fromdate=<?php echo date("Y-m-d", strtotime("last monday", strtotime(date("Y-m-d"))));?>&todate=<?php echo date("Y-m-d", strtotime("this sunday", strtotime(date("Y-m-d"))));?>&page=clients">Reports</a></li>
+			<li class="site-menu-item"><a class="site-menu-link" href="../ci/index.php/report?fromdate=<?php echo date("Y-m-d", strtotime("last monday", strtotime(date("Y-m-d"))));?>&todate=<?php echo date("Y-m-d", strtotime("this sunday", strtotime(date("Y-m-d"))));?>&page=clients&type=week">Reports</a></li>
 			<li class="site-menu-item"><a class="site-menu-link" href="#">Invoices</a></li>
 			<li class="site-menu-item"><a class="site-menu-link" href="../ui/projects.php">Manage</a></li>
 		<?php //} ?>	
@@ -86,9 +91,9 @@ if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"] != "") {
 	<nav id="section-nav" class="section-nav timesheets">
 		<h1 class="section-nav-title">Reports: </h1>
 		<ul class="section-menu">
-			<li class="section-menu-item"><a class="section-menu-link" href="../ci/index.php/report?fromdate=<?php echo date("Y-m-d", strtotime("last monday", strtotime(date("Y-m-d"))));?>&todate=<?php echo date("Y-m-d", strtotime("this sunday", strtotime(date("Y-m-d"))))?>&page=clients">Time</a></li>
+			<li class="section-menu-item"><a class="section-menu-link" href="../ci/index.php/report?fromdate=<?php echo date("Y-m-d", strtotime("last monday", strtotime(date("Y-m-d"))));?>&todate=<?php echo date("Y-m-d", strtotime("this sunday", strtotime(date("Y-m-d"))))?>&type=week&page=clients">Time</a></li>
 			<!--li class="section-menu-item"><a class="section-menu-link" href="#">Expenses</a></li-->
-			<li class="section-menu-item"><a class="section-menu-link" href="#">Detailed Time</a></li>
+			<li class="section-menu-item"><a class="section-menu-link" href="../ci/index.php/search_controller/index/<?php echo date("Y-m-d", strtotime("last monday", strtotime(date("Y-m-d"))));?>/<?php echo date("Y-m-d", strtotime("this sunday", strtotime(date("Y-m-d"))));?>">Detailed Time</a></li>
 			<li class="section-menu-item"><a class="section-menu-link" href="#">Uninvoiced</a></li>
 			<li class="section-menu-item"><a class="section-menu-link" href="#">Project Budget</a></li>
 
