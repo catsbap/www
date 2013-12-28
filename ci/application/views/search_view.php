@@ -6,7 +6,26 @@
 <script>
 
 $(document).ready( function() {
-	//semimonthly is the only one left!!! :)
+	//initial value is hide departments
+	$( '.departmentInputDiv' ).hide();
+	$( '.staffInput' ).hide();
+	//hide and show staff
+	$('.departmentInput').click( function() {
+		$( '.departmentInputDiv' ).show();
+		$( '.departmentInput' ).hide();
+		$( '.staffInputDiv' ).hide();
+		$( '.staffInput' ).show();
+	});
+	//hide and show departments
+	$('.staffInput').click( function() {
+		$( '.staffInputDiv' ).show();
+		$( '.staffInput' ).hide();
+		$( '.departmentInputDiv' ).hide();
+		$( '.departmentInput' ).show();
+	});
+	
+    
+    //semimonthly and custom are the only ones left!!! :)
     $('#timeframe').change( function() {
         //user selected week, update the hidden fromdate and todate
         if($(this).val() == 'type=thisweek') {
@@ -155,7 +174,18 @@ echo form_dropdown('timeframe', $options, 'type=' . $this->input->get('type'), '
 	</option>
 <?php } ?>
 </datalist>
-</td></tr><tr><td align="right" width="40%">People:</td><td align="left">
+</td></tr><tr><td align="right" width="40%" class="departmentInputDiv">Departments:</td><td align="left" class="departmentInputDiv">
+<input type=text list=department name="department">
+<datalist id=department name=department>
+<?php foreach ($department_results as $result) {
+	?><option><?php
+	print_r($result->person_department);
+?>
+	</option>
+<?php } ?>
+</datalist>
+</td>
+<td align="right" width="40%" class="staffInputDiv">Staff:</td><td align="left" class="staffInputDiv">
 <input type=text list=people name="people">
 <datalist id=people name=people>
 <?php foreach ($person_results as $result) {
@@ -165,7 +195,7 @@ echo form_dropdown('timeframe', $options, 'type=' . $this->input->get('type'), '
 	</option>
 <?php } ?>
 </datalist>
-</td></tr><tr><td align="center" colspan="2"><input type="submit" value = "Search" />
+</td><td><a href="#" class="departmentInput">Search Departments</a><a href="#" class="staffInput">Search Staff</a></td></tr><tr><td align="center" colspan="2"><input type="submit" value = "Search" />
 </td></tr></table>
 </form>
 </html>

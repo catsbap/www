@@ -86,6 +86,25 @@ class Search_model extends CI_Model {
 		return $rows;	
 	}
 	
+	//populate the departments in the combobox that have time tracked
+	//for the given timeframe.
+	function getAllDepartmentTime($from, $to) {
+		$rows = array(); //will hold all results
+		$departmenthoursquery = $this->db->select('person.person_department');
+		$departmenthoursquery = $this->db->from('person');
+		$departmenthoursquery = $this->db->join('timesheet_item', 'person.person_id = timesheet_item.person_id');
+		$departmenthoursquery = $this->db->where('timesheet_item.timesheet_date <=', $to);
+		$departmenthoursquery = $this->db->where('timesheet_item.timesheet_date >=', $from);
+		$departmenthoursquery = $this->db->group_by('person.person_first_name');
+		$departmenthoursquery = $this->db->having('count(*) > 0');
+		$departmenthoursquery = $this->db->get();	
+		foreach($departmenthoursquery->result() as $row)
+		{    
+        $rows[] = $row; //add the fetched result to the result array;
+		}
+		return $rows;	
+	}
+	
 	function search($from, $to, $client_name) {
 		$rows = array(); //will hold all results
 		$clienthoursquery = $this->db->select('client.client_name');
@@ -106,7 +125,7 @@ class Search_model extends CI_Model {
 		return $rows;	
 	}
 	
-	function getAllHours($to, $from, $client_name, $project_name, $task_name, $person_name, $activeToggle) {
+	function getAllHours($to, $from, $client_name, $project_name, $task_name, $person_name, $department_name, $activeToggle) {
 		$rows = array(); //will hold all results
 		$allhoursquery = $this->db->select('client.client_id');
 		$allhoursquery = $this->db->select('client.client_name');
@@ -137,6 +156,7 @@ class Search_model extends CI_Model {
 		$allhoursquery = $this->db->where('project.project_archived like', $activeToggle);
 		$allhoursquery = $this->db->where('task.task_name like', $task_name);
 		$allhoursquery = $this->db->where('person.person_first_name like', $person_name);
+		$allhoursquery = $this->db->where('person.person_department like', $department_name);
 		$allhoursquery = $this->db->group_by('client.client_name');
 		$allhoursquery = $this->db->group_by('project.project_name');
 		$allhoursquery = $this->db->group_by('person.person_id');

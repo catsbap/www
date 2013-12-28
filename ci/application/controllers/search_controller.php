@@ -28,6 +28,7 @@ class Search_controller extends CI_Controller {
 		$data['project_results'] = $this->Search_model->getAllProjectTime($this->data['fromdate'], $this->data['todate']);
 		$data['task_results'] = $this->Search_model->getAllTaskTime($this->data['fromdate'], $this->data['todate']);
 		$data['person_results'] = $this->Search_model->getAllPeopleTime($this->data['fromdate'], $this->data['todate']);
+		$data['department_results'] = $this->Search_model->getAllDepartmentTime($this->data['fromdate'], $this->data['todate']);
 		$this->load->view('header_view');
 		$this->load->view('search_view', $data); //this loads the form  
     }
@@ -38,6 +39,7 @@ class Search_controller extends CI_Controller {
 		 $project_name = $this->input->post('projects');
 		 $task_name = $this->input->post('tasks');
 		 $person_name = $this->input->post('people');
+		 $department_name = $this->input->post('department');
 		 //get the activeToggle to determine if we should include only active projects
 		 $activeToggle= $this->uri->segment(5);	 
 		 //lets just do this the long way.
@@ -53,10 +55,13 @@ class Search_controller extends CI_Controller {
 		 if ($person_name == "") {
 			 $person_name = "%";
 		 }
+		 if ($department_name == "") {
+			 $department_name = "%";
+		 }
 		 if ($activeToggle == 1) {
 			 $activeToggle = "%";
 		 }
-		 $data['results'] = $this->Search_model->getAllHours($this->data['fromdate'],$this->data['todate'],$client_name, $project_name, $task_name, $person_name, $activeToggle);
+		 $data['results'] = $this->Search_model->getAllHours($this->data['fromdate'],$this->data['todate'],$client_name, $project_name, $task_name, $person_name, $department_name, $activeToggle);
 		 //get out the total hours to display in the UI
 		 $running_total = 0;
 		 foreach($data['results'] as $row){
@@ -75,11 +80,15 @@ class Search_controller extends CI_Controller {
 		 if ($person_name == "%") {
 			 $person_name = "All Staff";
 		 }
+		 if ($department_name == "%") {
+			 $department_name = "All Departments";
+		 }
 		 $data['running_total'] = $running_total;
 		 $data['client_name'] = $client_name;
 		 $data['project_name'] = $project_name;
 		 $data['task_name'] = $task_name;
 		 $data['person_name'] = $person_name;
+		 $data['department_name'] = $department_name;
 		 $data['fromdate'] = $this->data['fromdate'];
 		 $data['todate'] = $this->data['todate'];
 		 $this->load->view('header_view');
