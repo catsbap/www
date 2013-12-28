@@ -4,8 +4,9 @@
 
 
 <script>
-//KEEP WORKING THIS, I'M SICK OF DATES ON 12/26
+
 $(document).ready( function() {
+	//semimonthly is the only one left!!! :)
     $('#timeframe').change( function() {
         //user selected week, update the hidden fromdate and todate
         if($(this).val() == 'type=thisweek') {
@@ -46,7 +47,60 @@ $(document).ready( function() {
 			d2 = date.clearTime().moveToLastDayOfMonth();
 			todate = d2.toString('yyyy-M-d');
 			$('#todate').val(todate)
-		} 
+		} else if ($(this).val() == 'type=lastyear') {
+			var date = date || Date.today();
+        	d1 = date.add(-2).year();
+			fromdate = d1.toString('yyyy-M-d');
+			$('#fromdate').val(fromdate);
+			var date = date || Date.today();
+			d2 = date.add(1).years();
+			todate = d2.toString('yyyy-M-d');
+			$('#todate').val(todate);
+		} else if ($(this).val() == 'type=thisyear') {
+			var date = date || Date.today();
+        	d1 = date.add(-1).year();
+			fromdate = d1.toString('yyyy-M-d');
+			$('#fromdate').val(fromdate);
+			var date = date || Date.today();
+			d2 = date.add(1).year();
+			todate = d2.toString('yyyy-M-d');
+			$('#todate').val(todate);
+		} else if ($(this).val() == 'type=thisquarter') {
+			var today = Date.parse('today').toString('yyyy-MM-dd');
+			var year = Date.parse('today').toString('yyyy');
+			var month = Date.parse('today').toString('MM');
+			var quarterMonth = (Math.floor((month-1)/3)*3)+1;
+			var quarter = (Math.floor(month-1)/3)+1;
+			var lastQuarter = (quarter > 1) ? quarter - 1 : lastQuarter = 4;
+			var quarterStartDate = (quarterMonth < 10) ? year+'-0'+quarterMonth+'-01' : year+'-'+quarterMonth+'-01';
+			fromdate = quarterStartDate.toString('yyyy-M-d');
+			$('#fromdate').val(fromdate);
+			//var date = date || Date.today();
+			var date = Date.parse(quarterStartDate);
+			tempdate = date.add(3).months();
+			d2 = tempdate.add(-1).day();
+			todate = d2.toString('yyyy-M-d');
+			$('#todate').val(todate);
+		} else if ($(this).val() == 'type=lastquarter') {
+			var today = Date.parse('today').toString('yyyy-MM-dd');
+			var year = Date.parse('today').toString('yyyy');
+			var month = Date.parse('today').toString('MM');
+			var quarterMonth = (Math.floor((month-1)/3)*3)+1;
+			var quarter = (Math.floor(month-1)/3)+1;
+			var lastQuarter = (quarter > 1) ? quarter - 1 : lastQuarter = 4;
+			var quarterStartDate = (quarterMonth < 10) ? year+'-0'+quarterMonth+'-01' : year+'-'+quarterMonth+'-01';
+			quarterStartDate = Date.parse(quarterStartDate);
+			tempdate = quarterStartDate.add(-3).months()
+			fromdate = quarterStartDate.toString('yyyy-M-d');
+			$('#fromdate').val(fromdate);
+			//var date = date || Date.today();
+			var date = Date.parse(quarterStartDate);
+			tempdate = date.add(3).months();
+			d2 = tempdate.add(-1).day();
+			todate = d2.toString('yyyy-M-d');
+			$('#todate').val(todate);
+		}
+		
 		var url = "<?php echo base_url();?>index.php/<?php echo $this->uri->segment(1)?>/<?php echo $this->uri->segment(2)?>/" + fromdate + "/" + todate;
 		window.location.href = url;
 
