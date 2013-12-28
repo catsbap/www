@@ -69,7 +69,48 @@ $(document).ready(function() {
     
     //inicial settings
     $("." + project_id).hide();
+
+	//this is for the timeframe dropdown.
+    var value = window.location.href.match(/[?&]type=([^&#]+)/) || [];
+	
+	$("#timeframe").change(function(){	
+                /*///////////////////////////////*/
+                //if we go with things this way, we will have
+                //to alter the URL based on the timeframe the 
+                //first time the user comes into this page.
+                //right now, the dates aren't updated, but the 
+                //type is. The date is not updated in the URL
+                //until the user selects previous and next.
+                var val = $('#timeframe').val(); //get the value from the timeframe drop down
+                var val = val.split('=')[1];
+                changeUrlValue('type', val);
+		});
+		
+		function getVarFromURL(varName){
+            var url = window.location.href;
+            url = url.substring(url.indexOf('?'));
+            var urlLowerCase = url.toLowerCase();
+            varName = varName.toLowerCase();
+            if (urlLowerCase.indexOf(varName + "=") != -1) {
+                var value = url.substring(urlLowerCase.indexOf(varName) + varName.length + 1);
+                if (value.indexOf('&') != -1) {
+                    value = value.substring(0, value.indexOf('&'));
+                }
+                return value;
+            }
+            else {
+                return null;
+            }
+		}
+		
+		function changeUrlValue(name, value){
+			var pag = window.location.pathname;
+			var url = window.location.search;	
+			var tmpRegex = new RegExp("(" + name + "=)[a-z]+", 'ig');
+			window.location.href = url.replace(tmpRegex, '$1'+value);
+		}
 });
+	
 </script> 
 <body>
 	<div id="page-content" class="page-content">
@@ -81,8 +122,11 @@ $(document).ready(function() {
 	<tr><td><?php echo $picker;?>
 	<tr><td><?php echo $project_name[0]->project_name;
 	?>
-	<tr><td><?php echo $breadcrumb ?>
-	</td></tr>
+	<tr><td><?php echo $breadcrumb ?></td></tr>
+	<tr><td><form><?php $options = array('type=week' => 'Week', 'type=semimonthly' => 'Semimonthly',
+'type=month' => 'Month', 'type=year' => 'Year');
+echo form_dropdown('timeframe', $options, 'type=' . $this->input->get('type'), 'id=timeframe');
+?></td></tr></form>
 	<tr><td>
 	<div id="message"></div>
 	<b>Hours Tracked</b><br>

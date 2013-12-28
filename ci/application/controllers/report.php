@@ -31,7 +31,9 @@ class Report extends CI_Controller {
 		
 		//THIS IS SUPPOSED TO BE JUST WHATEVER IS IN THE URL!!
 		//this sets up the appropriate date in the UI the first time the user comes into the page.
-		//ideally, we want to update the URL client-side, but this is going to have to work for now.
+		//ideally, we want to update the URL client-side, but this is going to have to work for now,
+		//^-----this means we update the url with jquery or javascript when the user selects the option from the drop-down on the page.
+		//this is really the only way to make this work!!
 		//12-22, wait to implement quarterly and custom.
 		
 		if ($this->type=='semimonthly') {
@@ -79,6 +81,7 @@ class Report extends CI_Controller {
 		//date picker code
 		$this->load->library('DatePicker');   
 		//now we have the task object
+		//I don't think we're using this anywhere, it is a function that does nothing, just loads the class.
 		$this->load->library('Task');
 		$mypicker = $this->datepicker->show_picker();
 	    $this->data['picker'] = $mypicker;

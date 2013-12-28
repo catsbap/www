@@ -11,6 +11,8 @@ class Report_controller extends CI_Controller {
 		//this is common code to all of these objects.
 		parent::__construct();
 		$this->load->library('javascript');
+		$this->data['library_src'] = $this->jquery->script();
+		$this->data['script_foot'] = $this->jquery->_compile();
 		//load breadcrumb
 		$this->load->library('breadcrumb');
 		//load form helper
@@ -20,6 +22,60 @@ class Report_controller extends CI_Controller {
 		$this->type = $this->input->get('type');
 		$this->fromdate = $this->input->get('fromdate');
 		$this->todate = $this->input->get('todate');
+		/******TAKE THIS OUT ONCE WE GET SEGMENTS WORKING!*******/
+		//start to implement types of reports here, this is very heavy handed, we probably want this to be a helper.
+		//THIS SHOULD FOLLOW THE DATE PICKER!
+		$this->type = $this->input->get('type');
+		$this->fromdate = $this->input->get('fromdate');
+		$this->todate = $this->input->get('todate');
+		
+		//THIS IS SUPPOSED TO BE JUST WHATEVER IS IN THE URL!!
+		//this sets up the appropriate date in the UI the first time the user comes into the page.
+		//ideally, we want to update the URL client-side, but this is going to have to work for now,
+		//^-----this means we update the url with jquery or javascript when the user selects the option from the drop-down on the page.
+		//this is really the only way to make this work!!
+		//12-22, wait to implement quarterly and custom.
+		
+		if ($this->type=='semimonthly') {
+			$current_day = date_format(new DateTime($this->input->get('fromdate')), 'd');
+			$date = new DateTime($this->input->get('fromdate'));
+			$year_of_month = date_format($date->modify('last day of this month'), 'Y');
+			$month_of_month = date_format($date->modify('last day of this month'), 'm');
+			$middle_day = 16;
+			if ($current_day >= $middle_day) {
+				$date = new DateTime($this->input->get('fromdate'));
+				$this->fromdate = $year_of_month . "-" . $month_of_month . "-" . $middle_day;
+				$date = new DateTime($this->input->get('fromdate'));
+				$last_day_of_month = $date->modify('last day of this month');
+				$this->todate = date_format($last_day_of_month, 'Y-m-d');
+			} else {
+				$date = new DateTime($this->input->get('fromdate'));
+				$date = $date->modify('first day of this month');
+				$this->fromdate = date_format($date, 'Y-m-d');
+				$date = new DateTime($this->fromdate);
+				//this is always the last day of last month.
+				$this->todate = date_format(date_add($date, date_interval_create_from_date_string($middle_day . ' days')), 'Y-m-d');
+			}
+		} elseif ($this->type=='month') {
+			$first_day = new DateTime($this->input->get('fromdate'));
+			$date = $first_day->modify('first day of this month');
+			$this->fromdate = date_format($date, 'Y-m-d');
+			$date = $first_day->modify('last day of this month');
+			$this->todate = date_format($date, 'Y-m-d');			
+		} elseif ($this->type=="week") {
+			$first_day = new DateTime($this->input->get('fromdate'));
+			$date = $first_day->modify('monday this week');
+			$this->fromdate = date_format($date, 'Y-m-d');
+			$date = $first_day->modify('+6 days');
+			$this->todate = date_format($date, 'Y-m-d');
+		} elseif ($this->type=="year") {
+			$first_day = new DateTime($this->input->get('fromdate'));
+			$date = $first_day->modify('first day of this year');
+			$this->fromdate = date_format($date, 'Y-m-d');
+			$date = $first_day->modify('last day of this year');
+			$this->todate = date_format($date, 'Y-m-d');
+		}
+/****************************/
 		//get the information for the page we're viewing.
 		if (isset($_GET['client_id'])) {
 			$this->client_id = $this->input->get('client_id');
@@ -70,6 +126,8 @@ class Report_controller extends CI_Controller {
 			$date = $first_day->modify('last day of this year');
 			$this->todate = date_format($date, 'Y-m-d');
 		}
+		$this->data['from_date'] = $this->fromdate;
+		$this->data['to_date'] = $this->todate;
 		
 		$this->load->library('DatePicker');   
 		$mypicker = $this->datepicker->show_picker();
@@ -93,7 +151,7 @@ class Report_controller extends CI_Controller {
 				$url = current_url();
 				$this->data['current_url'] = $url . '?' . $_SERVER['QUERY_STRING'];
 				$this->data['last_url'] = $_SERVER['HTTP_REFERER'];
-						error_log($this->data['last_url']);
+						//error_log($this->data['last_url']);
 
 					$this->breadcrumb->clear();					
 				//setup the menu and load it ready for display in the view
@@ -104,6 +162,15 @@ class Report_controller extends CI_Controller {
 		//get out all the data at the aggregate level, all data grouped by client, project, task, person.
 		$this->load->model('Report_model', '', TRUE);
 		$all_data = $this->Report_model->getAllHours($this->todate, $this->fromdate);
+		if (empty($all_data))
+				{
+					//no data has been tracked yet.
+					$rate_temp['total_time'][] = 0.00;
+					$rate_temp['billable_rate'][] = 0.00;
+					$rate_temp['billable_time'][] = 0.00;
+					$this->data['rate_temp'] = 0.00;
+			//		//return();
+				}
 			$this->data['controller'] = "report_controller";
 			foreach ($all_data as $data) {
 				$billable_time = "";

@@ -54,9 +54,7 @@ background-color: aqua;
 
 $(document).ready(function() { 
     			var value = window.location.href.match(/[?&]type=([^&#]+)/) || [];
-				//alert(value[0]);
-				//$('#timeframe').val(value[0]);
-    
+				
     $("#timeframe").change(function(){	
                 /*///////////////////////////////*/
                 //if we go with things this way, we will have
@@ -67,22 +65,7 @@ $(document).ready(function() {
                 //until the user selects previous and next.
                 var val = $('#timeframe').val(); //get the value from the timeframe drop down
                 var val = val.split('=')[1];
-                changeUrlValue('type', val)
-                				
-				//this code updates the date field
-				//get the fromdate out of the URL.
-				//var fromdate = 'fromdate=' + getVarFromURL('fromdate');
-				//alert(fromdate);
-				//get the todate out of the url.
-				//var todate = getVarFromURL('todate');
-				//get the type value from the dropdown
-				//var type = val;
-				//console.log(fromdate);
-				//console.log(todate);
-				//if (val == 'semimonthly') {
-				//	fromdate = '2013-5-2';
-				//	changeUrlValue('fromdate',fromdate);
-				//}
+                changeUrlValue('type', val);
 		});
 		
 		function getVarFromURL(varName){
@@ -104,36 +87,9 @@ $(document).ready(function() {
 		
 		function changeUrlValue(name, value){
 			var pag = window.location.pathname;
-			var url = window.location.search;
-			//alert(url);
-			/*
-			url = url.replace("?", "").split("&"); // Clean up the URL, and create an array with each query parameter
-
-			var n = 0;
-			for (var count = 0; count < url.length; count++) {
-				if (!url[count].indexOf(name)) { 
-					n = count;
-					break;
-				}
-			}
-
-			if (n !=0) {
-				url.splice(n,1); // remove the type from the array
-			}
-			var len = url.length;
-			var newUrl = url.join("&"); // Restringify the array
-
-			if (len > 0) { // Check whether or not the timeframe is the only parameter, then build new URL with ? or &
-				newUrl = pag + "?" + newUrl + "&" + value;
-			} else {
-				newUrl = pag + newUrl + "?" + value;
-			}	
-			window.location.href = newUrl; //add the new value to the URL
-			*/	
+			var url = window.location.search;	
 			var tmpRegex = new RegExp("(" + name + "=)[a-z]+", 'ig');
-			//alert(tmpRegex);
 			window.location.href = url.replace(tmpRegex, '$1'+value);
-			//alert(url.replace(tmpRegex, '$1'+value));
 		}
     
 });

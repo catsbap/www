@@ -30,10 +30,38 @@ class DatePicker{
 		} else {
 			$type= "week";
 		}
+		//these values will be appended to the anchor if they are in the url,
+		//indicating the user came from the individual report levels.
+		$report_var = "";
+		$report_val = "";
+		
 		if (isset($_GET['client_id'])) {
 			$client_id = $_GET['client_id'];
+			$report_var = '&client_id=';
+			$report_val = $client_id;
 		} else {
 			$client_id = "";
+		}
+		if (isset($_GET['project_id'])) {
+			$project_id = $_GET['project_id'];
+			$report_var = '&project_id=';
+			$report_val = $project_id;
+		} else {
+			$project_id = "";
+		}
+		if (isset($_GET['task_id'])) {
+			$task_id = $_GET['task_id'];
+			$report_var = '&task_id=';
+			$report_val = $task_id;
+		} else {
+			$task_id = "";
+		}
+		if (isset($_GET['person_id'])) {
+			$person_id = $_GET['person_id'];
+			$report_var = '&person_id=';
+			$report_val = $person_id;
+		} else {
+			$person_id = "";
 		}
 		//there are slicker ways to do this
 		$controller = $obj->uri->segment(1); 
@@ -86,7 +114,7 @@ class DatePicker{
 				//echo $picker_fromdate;
 				//echo "<br>previous picker todate<br>";
 				//echo $picker_todate;
-				$picker = anchor("$base/index.php/$controller/$view?fromdate=$picker_fromdate&todate=$picker_todate&page=$page&type=$type", "<<<<< Previous ||");
+				$picker = anchor("$base/index.php/$controller/$view?fromdate=$picker_fromdate&todate=$picker_todate&page=$page&type=$type$report_var$report_val", "<<<<< Previous ||");
 				
 				
 				
@@ -101,7 +129,7 @@ class DatePicker{
 				//echo $picker_fromdate;
 				//echo "<br>next picker todate<br>";
 				//echo $picker_todate;
-				$picker .= anchor("$base/index.php/$controller/$view?fromdate=$picker_fromdate&todate=$picker_todate&page=$page&type=$type", " Next >>>>>>");	
+				$picker .= anchor("$base/index.php/$controller/$view?fromdate=$picker_fromdate&todate=$picker_todate&page=$page&type=$type$report_var$report_val", " Next >>>>>>");	
 			
 			} else {
 				//we are in the first half of the month. Rewind.
@@ -130,7 +158,7 @@ class DatePicker{
 				//echo $picker_fromdate;
 				//echo "<br>previous picker todate<br>";
 				//echo $picker_todate;
-				$picker = anchor("$base/index.php/$controller/$view?fromdate=$picker_fromdate&todate=$picker_todate&page=$page&type=$type", "<<<<< Previous ||");
+				$picker = anchor("$base/index.php/$controller/$view?fromdate=$picker_fromdate&todate=$picker_todate&page=$page&type=$type$report_var$report_val", "<<<<< Previous ||");
 				
 				
 				//NEXT DATE
@@ -145,7 +173,7 @@ class DatePicker{
 				//echo $picker_fromdate;
 				//echo "<br>next picker todate<br>";
 				//echo $picker_todate;
-				$picker .= anchor("$base/index.php/$controller/$view?fromdate=$picker_fromdate&todate=$picker_todate&page=$page&type=$type", " Next >>>>>>");
+				$picker .= anchor("$base/index.php/$controller/$view?fromdate=$picker_fromdate&todate=$picker_todate&page=$page&type=$type$report_var$report_val", " Next >>>>>>");
 			}
 		} elseif ($type == 'month') {
 			$date = new DateTime($todate);
@@ -159,7 +187,7 @@ class DatePicker{
 			//these are the links for the previous week
 			//echo $fromdate;
 			//echo $todate;
-		    $picker = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&page=$page&type=$type", "<<<<< Previous ||");
+		    $picker = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&page=$page&type=$type$report_var$report_val", "<<<<< Previous ||");
 			$date = new DateTime($todate);
 			$date->modify('+2 months');
 			$date = $date->format('Y-m-d');
@@ -168,7 +196,7 @@ class DatePicker{
 			$date->modify('+2 months');
 			$date = $date->format('Y-m-d');
 			$fromdate = $date;
-			$picker .= anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&page=$page&type=$type", " Next >>>>>>");
+			$picker .= anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&page=$page&type=$type$report_var$report_val", " Next >>>>>>");
 		} elseif ($type == 'year') {
 			$date = new DateTime($todate);
 			$date->modify('-1 year');
@@ -181,7 +209,7 @@ class DatePicker{
 			//these are the links for the previous week
 			//echo $fromdate;
 			//echo $todate;
-		    $picker = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&page=$page&type=$type", "<<<<< Previous ||");
+		    $picker = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&page=$page&type=$type$report_var$report_val", "<<<<< Previous ||");
 			$date = new DateTime($todate);
 			$date->modify('+2 years');
 			$date = $date->format('Y-m-d');
@@ -190,7 +218,7 @@ class DatePicker{
 			$date->modify('+2 years');
 			$date = $date->format('Y-m-d');
 			$fromdate = $date;
-			$picker .= anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&page=$page&type=$type", " Next >>>>>>");
+			$picker .= anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&page=$page&type=$type$report_var$report_val", " Next >>>>>>");
 		} elseif ($type == 'quarter') { 
 			$date = new DateTime($todate);
 			$q=ceil($date->format("n")/3);
@@ -204,7 +232,7 @@ class DatePicker{
 			$modifier='last day of '.$m_end.' '.$date->format('Y-m-d');
 			$date->modify($modifier);
 			$todate = $date->format('Y-m-d');
-			$picker = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&page=$page&type=$type", "<<<<< Previous ||");
+			$picker = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&page=$page&type=$type$report_var$report_val", "<<<<< Previous ||");
 			$m_start=$months_start[$q-1];
 			$m_end=$months_end[$q-1];
 			$modifier='first day of '.$m_start.' '.$date->format('Y-m-d');
@@ -213,7 +241,7 @@ class DatePicker{
 			$modifier='last day of '.$m_end.' '.$date->format('Y-m-d');
 			$date->modify($modifier);
 			$todate = $date->format('Y-m-d');
-			$picker .= anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&page=$page&type=$type", " Next >>>>>>");
+			$picker .= anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&page=$page&type=$type$report_var$report_val", " Next >>>>>>");
 		} elseif ($type == 'week') {
 			$date = new DateTime($todate);
 			$date->modify('-1 week');
@@ -226,7 +254,7 @@ class DatePicker{
 			//these are the links for the previous week
 			//echo $fromdate;
 			//echo $todate;
-		    $picker = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&page=$page&type=$type", "<<<<< Previous ||");
+			$picker = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&page=$page&type=$type$report_var$report_val", "<<<<< Previous ||");
 			$date = new DateTime($todate);
 			$date->modify('+2 week');
 			$date = $date->format('Y-m-d');
@@ -235,8 +263,10 @@ class DatePicker{
 			$date->modify('+2 week');
 			$date = $date->format('Y-m-d');
 			$fromdate = $date;
-			$picker .= anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&page=$page&type=$type", " Next >>>>>>");
+			$picker .= anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&page=$page&type=$type$report_var$report_val", " Next >>>>>>");
 		}
+		//add the client_id, project_id, task_id or person_id to the picker if they are in the url.
+		//error_log($picker);
 		return $picker;
 	}
 }
