@@ -53,8 +53,8 @@ background-color: aqua;
 
 
 $(document).ready(function() { 
-    			var value = window.location.href.match(/[?&]type=([^&#]+)/) || [];
-				
+    var value = window.location.href.match(/[?&]type=([^&#]+)/) || [];
+    
     $("#timeframe").change(function(){	
                 /*///////////////////////////////*/
                 //if we go with things this way, we will have

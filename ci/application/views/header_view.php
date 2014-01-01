@@ -48,9 +48,9 @@
 		<ul class="section-menu">
 			<li class="section-menu-item"><a class="section-menu-link" href="../index.php/report?fromdate=<?php echo date("Y-m-d", strtotime("last monday", strtotime(date("Y-m-d"))));?>&todate=<?php echo date("Y-m-d", strtotime("this sunday", strtotime(date("Y-m-d"))))?>&page=clients&type=week">Time</a></li>
 			<!--li class="section-menu-item"><a class="section-menu-link" href="#">Expenses</a></li-->
-			<li class="section-menu-item"><a class="section-menu-link" href="../index.php/search_controller/index/<?php echo date("Y-m-d", strtotime("last monday", strtotime(date("Y-m-d"))));?>/<?php echo date("Y-m-d", strtotime("this sunday", strtotime(date("Y-m-d"))));?>">Detailed Time</a></li>
+			<li class="section-menu-item"><a class="section-menu-link" href="http://<?php echo $_SERVER['SERVER_NAME'];?>:8888/time_tracker/ci/index.php/search_controller/index/<?php echo date("Y-m-d", strtotime("last monday", strtotime(date("Y-m-d"))));?>/<?php echo date("Y-m-d", strtotime("this sunday", strtotime(date("Y-m-d"))));?>">Detailed Time</a></li>
 			<li class="section-menu-item"><a class="section-menu-link" href="#">Uninvoiced</a></li>
-			<li class="section-menu-item"><a class="section-menu-link" href="#">Project Budget</a></li>
+			<li class="section-menu-item"><a class="section-menu-link" href="../index.php/budget_controller/index">Project Budget</a></li>
 
 		</ul>
 	</nav>

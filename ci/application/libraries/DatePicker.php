@@ -242,7 +242,8 @@ class DatePicker{
 			$date->modify($modifier);
 			$todate = $date->format('Y-m-d');
 			$picker .= anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&page=$page&type=$type$report_var$report_val", " Next >>>>>>");
-		} elseif ($type == 'week') {
+		//default to week
+		} else {
 			$date = new DateTime($todate);
 			$date->modify('-1 week');
 			$date = $date->format('Y-m-d');

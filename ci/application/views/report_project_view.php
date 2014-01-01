@@ -72,6 +72,13 @@ $(document).ready(function() {
 
 	//this is for the timeframe dropdown.
     var value = window.location.href.match(/[?&]type=([^&#]+)/) || [];
+    
+    //this is to show the lifespan report, which is only on the project page.			
+    $(".lifespan").click(function() {
+		var val = "type=lifespan";
+        var val = val.split('=')[1];
+        changeUrlValue('type', val);    
+    });
 	
 	$("#timeframe").change(function(){	
                 /*///////////////////////////////*/
@@ -147,6 +154,8 @@ echo form_dropdown('timeframe', $options, 'type=' . $this->input->get('type'), '
 
 	
 	</td></tr>
+	<tr><td><a href="#" class="lifespan";>Project Lifespan Report</a></td></tr>
+
 	<tr><td colspan="4">	<div id="menucss"><?php echo $menu ?></div>
 </td></tr>
 	<tr><td><h5>Name</h5></td><td><h5>Hours</h5></td><td><h5>Billable Hours</h5></td><td><h5>Billable Amount</h5></td></tr>

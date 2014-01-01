@@ -121,6 +121,8 @@ class Report extends CI_Controller {
 		//build the anchors dynamically to return to the view.
 		
 		//hours tracked
+							//$hours = "";
+
 		$all_data = $this->Report_model->getAllHours($this->todate, $this->fromdate);
 			if (empty($all_data))
 				{
@@ -159,7 +161,7 @@ class Report extends CI_Controller {
 							$billable_time = $data['timesheet_hours'];
 						}
 						$billable_rate = money_format('%i', $data['task_hourly_rate'] * $billable_time);
-					} elseif ($hours['project_invoice_by'] == "Do not apply hourly rate") {
+					} elseif ($data['project_invoice_by'] == "Do not apply hourly rate") {
 						$total_time = $data['timesheet_hours'];
 						$billable_time = "0.00";
 						$billable_rate = "0.00";
@@ -251,6 +253,7 @@ class Report extends CI_Controller {
 			$this->load->view('client_view', $data);
 		} elseif ($this->input->get('page') == "projects") {
 			//****PROJECT DATA******/
+		
 		$this->data['view'] = "project_report";
 		$project_url = array();
 		$project_url[]['project_billable_rate'] = array();
@@ -280,7 +283,7 @@ class Report extends CI_Controller {
 		
 			$this->data['project_url'] = $project_url;
 			$data = $this->data;
-			$this->load->view('project_view', $data);		
+			$this->load->view('project_view', $data);	
 		} elseif ($this->input->get('page') == "tasks") {
 			//****TASK DATA******/
 		$this->data['view'] = "task_report";
@@ -311,7 +314,13 @@ class Report extends CI_Controller {
 		
 			$this->data['task_url'] = $task_url;
 			$data = $this->data;
-			$this->load->view('task_view', $data);
+			//PROJECT LIFESPAN REPORT
+			if ($this->type=="lifespan") {
+				$data = $this->Report_model->getProjectLifespan($this->todate, $this->fromdate);
+				$this->load->view('lifespan_view', $data);
+			} else {
+				$this->load->view('task_view', $data);
+			}
 			//****PERSON DATA******//			
 		} elseif ($this->input->get('page') == "staff") {
 			$this->data['view'] = "person_report";

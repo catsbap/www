@@ -28,7 +28,6 @@ class Budget_controller extends CI_Controller {
 		//projects that do not have "No Budget" in the project_budget_by field.
 		//budget types are project_budget_total_fees (all hours), project_budget_total_hours(billable_hours * hourly_rate)
 		//total_budget_hours on person (total hours for person), total_budget_hours on task (total hours for task).
-		//WAIT TO IMPLEMENT 2 AND 3 UNTIL PROJECT INTERFACE IS UPDATED 12/29
 		
 		//get all the objects out of the db.
 		$data = $this->Budget_model->getAllBudgetedHours();
@@ -67,7 +66,7 @@ class Budget_controller extends CI_Controller {
 				$data['budget'][] = $item;
 				//print_r($data);
 			}
-			//QA THESE REPORTS ON MONDAY 12/30
+			//QA THESE REPORTS!!
 			if ($item->project_budget_by == "Hours per task") {
 				$item->budget = $item->task_total_budget_hours;
 				$hours = $item->timesheet_hours;

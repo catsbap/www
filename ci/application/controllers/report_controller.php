@@ -19,9 +19,6 @@ class Report_controller extends CI_Controller {
 		$this->load->helper('form');
 		
 		//$this->load->library('jquery');
-		$this->type = $this->input->get('type');
-		$this->fromdate = $this->input->get('fromdate');
-		$this->todate = $this->input->get('todate');
 		/******TAKE THIS OUT ONCE WE GET SEGMENTS WORKING!*******/
 		//start to implement types of reports here, this is very heavy handed, we probably want this to be a helper.
 		//THIS SHOULD FOLLOW THE DATE PICKER!
@@ -201,7 +198,7 @@ class Report_controller extends CI_Controller {
 							$billable_time = $data['timesheet_hours'];
 						}
 						$billable_rate = money_format('%i', $data['task_hourly_rate'] * $billable_time);
-					} elseif ($hours['project_invoice_by'] == "Do not apply hourly rate") {
+					} elseif ($data['project_invoice_by'] == "Do not apply hourly rate") {
 						$total_time = $data['timesheet_hours'];
 						$billable_time = "0.00";
 						$billable_rate = "0.00";
@@ -382,13 +379,59 @@ class Report_controller extends CI_Controller {
 		$this->data['project_id'] = $_GET["project_id"];
 		$data = $this->data;
 		
+		
 		$this->load->view('header_view');
-		$this->load->view('report_project_view', $data);
+		//LIFESPAN REPORT
+		if ($this->type=="lifespan") {
+				$data['results'] = $this->Report_model->getProjectLifespan($this->data['project_id']);
+				
+				//the lifespan report includes billable hours for the project. Get them out of the $data variable, which has already been created.
+				//get out how we invoice this project.
+				$invoice_by = $data['results'][0]->project_invoice_by;
+				$data['billable_hours'] = 0;
+				$data['billable_amount'] = 0.0;
+				if ($invoice_by == 'Project hourly rate') {
+					//I think we're going to have to rethink this..
+					//$data['billable_hours'] = $data['results'][0]->timesheet_	
+					$data['billable_hours'] = '999';
+					$data['billable_amount'] = '999';
+				} elseif ($invoice_by == 'Person hourly rate') {
+					$data['billable_hours'] = '999';
+					$data['billable_amount'] = '999';				
+				} elseif ($invoice_by == 'Task hourly rate') {
+					//get out the billable hours
+					//not sure this is right, though. Double check this!
+					$tasks = $this->data['task_url'];
+					foreach ($tasks as $task) {
+						if (isset($task['task_billable_hours'])) {
+							$data['billable_hours'] = $data['billable_hours'] + $task['task_billable_hours'];
+						}
+						if (isset($task['task_total_rate'])) {
+							$data['billable_amount'] = $data['billable_amount'] + $task['task_total_rate']; 
+						}
+					}
+				} else {
+					echo "This project is not invoiced; no data to display.";
+				}
+				//get out the budget information, regardless of the invoice type.
+				if ($data['results'][0]->project_budget_by == "Total project hours") {
+					$data['budget'] = $data['results'][0]->project_budget_total_hours;
+				} elseif ($data['results'][0]->project_budget_by == "Total project fees") {
+					$data['budget'] = $data['results'][0]->project_budget_total_fees;
+				} elseif ($data['results'][0]->project_budget_by == "Hours per task") {
+					$data['budget'] = $data['results'][0]->task_budget_hours;
+				} elseif ($data['results'][0]->project_budget_by == "Hours per person") {
+					$data['budget'] = $data['results'][0]->person_budget_hours;
+				}
+				
+				$this->load->view('lifespan_view', $data);
+			} else {
+				$this->load->view('report_project_view', $data);
+			}
 	}
 	
 	////***SHOWS THE PEOPLE
 	function task_report($task_id) {
-		//FIGURE OUT HOW TO GET THE CLIENT TO SHOW UP JUST AS A DROPDOWN.		
 		$rate_temp = $this->data['rate_temp'];
 		$this->load->model('Report_model', '', TRUE);
 		$this->data['controller'] = "report_controller";

@@ -487,4 +487,37 @@ class Report_model extends CI_Model {
 		}
 		return $rows;	
 	}
+	
+	//project lifespan report
+	//I do not want to use arrays anymore, use objects!!
+		function getProjectLifespan($project_id) {
+		$lifespanquery = $this->db->select('project.project_id');
+		$lifespanquery = $this->db->select('project.project_name');
+		$lifespanquery = $this->db->select('project.project_billable');
+		$lifespanquery = $this->db->select('project.project_budget_by');
+		$lifespanquery = $this->db->select('project.project_budget_total_hours');
+		$lifespanquery = $this->db->select('project.project_budget_total_fees');
+		$lifespanquery = $this->db->select('project.project_invoice_by');
+		$lifespanquery = $this->db->select('project.project_hourly_rate');
+		$lifespanoquery = $this->db->select('person.person_hourly_rate');
+		$lifespanquery = $this->db->select('task.task_name');
+		$lifespanquery = $this->db->select('task.task_hourly_rate');
+		$lifespanquery = $this->db->select('project_task.total_budget_hours as task_budget_hours');
+		$lifespanquery = $this->db->select('project_person.total_budget_hours as person_budget_hours');
+		$lifespanquery = $this->db->select_min('timesheet_item.timesheet_date', 'from_date');
+		$lifespanquery = $this->db->select_max('timesheet_item.timesheet_date', 'to_date');
+		$lifespanquery = $this->db->select_sum('timesheet_item.timesheet_hours');
+		$lifespanquery = $this->db->from('project');
+		$lifespanquery = $this->db->join('timesheet_item', 'timesheet_item.project_id = project.project_id');
+		$lifespanquery = $this->db->join('task', 'timesheet_item.task_id = task.task_id');
+		$lifespanquery = $this->db->join('person', 'timesheet_item.person_id = person.person_id');
+		$lifespanquery = $this->db->join('project_person', 'project_person.person_id = person.person_id');
+		$lifespanquery = $this->db->join('project_task', 'project_task.project_id = project.project_id');
+		$lifespanquery = $this->db->where('project.project_id =', $project_id);
+		$lifespanquery = $this->db->group_by('project.project_name');
+		$lifespanquery = $this->db->having('count(*) > 0');
+		$lifespanquery = $this->db->get();
+		return $lifespanquery->result();	
+	}
+
 }
