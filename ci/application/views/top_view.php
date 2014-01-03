@@ -46,7 +46,7 @@ background-color: aqua;
 
 </style>
 <?php echo $library_src;?>
-<?php echo $script_foot;?>
+<?php //echo $script_foot;?>
 <script>
 //this gets the task ID out of the drop down menu and puts the value in the URL.
 //this should be in a helper??
@@ -101,7 +101,7 @@ $(document).ready(function() {
 	<div id="page-content" class="page-content">
 	
 		<header class="page-header">
-			<?php echo $picker?><?php echo $from_date;?> to <?php echo $to_date;?>
+			<?php echo $this->data['picker']?><?php echo $from_date;?> to <?php echo $to_date;?>
 		</header>
 	<table width="100%" border=1px solid;>
 	<tr><td><form><?php $options = array('type=week' => 'Week', 'type=semimonthly' => 'Semimonthly',
@@ -109,21 +109,21 @@ $(document).ready(function() {
 echo form_dropdown('timeframe', $options, 'type=' . $this->input->get('type'), 'id=timeframe');
 ?></td></tr></form>
 	<tr><td width=25%><h5>Hours Tracked</h5><h3><?php 
-	print_r($total_time);
+	print_r($aggregate_total_time);
 	?></h3>
 	</td><td><td><h5>Billable Hours</h5><h3><?php 
-	print_r($billable_time);
+	print_r($aggregate_billable_time);
 	?>
 	<br>
 	<h5>Unbillable Hours</h5><h3><?php 
-	if (!$total_time) {
+	if (!$aggregate_total_time) {
 		echo "0";
 	} elseif (!$billable_time) {
-		print_r($total_time);
+		print_r($aggregate_total_time);
 	} else {
-		echo intval($total_time - $billable_time);
+		echo intval($aggregate_total_time - $aggregate_billable_time);
 	}
 	?>
 	</h3></h3></td><td>
 	<h5>Billable Amount</h5><h3>
-	<?php echo "$ " . $billable_rate . ".00"?></h3></td></td></tr>
+	<?php echo "$ " . $aggregate_billable_amount . ".00"?></h3></td></td></tr>

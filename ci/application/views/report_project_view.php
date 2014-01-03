@@ -46,7 +46,7 @@ background-color: aqua;
 
 </style>
 <?php echo $library_src;?>
-<?php echo $script_foot;?>
+<?php //echo $script_foot;?>
 <script>
 //call a function here to get the project_id.
 //jquery to open the people under the project link. needs to be more specific to the project,
@@ -65,6 +65,7 @@ $(document).ready(function() {
     
     $(".button_" + project_id).click(function(){	
                 $( "." + project_id ).toggle( "slow" );
+                //alert(getParameterByName('person_id'));
     });
     
     //inicial settings
@@ -126,10 +127,10 @@ $(document).ready(function() {
 			<h3 class="page-title"><?php echo date_format(new DateTime($_GET['fromdate']), "F j, Y");?> to <?php echo date_format(new DateTime($_GET['todate']), "F j, Y");?></h3>
 		</header>
 	<table width="100%" style="border:1px solid;">
-	<tr><td><?php echo $picker;?>
-	<tr><td><?php echo $project_name[0]->project_name;
+	<tr><td><?php echo $this->data['picker'];?>
+	<tr><td><?php $this->data['project_name'][0];
 	?>
-	<tr><td><?php echo $breadcrumb ?></td></tr>
+	<tr><td><?php echo $this->data['breadcrumb'] ?></td></tr>
 	<tr><td><form><?php $options = array('type=week' => 'Week', 'type=semimonthly' => 'Semimonthly',
 'type=month' => 'Month', 'type=year' => 'Year');
 echo form_dropdown('timeframe', $options, 'type=' . $this->input->get('type'), 'id=timeframe');
@@ -138,35 +139,34 @@ echo form_dropdown('timeframe', $options, 'type=' . $this->input->get('type'), '
 	<div id="message"></div>
 	<b>Hours Tracked</b><br>
 	<?php 
-	print_r($total_time);
+	print_r($aggregate_total_time);
 	?>
 	</td><td><b>Billable Hours</b><br>
-	<?php print_r($billable_time);
+	<?php print_r($aggregate_billable_time);
 	?>
 	<h5>Unbillable Hours</h5><h3><?php 
-		echo $total_time-$billable_time;
+		echo $aggregate_total_time-$aggregate_billable_time;
 	?>
 	</h3></td><td>
 	<h5>Billable Amount</h5><h3>
 	<?php 
-	print_r($billable_rate) . ".00";
+	print_r($aggregate_billable_amount) . ".00";
 	echo ".00";?></h3></td></td></tr>
 
 	
 	</td></tr>
 	<tr><td><a href="#" class="lifespan";>Project Lifespan Report</a></td></tr>
 
-	<tr><td colspan="4">	<div id="menucss"><?php echo $menu ?></div>
+	<tr><td colspan="4">	<div id="menucss"><?php echo $this->data['menu'] ?></div>
 </td></tr>
 	<tr><td><h5>Name</h5></td><td><h5>Hours</h5></td><td><h5>Billable Hours</h5></td><td><h5>Billable Amount</h5></td></tr>
 	<?php 
 	$i = 0;
-	foreach ($task_url as $key=>$value) {
+	foreach ($this->data['task_url'] as $key=>$value) {
 		//print_r($task_url);
 		foreach ($value as $key=>$val) {
 			if ($key == 'task_id') {
 				echo "<tr>";
-				//what if we call the project id here
 				$this->timetrackerurls->display_person($value['task_id'], $project_id);
 				echo "</tr>";
 			} else {

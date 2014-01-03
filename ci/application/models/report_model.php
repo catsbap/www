@@ -481,7 +481,7 @@ class Report_model extends CI_Model {
 		$projecthoursquery = $this->db->group_by('task.task_id');
 		$projecthoursquery = $this->db->having('count(*) > 0');
 		$projecthoursquery = $this->db->get();	
-		foreach($projecthoursquery->result_array() as $row)
+		foreach($projecthoursquery->result() as $row)
 		{    
         $rows[] = $row; //add the fetched result to the result array;
 		}
