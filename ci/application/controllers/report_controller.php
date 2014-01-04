@@ -329,46 +329,63 @@ class Report_controller extends CI_Controller {
 		
 		$this->load->view('header_view');
 		//LIFESPAN REPORT
+		//this report is only in the project page
 		if ($this->type=="lifespan") {
-				$data['results'] = $this->Report_model->getProjectLifespan($this->data['project_id']);
+				$this->data['results'] = $this->Report_model->getProjectLifespan($this->data['project_id']);
 				
-				//the lifespan report includes billable hours for the project. Get them out of the $data variable, which has already been created.
-				//get out how we invoice this project.
-				$invoice_by = $data['results'][0]->project_invoice_by;
-				$data['billable_hours'] = 0;
-				$data['billable_amount'] = 0.0;
+				//the lifespan report includes budgeted hours for the project. Get them out of the $this->data variable, which has already been created.
+				//get out how we invoice this project. Do we allow projects to be budgeted when they are not invoiced? This code currently allows this, but won't show the invoice info.
+				$invoice_by = $this->data['results'][0]->project_invoice_by;
+				$this->data['billable_hours'] = 0;
+				$this->data['billable_amount'] = 0.0;
 				if ($invoice_by == 'Project hourly rate') {
-					//I think we're going to have to rethink this..
-					//$data['billable_hours'] = $data['results'][0]->timesheet_	
-					$data['billable_hours'] = '999';
-					$data['billable_amount'] = '999';
+					$projects = $this->Report_model->getLifespanByProject($this->data['results'][0]->to_date, $this->data['results'][0]->from_date, $this->data['project_id']);
+					//get out all of the hours for this project.
+					foreach ($projects as $project) {
+						$this->data['billable_hours'] = $project['timesheet_hours'];
+						$this->data['billable_amount'] = $project['project_hourly_rate'] * $project['timesheet_hours'];;
+						$this->data['rate'] = $project['project_hourly_rate'];
+					}
 				} elseif ($invoice_by == 'Person hourly rate') {
-					$data['billable_hours'] = '999';
-					$data['billable_amount'] = '999';				
+					//get out the people for this project
+					$people = $this->Report_model->getLifespanPeopleByProject($this->data['results'][0]->to_date, $this->data['results'][0]->from_date, $this->data['project_id']);
+					foreach($people as $person) {;
+						$this->data['billable_hours'] = $person['timesheet_hours'];
+						$this->data['billable_amount'] = $person['person_hourly_rate'] * $person['timesheet_hours'];
+						$this->data['rate'] = $person['person_hourly_rate'];
+					}				
 				} elseif ($invoice_by == 'Task hourly rate') {
-					//get out the billable hours
-					//not sure this is right, though. Double check this!
-					$tasks = $this->data['task_url'];
+					//get out the tasks for this project
+					$tasks =  $this->Report_model->getLifespanTasksByProject($this->data['results'][0]->to_date, $this->data['results'][0]->from_date, $this->data['project_id']);
 					foreach ($tasks as $task) {
-						if (isset($task['task_billable_hours'])) {
-							$data['billable_hours'] = $data['billable_hours'] + $task['task_billable_hours'];
-						}
-						if (isset($task['task_total_rate'])) {
-							$data['billable_amount'] = $data['billable_amount'] + $task['task_total_rate']; 
-						}
+						$this->data['billable_hours'] = $task['timesheet_hours'];
+						$this->data['billable_amount'] = $task['task_hourly_rate'] * $task['timesheet_hours']; 
+						$this->data['rate'] = $task['task_hourly_rate'];
 					}
 				} else {
 					echo "This project is not invoiced; no data to display.";
 				}
 				//get out the budget information, regardless of the invoice type.
-				if ($data['results'][0]->project_budget_by == "Total project hours") {
-					$data['budget'] = $data['results'][0]->project_budget_total_hours;
-				} elseif ($data['results'][0]->project_budget_by == "Total project fees") {
-					$data['budget'] = $data['results'][0]->project_budget_total_fees;
-				} elseif ($data['results'][0]->project_budget_by == "Hours per task") {
-					$data['budget'] = $data['results'][0]->task_budget_hours;
-				} elseif ($data['results'][0]->project_budget_by == "Hours per person") {
-					$data['budget'] = $data['results'][0]->person_budget_hours;
+				//THIS IS A BUSINESS QUESTION...IF A PROJECT IS INVOICED BY PERSON, CAN THEY BE BUDGETED BY TASK (FOR EXAMPLE). IF SO,
+				//HOW WOULD WE KNOW WOULD WE KNOW THE TASK RATE?
+				//FOR NOW, ASSUME THE INVOICE TYPE IS THE SAME AS THE BUDGET TYPE.
+				if ($this->data['results'][0]->project_budget_by == "Total project hours") {
+					//ACCORDING TO HARVEST, THE TOTAL  PROJECT HOURS IS ALL HOURS TRACKED TO THE PROJECT.
+					$this->data['budget'] = $this->data['results'][0]->project_budget_total_hours;
+					$this->data['spent'] = $this->data['billable_amount'];
+				} elseif ($this->data['results'][0]->project_budget_by == "Total project fees") {
+					//ACCORDING TO HARVEST, THE TOTAL PROJECT FEES ARE THE BILLABLE HOURS X THE HOURLY RATE.
+					//the rates are based on the invoices, so they are managed above.
+					$this->data['budget'] = $this->data['results'][0]->project_budget_total_fees;
+					$this->data['spent'] = $this->data['billable_amount'];
+				} elseif ($this->data['results'][0]->project_budget_by == "Hours per task") {
+					//ACCORDING TO HARVEST, THE HOURS PER TASK ARE THE HOURS SPENT ON THE TASKS FOR THE PROJECT.
+					$this->data['budget'] = $this->data['results'][0]->task_budget_hours;
+					$this->data['spent'] = $this->data['billable_amount'];
+				} elseif ($this->data['results'][0]->project_budget_by == "Hours per person") {
+					//ACCORDING TO HARVEST, THE HOURS PER PERSON ARE THE HOURS SPENT THE PEOPLE ON THE PROJECT.
+					$this->data['budget'] = $this->data['results'][0]->person_budget_hours;
+					$this->data['spent'] = $this->data['billable_amount'];
 				}
 				
 				$this->load->view('lifespan_view', $data);
