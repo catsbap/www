@@ -369,7 +369,78 @@ class Report_model extends CI_Model {
 		return $rows;	
 	}
 	
-		function getPersonsByTask($to, $from, $task_id) {
+	function getLifespanByProject($to, $from, $project_id) {
+		$rows = array();
+		$projectquery = $this->db->select('project.project_name');
+		$projectquery = $this->db->select('project.project_id');
+		$projectquery = $this->db->select('project.project_hourly_rate');
+		$projectquery = $this->db->select('timesheet_item.project_id');
+		$projectquery = $this->db->from('project');
+		$projectquery = $this->db->select_sum('timesheet_item.timesheet_hours');
+		$projectquery = $this->db->join('timesheet_item', 'timesheet_item.project_id = project.project_id');
+		$projectquery = $this->db->where('timesheet_item.project_id =', $project_id);
+		$projectquery = $this->db->where('timesheet_item.timesheet_date <=', $to);
+		$projectquery = $this->db->where('timesheet_item.timesheet_date >=', $from);
+		//$projectquery = $this->db->group_by('client.client_name');
+		$projectquery = $this->db->group_by('timesheet_item.project_id');
+		$projectquery = $this->db->having('count(*) > 0');
+		$projectquery = $this->db->get();	
+		foreach($projectquery->result_array() as $row)
+		{    
+        $rows[] = $row; //add the fetched result to the result array;
+		}
+		return $rows;	
+	}
+
+	function getLifespanTasksByProject($to, $from, $project_id) {
+		$rows = array();
+		$projectquery = $this->db->select('task.task_name');
+		$projectquery = $this->db->select('task.task_id');
+		$projectquery = $this->db->select('task.task_hourly_rate');
+		$projectquery = $this->db->select('timesheet_item.task_id');
+		$projectquery = $this->db->from('task');
+		$projectquery = $this->db->select_sum('timesheet_item.timesheet_hours');
+		$projectquery = $this->db->join('timesheet_item', 'timesheet_item.task_id = task.task_id');
+		$projectquery = $this->db->where('timesheet_item.project_id =', $project_id);
+		$projectquery = $this->db->where('timesheet_item.timesheet_date <=', $to);
+		$projectquery = $this->db->where('timesheet_item.timesheet_date >=', $from);
+		//$projectquery = $this->db->group_by('client.client_name');
+		$projectquery = $this->db->group_by('timesheet_item.project_id');
+		$projectquery = $this->db->having('count(*) > 0');
+		$projectquery = $this->db->get();	
+		foreach($projectquery->result_array() as $row)
+		{    
+        $rows[] = $row; //add the fetched result to the result array;
+		}
+		return $rows;	
+	}
+	
+	
+	function getLifespanPeopleByProject($to, $from, $project_id) {
+		//get out all of the people that have worked on this project.
+		$rows = array();
+		$projectquery = $this->db->select('person.person_first_name');
+		$projectquery = $this->db->select('person.person_id');
+		$projectquery = $this->db->select('person.person_hourly_rate');
+		$projectquery = $this->db->select('timesheet_item.project_id');
+		$projectquery = $this->db->from('person');
+		$projectquery = $this->db->select_sum('timesheet_item.timesheet_hours');
+		$projectquery = $this->db->join('timesheet_item', 'timesheet_item.person_id = person.person_id');
+		$projectquery = $this->db->where('timesheet_item.project_id =', $project_id);
+		$projectquery = $this->db->where('timesheet_item.timesheet_date <=', $to);
+		$projectquery = $this->db->where('timesheet_item.timesheet_date >=', $from);
+		$projectquery = $this->db->group_by('person.person_first_name');
+		$projectquery = $this->db->group_by('timesheet_item.project_id');
+		$projectquery = $this->db->having('count(*) > 0');
+		$projectquery = $this->db->get();	
+		foreach($projectquery->result_array() as $row)
+		{    
+        $rows[] = $row; //add the fetched result to the result array;
+		}
+		return $rows;	
+	}
+	
+	function getPersonsByTask($to, $from, $task_id) {
 		$rows = array();
 		$projectquery = $this->db->select('timesheet_item.task_id');
 		$projectquery = $this->db->select('timesheet_item.project_id');
@@ -489,7 +560,7 @@ class Report_model extends CI_Model {
 	}
 	
 	//project lifespan report
-	//I do not want to use arrays anymore, use objects!!
+	//this is for all dates for the given project.
 		function getProjectLifespan($project_id) {
 		$lifespanquery = $this->db->select('project.project_id');
 		$lifespanquery = $this->db->select('project.project_name');
