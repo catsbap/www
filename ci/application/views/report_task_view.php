@@ -64,7 +64,7 @@ background-color: aqua;
 	</td><td><b>Billable Hours</b><br>
 	<?php print_r($billable_time);
 	?>		<h5>Unbillable Hours</h5><h3><?php 
-		echo "ert";
+		//echo "ert";
 	?>
 	</h3></td><td>
 	<h5>Billable Amount</h5><h3>

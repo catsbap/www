@@ -220,27 +220,69 @@ class DatePicker{
 			$fromdate = $date;
 			$picker .= anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&page=$page&type=$type$report_var$report_val", " Next >>>>>>");
 		} elseif ($type == 'quarter') { 
-			$date = new DateTime($todate);
-			$q=ceil($date->format("n")/3);
-			$months_start=array('January','April','July','October');
-			$months_end=array('March','June','September','December');
-			$m_start=$months_start[$q-2];
-			$m_end=$months_end[$q-2];
-			$modifier='first day of '.$m_start.' '.$date->format('Y-m-d');
-			$date->modify($modifier);
-			$fromdate = $date->format('Y-m-d');
-			$modifier='last day of '.$m_end.' '.$date->format('Y-m-d');
-			$date->modify($modifier);
-			$todate = $date->format('Y-m-d');
+			//get the current quarter date and rewind it.
+			$date = new DateTime($_GET['todate']);
+			//get the month, which will tell us what quarter we're in.
+			$month = $date->format('n') ;
+			//previous quarter code
+			if ($month < 4) {
+				//echo "we're in the first quarter going to the fourth quarter";
+                $todate = $date->modify('last day of december ' . $date->format('Y'));
+                $todate->modify('-1 year');
+                $todate = $todate->format('Y-m-d');
+				$fromdate = $date->modify('first day of  october ' . $date->format('Y'));
+	         } elseif ($month > 9) {
+            	//echo "we're in the fourth going to third quarter";
+            	$date = new DateTime($_GET['todate']);
+				$todate = $date->modify('last day of september ' . $date->format('Y'));
+                $todate = $todate->format('Y-m-d');
+                $fromdate = $date->modify('first day of july ' . $date->format('Y'));
+            } elseif ($month > 6 && $month < 10) {
+            	//echo "we're in the third going to second quarter";
+            	$date = new DateTime($_GET['todate']);
+                $todate = $date->modify('last day of june ' . $date->format('Y'));
+                $todate = $todate->format('Y-m-d');
+                $fromdate = $date->modify('first day of april ' . $date->format('Y'));
+            } elseif ($month > 3 && $month < 7) {
+            	//echo "we're in the second going to first quarter";
+            	$date = new DateTime($_GET['todate']);
+                $todate = $date->modify('last day of march ' . $date->format('Y'));
+                $todate = $todate->format('Y-m-d');
+                $fromdate = $date->modify('first day of january ' . $date->format('Y'));
+            }
+			$fromdate = $fromdate->format('Y-m-d');
 			$picker = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&page=$page&type=$type$report_var$report_val", "<<<<< Previous ||");
-			$m_start=$months_start[$q-1];
-			$m_end=$months_end[$q-1];
-			$modifier='first day of '.$m_start.' '.$date->format('Y-m-d');
-			$date->modify($modifier);
-			$fromdate = $date->format('Y-m-d');
-			$modifier='last day of '.$m_end.' '.$date->format('Y-m-d');
-			$date->modify($modifier);
-			$todate = $date->format('Y-m-d');
+			//get the current quarter date and ff it.
+			$date = new DateTime($_GET['todate']);
+			//get the month, which will tell us what quarter we're in.
+			$month = $date->format('n') ;
+			//previous quarter code
+			if ($month < 4) {
+				//echo "we're in the first quarter going to the second quarter";
+                $todate = $date->modify('last day of june ' . $date->format('Y'));
+                $todate = $todate->format('Y-m-d');
+				$fromdate = $date->modify('first day of  april ' . $date->format('Y'));
+	         } elseif ($month > 9) {
+            	//echo "we're in the fourth going to first quarter";
+            	$date = new DateTime($_GET['todate']);
+				$date = $date->modify('+1 year');
+				$todate = $date->modify('last day of march ' . $date->format('Y'));
+                $todate = $todate->format('Y-m-d');
+                $fromdate = $date->modify('first day of  january' . $date->format('Y'));
+            } elseif ($month > 6 && $month < 10) {
+            	//echo "we're in the third going to fourth quarter";
+            	$date = new DateTime($_GET['todate']);
+                $todate = $date->modify('last day of december ' . $date->format('Y'));
+                $todate = $todate->format('Y-m-d');
+                $fromdate = $date->modify('first day of october ' . $date->format('Y'));
+            } elseif ($month > 3 && $month < 7) {
+            	//echo "we're in the second going to third quarter";
+            	$date = new DateTime($_GET['todate']);
+                $todate = $date->modify('last day of september ' . $date->format('Y'));
+                $todate = $todate->format('Y-m-d');
+                $fromdate = $date->modify('first day of july ' . $date->format('Y'));
+            }
+			$fromdate = $fromdate->format('Y-m-d');
 			$picker .= anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&page=$page&type=$type$report_var$report_val", " Next >>>>>>");
 		//default to week
 		} else {

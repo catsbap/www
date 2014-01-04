@@ -24,12 +24,6 @@ class Report_controller extends CI_Controller {
 		$this->fromdate = $this->input->get('fromdate');
 		$this->todate = $this->input->get('todate');
 		
-		//THIS IS SUPPOSED TO BE JUST WHATEVER IS IN THE URL!!
-		//this sets up the appropriate date in the UI the first time the user comes into the page.
-		//ideally, we want to update the URL client-side, but this is going to have to work for now,
-		//^-----this means we update the url with jquery or javascript when the user selects the option from the drop-down on the page.
-		//this is really the only way to make this work!!
-		//12-22, wait to implement quarterly and custom.
 		
 
 /****************************/
@@ -44,7 +38,8 @@ class Report_controller extends CI_Controller {
 			$this->person_id = $this->input->get('person_id');
 		}
 		//date picker code
-		if ($this->type=='semimonthly') {
+		//now that this is updated on the fly we don't need this.
+		/*if ($this->type=='semimonthly') {
 			$current_day = date_format(new DateTime($this->input->get('fromdate')), 'd');
 			$date = new DateTime($this->input->get('fromdate'));
 			$year_of_month = date_format($date->modify('last day of this month'), 'Y');
@@ -78,11 +73,15 @@ class Report_controller extends CI_Controller {
 			$this->todate = date_format($date, 'Y-m-d');
 		} elseif ($this->type=="year") {
 			$first_day = new DateTime($this->input->get('fromdate'));
-			$date = $first_day->modify('first day of this year');
+			//print_r($first_day);
+			$date = $first_day->modify('first day of January this year');
+			//print_r($first_day);
 			$this->fromdate = date_format($date, 'Y-m-d');
-			$date = $first_day->modify('last day of this year');
+			$date = $first_day->modify('last day of December this year');
 			$this->todate = date_format($date, 'Y-m-d');
 		}
+		*/
+		
 		$this->data['from_date'] = $this->fromdate;
 		$this->data['to_date'] = $this->todate;
 		
@@ -192,18 +191,20 @@ class Report_controller extends CI_Controller {
 		//get all of the projects for this time for the given client id, in the URL.
 		$projectquery = $this->Report_model->getProjectsByClient($this->todate, $this->fromdate, $this->client_id);
 		//print_r($projectquery);
-		echo($this->todate);
-		echo($this->fromdate);
-		echo($this->client_id);
+		//echo($this->todate);
+		//echo($this->fromdate);
+		//echo($this->client_id);
 		$project_url = array();
-
-
+		
+		$data = new stdClass;
+		$all_data = $this->data['all_data'];
+		//aggregate the various projects.
 		foreach ($projectquery as $projects) {	
 			$running_total_time = 0;
 			$running_billable_time = 0;
 			$running_billable_amount = 0;
 			$anchored_project_url = 0;
-			$all_data = $this->data['all_data'];
+			//$all_data = $this->data['all_data'];
 			//print_r($all_data);
 			//error_log(print_r($all_data,true));
 			foreach($all_data as $data) {
@@ -238,6 +239,7 @@ class Report_controller extends CI_Controller {
 			$total_time_holder = $total_time_holder + $data->timesheet_hours;
 			$billable_amount_holder = $billable_amount_holder + $data->billable_amount;
 		}
+
 		$data->aggregate_billable_time = $billable_time_holder;
 		$data->aggregate_total_time = $total_time_holder;
 		$data->aggregate_billable_amount = $billable_amount_holder;
@@ -252,8 +254,8 @@ class Report_controller extends CI_Controller {
 	//**SHOWS THE TASKS
 	function project_report() {
 		//jquery/js stuff//
-		$this->data['library_src'] = $this->jquery->script();
-		$this->data['script_foot'] = $this->jquery->_compile();
+		//$this->data['library_src'] = $this->jquery->script();
+		//$this->data['script_foot'] = $this->jquery->_compile();
 		//breadcrumb, build up as we go.
 		$this->breadcrumb->add_crumb('Time Report', $this->data['last_url']); // this will be a link
 		$this->breadcrumb->add_crumb('> This Client', $this->data['current_url']); // this will be a link
@@ -264,14 +266,20 @@ class Report_controller extends CI_Controller {
 		$this->data['controller'] = "report_controller";
 		$this->data['view'] = "task_report";
 		
+		
 		//get all of the tasks for this time for the given project id, in the URL.
 		$taskquery = $this->Report_model->getTasksByProject($this->todate, $this->fromdate, $this->project_id);
 		$task_url = array();
+		$data = new stdClass;
+		$all_data = $this->data['all_data'];
+		//handle the case where there are no tasks.
+		$this->data['task_url'] = $task_url;
+		//this aggregates the tasks
 		foreach ($taskquery as $tasks) {	
 			$running_total_time = 0;
 			$running_billable_time = 0;
 			$running_billable_amount = 0;
-			$all_data = $this->data['all_data'];	
+			//$all_data = $this->data['all_data'];	
 			$anchored_task_url = '';
 			$task_id = array();
 			foreach($all_data as $data) {
@@ -299,6 +307,7 @@ class Report_controller extends CI_Controller {
 		$task_total_time = "";
 		$task_billable_hours = "";
 		$task_total_rate = "";
+		//$data = new stdClass;
 
 		$billable_time_holder = 0;	
 		$total_time_holder = 0;

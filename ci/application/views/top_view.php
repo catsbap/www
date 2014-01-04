@@ -48,50 +48,77 @@ background-color: aqua;
 <?php echo $library_src;?>
 <?php //echo $script_foot;?>
 <script>
-//this gets the task ID out of the drop down menu and puts the value in the URL.
-//this should be in a helper??
-
 
 $(document).ready(function() { 
-    var value = window.location.href.match(/[?&]type=([^&#]+)/) || [];
-    
+    //grab the timeframe out of the drop down
+    //and update the URL with the correct dates.
+    //we are omitting custom dates and semimonthly for now.
+	//PULL THIS OUT INTO A LIBRARY!!	
     $("#timeframe").change(function(){	
-                /*///////////////////////////////*/
-                //if we go with things this way, we will have
-                //to alter the URL based on the timeframe the 
-                //first time the user comes into this page.
-                //right now, the dates aren't updated, but the 
-                //type is. The date is not updated in the URL
-                //until the user selects previous and next.
-                var val = $('#timeframe').val(); //get the value from the timeframe drop down
-                var val = val.split('=')[1];
-                changeUrlValue('type', val);
-		});
-		
-		function getVarFromURL(varName){
-            var url = window.location.href;
-            url = url.substring(url.indexOf('?'));
-            var urlLowerCase = url.toLowerCase();
-            varName = varName.toLowerCase();
-            if (urlLowerCase.indexOf(varName + "=") != -1) {
-                var value = url.substring(urlLowerCase.indexOf(varName) + varName.length + 1);
-                if (value.indexOf('&') != -1) {
-                    value = value.substring(0, value.indexOf('&'));
-                }
-                return value;
-            }
-            else {
-                return null;
-            }
-		}
-		
-		function changeUrlValue(name, value){
-			var pag = window.location.pathname;
-			var url = window.location.search;	
-			var tmpRegex = new RegExp("(" + name + "=)[a-z]+", 'ig');
-			window.location.href = url.replace(tmpRegex, '$1'+value);
+    if($(this).val() == 'type=week') {
+        	var date = date || Date.today();
+        	d1 = date.is().monday() ? date : date.last().monday();
+			d2 = d1.clone().next().sunday();
+			fromdate = d1.toString('yyyy-M-d');
+			$('#fromdate').val(fromdate)
+			//d2 = Date.next().sunday();
+			todate = d2.toString('yyyy-M-d');
+			$('#todate').val(todate)		
+		} else if ($(this).val() == 'type=month') {
+			var date = date || Date.today();
+        	d1 = date.clearTime().moveToFirstDayOfMonth();
+			fromdate = d1.toString('yyyy-M-d');
+			$('#fromdate').val(fromdate)
+			var date = date || Date.today();
+			d2 = date.clearTime().moveToLastDayOfMonth();
+			todate = d2.toString('yyyy-M-d');
+			$('#todate').val(todate)
+		} else if ($(this).val() == 'type=year') {
+			var date = date || Date.today();
+        	d1 = date.add(-1).year();
+			fromdate = d1.toString('yyyy-M-d');
+			$('#fromdate').val(fromdate);
+			var date = date || Date.today();
+			d2 = date.add(1).year();
+			todate = d2.toString('yyyy-M-d');
+			$('#todate').val(todate);
+		} else if ($(this).val() == 'type=quarter') {
+			var today = Date.parse('today').toString('yyyy-MM-dd');
+			var year = Date.parse('today').toString('yyyy');
+			var month = Date.parse('today').toString('MM');
+			var quarterMonth = (Math.floor((month-1)/3)*3)+1;
+			var quarter = (Math.floor(month-1)/3)+1;
+			var lastQuarter = (quarter > 1) ? quarter - 1 : lastQuarter = 4;
+			var quarterStartDate = (quarterMonth < 10) ? year+'-0'+quarterMonth+'-01' : year+'-'+quarterMonth+'-01';
+			fromdate = quarterStartDate.toString('yyyy-M-d');
+			$('#fromdate').val(fromdate);
+			//var date = date || Date.today();
+			var date = Date.parse(quarterStartDate);
+			tempdate = date.add(3).months();
+			d2 = tempdate.add(-1).day();
+			todate = d2.toString('yyyy-M-d');
+			$('#todate').val(todate);
 		}
     
+    var queryParameters = {}, queryString = location.search.substring(1),
+    re = /([^&=]+)=([^&]*)/g, m;
+ 
+	// Creates a map with the query string parameters
+	while (m = re.exec(queryString)) {
+    	queryParameters[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+		}
+ 
+		// Add new parameters or update existing ones
+		//queryParameters['newParameter'] = '';
+		queryParameters['todate'] = todate;
+		queryParameters['fromdate'] = fromdate;
+		var val = $('#timeframe').val(); //get the value from the timeframe drop down
+        var val = val.split('=')[1];
+		queryParameters['type'] = val;
+
+			//Replace the query portion of the URL.
+			location.search = $.param(queryParameters); // Causes page to reload
+            });				
 });
 </script> 
 
@@ -104,8 +131,7 @@ $(document).ready(function() {
 			<?php echo $this->data['picker']?><?php echo $from_date;?> to <?php echo $to_date;?>
 		</header>
 	<table width="100%" border=1px solid;>
-	<tr><td><form><?php $options = array('type=week' => 'Week', 'type=semimonthly' => 'Semimonthly',
-'type=month' => 'Month', 'type=year' => 'Year');
+	<tr><td><form><?php $options = array('type=week' => 'Week', 'type=month' => 'Month', 'type=year' => 'Year', 'type=quarter' => 'Quarter');
 echo form_dropdown('timeframe', $options, 'type=' . $this->input->get('type'), 'id=timeframe');
 ?></td></tr></form>
 	<tr><td width=25%><h5>Hours Tracked</h5><h3><?php 

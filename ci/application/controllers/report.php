@@ -32,7 +32,7 @@ class Report extends CI_Controller {
 		//this is really the only way to make this work!!
 		//12-22, wait to implement quarterly and custom.
 		
-		if ($this->type=='semimonthly') {
+		/*if ($this->type=='semimonthly') {
 			$current_day = date_format(new DateTime($this->input->get('fromdate')), 'd');
 			$date = new DateTime($this->input->get('fromdate'));
 			$year_of_month = date_format($date->modify('last day of this month'), 'Y');
@@ -71,7 +71,7 @@ class Report extends CI_Controller {
 			$date = $first_day->modify('last day of this year');
 			$this->todate = date_format($date, 'Y-m-d');
 		}
-		
+		*/
 			
 		$client_id = $this->input->get('client_id');
 		//date picker code

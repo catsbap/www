@@ -1,5 +1,5 @@
 <tr><td colspan=4>
-	<div id="menucss"><?php echo $menu ?></div>
+	<div id="menucss"><?php echo $this->data['menu'] ?></div>
 	</td></tr>
 	<tr><td><h5>Name</h5></td><td><h5>Hours</h5></td><td><h5>Billable Hours</h5></td><td><h5>Billable Amount</h5></td></tr>
 	<?php 
