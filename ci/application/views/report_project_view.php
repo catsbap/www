@@ -71,11 +71,18 @@ $(document).ready(function() {
 	
     //this is to show the lifespan report, which is only on the project page.			
     //we'll have to do this differently now
-    //$(".lifespan").click(function() {
-	//	var val = "type=lifespan";
-    //    var val = val.split('=')[1];
-    //    changeUrlValue('type', val);    
-    //});
+     function changeUrlValue(name, value){
+     	var pag = window.location.pathname;
+        var url = window.location.search;        
+        var tmpRegex = new RegExp("(" + name + "=)[a-z]+", 'ig');
+        window.location.href = url.replace(tmpRegex, '$1'+value);
+     }
+    
+    $(".lifespan").click(function() {
+		var val = "type=lifespan";
+        var val = val.split('=')[1];
+        changeUrlValue('type', val);    
+    });
 
     //grab the timeframe out of the drop down
     //and update the URL with the correct dates.
