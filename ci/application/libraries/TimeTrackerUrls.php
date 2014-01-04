@@ -54,7 +54,7 @@ class TimeTrackerUrls{
 		return $anchor;
 	}
 	
-	
+	//this function is called from the projects report.
 	function display_person($task_id, $project_id) {
 		$obj =& get_instance();
 		$todate = $obj->input->get('todate');
