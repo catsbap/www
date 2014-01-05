@@ -24,54 +24,7 @@ class Report extends CI_Controller {
 		$this->type = $this->input->get('type');
 		$this->fromdate = $this->input->get('fromdate');
 		$this->todate = $this->input->get('todate');
-		
-		//THIS IS SUPPOSED TO BE JUST WHATEVER IS IN THE URL!!
-		//this sets up the appropriate date in the UI the first time the user comes into the page.
-		//ideally, we want to update the URL client-side, but this is going to have to work for now,
-		//^-----this means we update the url with jquery or javascript when the user selects the option from the drop-down on the page.
-		//this is really the only way to make this work!!
-		//12-22, wait to implement quarterly and custom.
-		
-		/*if ($this->type=='semimonthly') {
-			$current_day = date_format(new DateTime($this->input->get('fromdate')), 'd');
-			$date = new DateTime($this->input->get('fromdate'));
-			$year_of_month = date_format($date->modify('last day of this month'), 'Y');
-			$month_of_month = date_format($date->modify('last day of this month'), 'm');
-			$middle_day = 16;
-			if ($current_day >= $middle_day) {
-				$date = new DateTime($this->input->get('fromdate'));
-				$this->fromdate = $year_of_month . "-" . $month_of_month . "-" . $middle_day;
-				$date = new DateTime($this->input->get('fromdate'));
-				$last_day_of_month = $date->modify('last day of this month');
-				$this->todate = date_format($last_day_of_month, 'Y-m-d');
-			} else {
-				$date = new DateTime($this->input->get('fromdate'));
-				$date = $date->modify('first day of this month');
-				$this->fromdate = date_format($date, 'Y-m-d');
-				$date = new DateTime($this->fromdate);
-				//this is always the last day of last month.
-				$this->todate = date_format(date_add($date, date_interval_create_from_date_string($middle_day . ' days')), 'Y-m-d');
-			}
-		} elseif ($this->type=='month') {
-			$first_day = new DateTime($this->input->get('fromdate'));
-			$date = $first_day->modify('first day of this month');
-			$this->fromdate = date_format($date, 'Y-m-d');
-			$date = $first_day->modify('last day of this month');
-			$this->todate = date_format($date, 'Y-m-d');			
-		} elseif ($this->type=="week") {
-			$first_day = new DateTime($this->input->get('fromdate'));
-			$date = $first_day->modify('monday this week');
-			$this->fromdate = date_format($date, 'Y-m-d');
-			$date = $first_day->modify('+6 days');
-			$this->todate = date_format($date, 'Y-m-d');
-		} elseif ($this->type=="year") {
-			$first_day = new DateTime($this->input->get('fromdate'));
-			$date = $first_day->modify('first day of this year');
-			$this->fromdate = date_format($date, 'Y-m-d');
-			$date = $first_day->modify('last day of this year');
-			$this->todate = date_format($date, 'Y-m-d');
-		}
-		*/
+
 			
 		$client_id = $this->input->get('client_id');
 		//date picker code
@@ -120,12 +73,10 @@ class Report extends CI_Controller {
 				$billable_time = 0;
 				$total_time = 0;
 				$billable_amount = 0;
-				//the get all data function is now returning objects.
 				//make sure we are only looking at billable projects.
 				if ($data->project_billable == 1) {
 					//the project is invoiced by project hourly rate.
 					if ($data->project_invoice_by == "Project hourly rate") {
-						//$total_time = $data['timesheet_hours'];
 						if ($data->project_hourly_rate <= 0) {
 							$billable_time = 0.00;
 						} else {
@@ -134,7 +85,6 @@ class Report extends CI_Controller {
 						//billable amount is the rate for the project X the timesheet hours.
 						$billable_amount = money_format('%i', $data->project_hourly_rate * $billable_time);	
 					} elseif ($data->project_invoice_by == "Person hourly rate") {
-						//$total_time = $data['timesheet_hours'];
 						if ($data->person_hourly_rate <= 0) {
 							$billable_time = 0.00;
 						} else {
@@ -143,7 +93,6 @@ class Report extends CI_Controller {
 						//billable amount is the rate for the person X the timesheet hours.
 						$billable_amount = money_format('%i', $data->person_hourly_rate * $billable_time);
 					} else if ($data->project_invoice_by == "Task hourly rate") {
-						//$total_time = $data['timesheet_hours'];
 						if ($data->task_hourly_rate <= 0) {
 							$billable_time = 0.00;
 						} else {
@@ -152,22 +101,16 @@ class Report extends CI_Controller {
 						//billable amount is the rate for the task X the timesheet hours.
 						$billable_amount = money_format('%i', $data->task_hourly_rate * $billable_time);
 					} elseif ($data->project_invoice_by == "Do not apply hourly rate") {
-						//$total_time = $data['timesheet_hours'];
 						$billable_time = "0.00";
 						$billable_amount = "0.00";
 					}
 				} else {
 					//THE PROJECT IS NOT BILLABLE.
-					//$total_time = $data['timesheet_hours'];
 					$billable_time = "0.00";
 					$billable_amount = "0.00";
 				}
 				//$rate_temp['total_time'][] = $total_time;
 				$data->billable_amount = $billable_amount;
-				//$data->client_id = $data['client_id'];
-				//$rate_temp['project_id'][] = $data['project_id'];
-				//$rate_temp['task_id'][] = $data['task_id'];
-				//$rate_temp['person_id'][] = $data['person_id'];
 				$data->billable_time = $billable_time;
 				//error_log(print_r($data, true));
 			}
@@ -182,7 +125,6 @@ class Report extends CI_Controller {
 		$total_time_holder = 0;
 		$billable_amount_holder = 0;
 		foreach ($all_data as $data) {
-			//print_r($data);
 			$billable_time_holder = $billable_time_holder + $data->billable_time;
 			$total_time_holder = $total_time_holder + $data->timesheet_hours;
 			$billable_amount_holder = $billable_amount_holder + $data->billable_amount;
@@ -194,16 +136,12 @@ class Report extends CI_Controller {
 		//put the date in the data variable to get it out of the view!
 		$data->from_date = $this->fromdate;
 		$data->to_date = $this->todate;
-		//$data = $this->data;
 		$this->load->view('header_view');
 		$this->load->view('top_view', $data);
-		//exit();
-		
-		//error_log(print_r($this->data,true));
-		
 		
 		$this->input->get('page');
 		if ($this->input->get('page') == "clients") {
+		
 		////////////////////////
 		//****CLIENT DATA*****//
 		///////////////////////
