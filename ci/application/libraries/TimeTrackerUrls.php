@@ -36,8 +36,8 @@ class TimeTrackerUrls{
 		$todate = $_GET['todate'];
 		$type=$_GET['type'];
 		$page = $_GET['page'];
-		//$anchor = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&task_id=$task_id&page=$page", "$task_name");
-		$anchor = "<div class='button_$task_id'><a href=#>$task_name</a></div>";
+		$anchor = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&task_id=$task_id&page=$page&type=$type", "$task_name");
+		//$anchor = "<div class='button_$task_id'><a href=#>$task_name</a></div>";
 		return $anchor;
 	}
 	
@@ -55,6 +55,7 @@ class TimeTrackerUrls{
 	}
 	
 	//this function is called from the projects report.
+	//Leave this function here for now, but we may not use it.
 	function display_person($task_id, $project_id) {
 		$obj =& get_instance();
 		$todate = $obj->input->get('todate');

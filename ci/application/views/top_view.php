@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
-	require_once("/Applications/MAMP/htdocs/time_tracker/common/common.inc.php");
+	//require_once("/Applications/MAMP/htdocs/time_tracker/common/common.inc.php");
 	//probably shouldn't be in the view, but we'll leave it here for now
 	//take this out for now until I can figure out what's wrog
-	checklogin();
+	//checklogin();
 	//include('header.php'); //add header.php to page moved to only be called when page is rendered so it's not sent back when page saved via JS/Ajax
 ?>
 <style>

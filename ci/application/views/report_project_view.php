@@ -201,7 +201,7 @@ echo form_dropdown('timeframe', $options, 'type=' . $this->input->get('type'), '
 		foreach ($value as $key=>$val) {
 			if ($key == 'task_id') {
 				echo "<tr>";
-				$this->timetrackerurls->display_person($value['task_id'], $project_id);
+				//$this->timetrackerurls->display_person($value['task_id'], $project_id);
 				echo "</tr>";
 			} else {
 				if ($val || $val == "0.00") {

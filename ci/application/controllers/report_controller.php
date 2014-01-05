@@ -18,15 +18,12 @@ class Report_controller extends CI_Controller {
 		//load form helper
 		$this->load->helper('form');
 		
-		//start to implement types of reports here, this is very heavy handed, we probably want this to be a helper.
-		//THIS SHOULD FOLLOW THE DATE PICKER!
 		$this->type = $this->input->get('type');
 		$this->fromdate = $this->input->get('fromdate');
 		$this->todate = $this->input->get('todate');
-		
-		
+		$this->data['from_date'] = $this->fromdate;
+		$this->data['to_date'] = $this->todate;
 
-/****************************/
 		//get the information for the page we're viewing.
 		if (isset($_GET['client_id'])) {
 			$this->client_id = $this->input->get('client_id');
@@ -37,54 +34,8 @@ class Report_controller extends CI_Controller {
 		} elseif (isset($_GET['person_id'])) {
 			$this->person_id = $this->input->get('person_id');
 		}
-		//date picker code
-		//now that this is updated on the fly we don't need this.
-		/*if ($this->type=='semimonthly') {
-			$current_day = date_format(new DateTime($this->input->get('fromdate')), 'd');
-			$date = new DateTime($this->input->get('fromdate'));
-			$year_of_month = date_format($date->modify('last day of this month'), 'Y');
-			$month_of_month = date_format($date->modify('last day of this month'), 'm');
-			$middle_day = 16;
-			if ($current_day >= $middle_day) {
-				$date = new DateTime($this->input->get('fromdate'));
-				$this->fromdate = $year_of_month . "-" . $month_of_month . "-" . $middle_day;
-				$date = new DateTime($this->input->get('fromdate'));
-				$last_day_of_month = $date->modify('last day of this month');
-				$this->todate = date_format($last_day_of_month, 'Y-m-d');
-			} else {
-				$date = new DateTime($this->input->get('fromdate'));
-				$date = $date->modify('first day of this month');
-				$this->fromdate = date_format($date, 'Y-m-d');
-				$date = new DateTime($this->fromdate);
-				//this is always the last day of last month.
-				$this->todate = date_format(date_add($date, date_interval_create_from_date_string($middle_day . ' days')), 'Y-m-d');
-			}
-		} elseif ($this->type=='month') {
-			$first_day = new DateTime($this->input->get('fromdate'));
-			$date = $first_day->modify('first day of this month');
-			$this->fromdate = date_format($date, 'Y-m-d');
-			$date = $first_day->modify('last day of this month');
-			$this->todate = date_format($date, 'Y-m-d');			
-		} elseif ($this->type=="week") {
-			$first_day = new DateTime($this->input->get('fromdate'));
-			$date = $first_day->modify('monday this week');
-			$this->fromdate = date_format($date, 'Y-m-d');
-			$date = $first_day->modify('+6 days');
-			$this->todate = date_format($date, 'Y-m-d');
-		} elseif ($this->type=="year") {
-			$first_day = new DateTime($this->input->get('fromdate'));
-			//print_r($first_day);
-			$date = $first_day->modify('first day of January this year');
-			//print_r($first_day);
-			$this->fromdate = date_format($date, 'Y-m-d');
-			$date = $first_day->modify('last day of December this year');
-			$this->todate = date_format($date, 'Y-m-d');
-		}
-		*/
 		
-		$this->data['from_date'] = $this->fromdate;
-		$this->data['to_date'] = $this->todate;
-		
+		//the datepicker is the previous and next buttons.
 		$this->load->library('DatePicker');   
 		$mypicker = $this->datepicker->show_picker();
 	    $this->data['picker'] = $mypicker;
@@ -92,6 +43,8 @@ class Report_controller extends CI_Controller {
 	    $this->load->library('TimeTrackerUrls');   
 	    $this->base=$this->config->item('base_url');
 		$this->css=$this->config->item('css');
+	
+////MENU
 		$this->load->library('menu');
 		$this->menu_pages = array(
                     "report?fromdate=$this->fromdate&todate=$this->todate&type=$this->type&page=clients" => "Clients",
@@ -100,16 +53,13 @@ class Report_controller extends CI_Controller {
                     "report?fromdate=$this->fromdate&todate=$this->todate&type=$this->type&page=staff" => "Staff"
                 );
  
-				//get the name of the active page
-				//$this->CI->load->library('uri');
 				$this->active = $this->uri->segment(1);
-				//will this work for the breadcrumb?
+				
+//BREADCRUMB
 				$url = current_url();
 				$this->data['current_url'] = $url . '?' . $_SERVER['QUERY_STRING'];
 				$this->data['last_url'] = $_SERVER['HTTP_REFERER'];
-						//error_log($this->data['last_url']);
-
-					$this->breadcrumb->clear();					
+				$this->breadcrumb->clear();					
 				//setup the menu and load it ready for display in the view
 				$this->data['menu'] = $this->menu->render($this->menu_pages, $this->active);
 				$this->data['css'] = $this->css;
@@ -121,6 +71,7 @@ class Report_controller extends CI_Controller {
 		$this->data['all_data'] = $all_data;
 		//create the class here, so that if no data is available
 			//it actually gets created anyway, with blank values.
+			//this just adds the billable amounts and times to the object array.
 			$data = new stdClass;
 			$this->data['controller'] = "report_controller";
 			foreach ($all_data as $data) {
@@ -129,7 +80,6 @@ class Report_controller extends CI_Controller {
 				$billable_amount = 0;
 				if ($data->project_billable == 1) {
 					if ($data->project_invoice_by == "Project hourly rate") {
-						//$total_time = $data['timesheet_hours'];
 						if ($data->project_hourly_rate <= 0) {
 							$billable_time = 0.00;
 						} else {
@@ -137,7 +87,6 @@ class Report_controller extends CI_Controller {
 						}
 						$billable_amount = money_format('%i', $data->project_hourly_rate * $billable_time);	
 					} elseif ($data->project_invoice_by == "Person hourly rate") {
-						//$total_time = $data['timesheet_hours'];
 						if ($data->person_hourly_rate <= 0) {
 							$billable_time = 0.00;
 						} else {
@@ -145,7 +94,6 @@ class Report_controller extends CI_Controller {
 						}
 						$billable_amount = money_format('%i', $data->person_hourly_rate * $billable_time);
 					} else if ($data->project_invoice_by == "Task hourly rate") {
-						//$total_time = $data['timesheet_hours'];
 						if ($data->task_hourly_rate <= 0) {
 							$billable_time = 0.00;
 						} else {
@@ -153,63 +101,46 @@ class Report_controller extends CI_Controller {
 						}
 						$billable_amount = money_format('%i', $data->task_hourly_rate * $billable_time);
 					} elseif ($data->project_invoice_by == "Do not apply hourly rate") {
-						//$total_time = $data['timesheet_hours'];
 						$billable_time = "0.00";
 						$billable_rate = "0.00";
 					}
 				} else {
-					//$total_time = $data['timesheet_hours'];
 					$billable_time = "0.00";
 					$billable_rate = "0.00";
 				}
-				//$rate_temp[] = array();
-				//$rate_temp['total_time'][] = $total_time;
 				$data->billable_amount = $billable_amount;				
-				//$rate_temp['client_id'][] = $data['client_id'];
-				//$rate_temp['project_id'][] = $data['project_id'];
-				//$rate_temp['task_id'][] = $data['task_id'];
-				//$rate_temp['person_id'][] = $data['person_id'];
 				$data->billable_time = $billable_time;
-				
-				//$this->data['rate_temp'] = $rate_temp;
 			}
 	}
 	
 	
-	//*SHOWS THE PROJECTS
+	//SHOWS THE CLIENT REPORT, WHICH AGGREGATES THE DATA AT THE PROJECT LEVEL
 	function client_report() {
 	//breadcrumb, build up as we go.
 		$this->breadcrumb->add_crumb('Time Report', $this->data['current_url']); // this will be a link
 		$this->data['breadcrumb'] =  $this->breadcrumb->output();
-		//error_log(print_r($this->data['breadcrumb']));
-		//$rate_temp = $this->data['rate_temp'];
 		$this->load->model('Report_model', '', TRUE);
 		$this->data['controller'] = "report_controller";
 		$this->data['view'] = "project_report";
 		
 		
-		//get all of the projects for this time for the given client id, in the URL.
+		//get all of the projects for this time for the given client id
 		$projectquery = $this->Report_model->getProjectsByClient($this->todate, $this->fromdate, $this->client_id);
-		//print_r($projectquery);
-		//echo($this->todate);
-		//echo($this->fromdate);
-		//echo($this->client_id);
 		$project_url = array();
 		
 		$data = new stdClass;
 		$all_data = $this->data['all_data'];
-		//aggregate the various projects.
+		
+		////////////////////////
+		//PROJECT DATA ROLLUP//
+		//////////////////////
+		
 		foreach ($projectquery as $projects) {	
 			$running_total_time = 0;
 			$running_billable_time = 0;
 			$running_billable_amount = 0;
 			$anchored_project_url = 0;
-			//$all_data = $this->data['all_data'];
-			//print_r($all_data);
-			//error_log(print_r($all_data,true));
 			foreach($all_data as $data) {
-								//echo($projects['project_id']);
-								//echo($data->project_id);
 				if ($projects['project_id'] == $data->project_id) {		
 					$anchored_project_url = $this->timetrackerurls->generate_project_url($projects['project_id'], $projects['project_name'], $this->data['controller'], $this->data['view']);
 					$running_total_time = $data->timesheet_hours + $running_total_time;
@@ -232,9 +163,9 @@ class Report_controller extends CI_Controller {
 		$billable_time_holder = 0;	
 		$total_time_holder = 0;
 		$billable_amount_holder = 0;
-		//$all_data = $this->Report_model->getAllHours($this->todate, $this->fromdate);
+		
+		//CLIENT AGGREGATE DATA TO DISPLAY IN THE TOP OF THE PAGE//
 		foreach ($all_data as $data) {
-			//print_r($data);
 			$billable_time_holder = $billable_time_holder + $data->billable_time;
 			$total_time_holder = $total_time_holder + $data->timesheet_hours;
 			$billable_amount_holder = $billable_amount_holder + $data->billable_amount;
@@ -243,48 +174,50 @@ class Report_controller extends CI_Controller {
 		$data->aggregate_billable_time = $billable_time_holder;
 		$data->aggregate_total_time = $total_time_holder;
 		$data->aggregate_billable_amount = $billable_amount_holder;
-		//error_log(print_r($this->data['breadcrumb'],true));
+		//////////////////////////////////////////////////////////
+		
 		$data->project_url = $project_url;
 		$data->client_name = $this->Report_model->getClientName($_GET["client_id"]);
-		//$data = $this->data;
 		$this->load->view('header_view');
 		$this->load->view('report_client_view', $data);
 	}
 	
-	//**SHOWS THE TASKS
+	//SHOWS THE PROJECT REPORT, WHICH AGGREGATES THE DATA AT THE TASK LEVEL
 	function project_report() {
-		//jquery/js stuff//
-		//$this->data['library_src'] = $this->jquery->script();
-		//$this->data['script_foot'] = $this->jquery->_compile();
+		
 		//breadcrumb, build up as we go.
 		$this->breadcrumb->add_crumb('Time Report', $this->data['last_url']); // this will be a link
-		$this->breadcrumb->add_crumb('> This Client', $this->data['current_url']); // this will be a link
+		$this->breadcrumb->add_crumb("> UGH']", $this->data['current_url']); // this will be a link
 		$this->data['breadcrumb'] =  $this->breadcrumb->output();
-		//error_log(print_r($this->data['breadcrumb']));
-		//$rate_temp = $this->data['rate_temp'];
 		$this->load->model('Report_model', '', TRUE);
 		$this->data['controller'] = "report_controller";
 		$this->data['view'] = "task_report";
 		
 		
-		//get all of the tasks for this time for the given project id, in the URL.
+		
+		//get all of the tasks for this time for the given project id
 		$taskquery = $this->Report_model->getTasksByProject($this->todate, $this->fromdate, $this->project_id);
 		$task_url = array();
 		$data = new stdClass;
 		$all_data = $this->data['all_data'];
+		
+		
 		//handle the case where there are no tasks.
-		$this->data['task_url'] = $task_url;
-		//this aggregates the tasks
+		//$this->data['task_url'] = $task_url;
+		
+		////////////////////////
+		//TASK DATA ROLLUP//
+		//////////////////////
+		
 		foreach ($taskquery as $tasks) {	
 			$running_total_time = 0;
 			$running_billable_time = 0;
 			$running_billable_amount = 0;
-			//$all_data = $this->data['all_data'];	
 			$anchored_task_url = '';
 			$task_id = array();
 			foreach($all_data as $data) {
 				if (($tasks['task_id'] == $data->task_id) && ($tasks['project_id'] == $data->project_id)) {		
-					$anchored_task_url = $this->timetrackerurls->generate_task_url($tasks['project_id'], $tasks['task_name'], $this->data['controller'], $this->data['view']);
+					$anchored_task_url = $this->timetrackerurls->generate_task_url($tasks['task_id'], $tasks['task_name'], $this->data['controller'], $this->data['view']);
 					//get the task ID to pass of to the person url
 					$task_id[] = $data->task_id;
 					$running_total_time = $data->timesheet_hours + $running_total_time;
@@ -312,7 +245,9 @@ class Report_controller extends CI_Controller {
 		$billable_time_holder = 0;	
 		$total_time_holder = 0;
 		$billable_amount_holder = 0;
-		//$all_data = $this->Report_model->getAllHours($this->todate, $this->fromdate);
+		
+		//CLIENT AGGREGATE DATA TO DISPLAY IN THE TOP OF THE PAGE//
+		//this may need to be at the project level, not at the client level.//
 		foreach ($all_data as $data) {
 			//print_r($data);
 			$billable_time_holder = $billable_time_holder + $data->billable_time;
@@ -322,14 +257,18 @@ class Report_controller extends CI_Controller {
 		$data->aggregate_billable_time = $billable_time_holder;
 		$data->aggregate_total_time = $total_time_holder;
 		$data->aggregate_billable_amount = $billable_amount_holder;
+		/////////////////////////////////////////////////////////////////////////
+		
 		$this->data['project_name'] = $this->Report_model->getProjectName($_GET["project_id"]);
 		$this->data['project_id'] = $_GET["project_id"];
-		//$data = $this->data;
 		
 		
 		$this->load->view('header_view');
-		//LIFESPAN REPORT
-		//this report is only in the project page
+		
+		////////////////////
+		//LIFESPAN REPORT//
+		//////////////////
+		
 		if ($this->type=="lifespan") {
 				$this->data['results'] = $this->Report_model->getProjectLifespan($this->data['project_id']);
 				
@@ -394,64 +333,75 @@ class Report_controller extends CI_Controller {
 			}
 	}
 	
-	////***SHOWS THE PEOPLE
-	function task_report($task_id) {
-		$rate_temp = $this->data['rate_temp'];
+	//SHOWS THE TASK REPORT, WHICH AGGREGATES THE DATA AT THE PERSON LEVEL
+	function task_report() {
+		//breadcrumb, build up as we go.
+		$this->breadcrumb->add_crumb('Time Report', $this->data['last_url']); // this will be a link
+		$this->breadcrumb->add_crumb(":{", $this->data['current_url']); // this will be a link
+		$this->data['breadcrumb'] =  $this->breadcrumb->output();
 		$this->load->model('Report_model', '', TRUE);
 		$this->data['controller'] = "report_controller";
 		$this->data['view'] = "person_report";
 		
-		//get all of the persons for this task for the given project id, in the URL.
-		$personquery = $this->Report_model->getPersonsByTask($this->todate, $this->fromdate, $task_id);
+		//get all of the persons for this task for the given task id
+		$personquery = $this->Report_model->getPersonsByTask($this->todate, $this->fromdate, $this->task_id);
 		$person_url = array();
+		$data = new stdClass;
+		$all_data = $this->data['all_data'];
+		
+		////////////////////////
+		//PERSON DATA ROLLUP//
+		//////////////////////
 		foreach ($personquery as $persons) {	
-			$running_total_time = '';
-			$running_billable_time = '';
-			$running_billable_rate = '';
-			$anchored_person_url = '';
-			foreach($rate_temp['person_id'] as $key=>$val) {
-				if (($persons['person_id'] == $rate_temp['person_id'][$key]) && ($persons['task_id'] == $rate_temp['task_id'][$key]) && ($persons['project_id'] == $rate_temp['project_id'][$key])) {
-					
+			$running_total_time = 0;
+			$running_billable_time = 0;
+			$running_billable_amount = 0;
+			$anchored_person_url = 0;
+			foreach($all_data as $data) {
+				if (($persons['person_id'] == $data->person_id) && ($persons['task_id'] == $data->task_id)) {
 					$anchored_person_url = $this->timetrackerurls->generate_person_url($persons['person_id'], $persons['person_first_name'], $this->data['controller'], $this->data['view']);
-					$running_total_time = $rate_temp['total_time'][$key] + $running_total_time;
-					$running_billable_time = $rate_temp['billable_time'] [$key] + $running_billable_time;
-					$running_billable_rate = money_format('%i', $rate_temp['billable_rate'] [$key] + $running_billable_rate);
+					$running_total_time = $data->timesheet_hours + $running_total_time;
+					$running_billable_time = $data->billable_time + $running_billable_time;
+					$running_billable_amount = money_format('%i', $data->billable_amount + $running_billable_amount);
 				}
 			}
 						
 			$person_url[]['person_url'] = $anchored_person_url;
 			$person_url[]['person_total_hours'] = $running_total_time;
 			$person_url[]['person_billable_hours'] = $running_billable_time;
-			$person_url[]['person_total_rate'] = $running_billable_rate;
+			$person_url[]['person_total_amount'] = $running_billable_amount;
 		}
+		//print_r($personquery);
 		
 		$rate = "";
 		$person_total_time = "";
 		$person_billable_hours = "";
 		$person_total_rate = "";
+		
+		$billable_time_holder = 0;	
+		$total_time_holder = 0;
+		$billable_amount_holder = 0;
 
-		foreach ($person_url as $key=>$value) {
-			foreach ($value as $key=>$value) {
-				if ($key == 'person_total_hours') {
-					$person_total_time = $person_total_time + $value;
-				}
-				if ($key == 'person_billable_hours') {
-					$person_billable_hours = $person_billable_hours + $value;
-				}
-				if ($key == 'person_total_rate') {
-					$person_total_rate = $person_total_rate + $value;
-				}
-			}
-			$this->data['total_time'] = $person_total_time;
-			$this->data['billable_time'] = $person_billable_hours;
-			$this->data['billable_rate'] = $person_total_rate;
+
+		//CLIENT AGGREGATE DATA TO DISPLAY IN THE TOP OF THE PAGE//
+		//this may need to be at the project level, not at the client level.//
+		foreach ($all_data as $data) {
+			//print_r($data);
+			$billable_time_holder = $billable_time_holder + $data->billable_time;
+			$total_time_holder = $total_time_holder + $data->timesheet_hours;
+			$billable_amount_holder = $billable_amount_holder + $data->billable_amount;
 		}
+		$data->aggregate_billable_time = $billable_time_holder;
+		$data->aggregate_total_time = $total_time_holder;
+		$data->aggregate_billable_amount = $billable_amount_holder;
+		/////////////////////////////////////////////////////////////////////////
+	
+		$data->person_url = $person_url;
+		$this->data['task_name'] = $this->Report_model->getTaskName($_GET["task_id"]);
+		$this->data['task_id'] = $_GET["task_id"];
+		$this->load->view('header_view');
+		$this->load->view('report_task_view', $data);
 
-		$this->data['person_url'] = $person_url;
-		$this->data['task_name'] = $this->Report_model->getTaskName($task_id);
-		$data = $this->data;
-		//print_r($data);
-		//$this->load->view('report_task_view', $data);
 	}
 
 	

@@ -1,7 +1,9 @@
 <?php
 
 
-//this code is used to set up the previous and next buttons in the UI
+//this code is used to set up the previous and next buttons in the UI.
+//this gets the dates out of the URL and sets up the previous and next buttons based on the timeframes
+//selected in the UI.
 class DatePicker{
 	function show_picker() {
 		$obj =& get_instance();
@@ -91,18 +93,8 @@ class DatePicker{
 				//we are in the second half of the month. 				
 				
 				///CURRENT DATE
-				//$date = new DateTime($fromdate);
-				//$fromdate = date_format($date->modify('first day of this month'), 'Y-m-d');
-				//echo "<br>current from date you're looking at here<br>";
-				//echo $fromdate;
 				$todate = $year_of_month . "-" . $month_of_month . "-" . ($middle_day);
 				$fromdate = date_format($last_day_of_month, 'Y-m-d');
-				//this is always the 15th of the month
-				//$todate = $year_of_month . "-" . $month_of_month . "-" . ($middle_day-1);
-				//echo "<br>current todate you're looking at<br>";
-				//echo $todate;
-				//echo $fromdate;
-				
 				
 				//PREVIOUS DATE (rewind)
 				$date = new DateTime($fromdate);
@@ -110,40 +102,19 @@ class DatePicker{
 				$picker_fromdate = date_format($date->modify('first day of this month'), 'Y-m-d');
 				//this is always the 15th of the month.
 				$picker_todate = $year_of_month . "-" . $month_of_month . "-" . ($middle_day-1);
-				//echo "<br>previous picker fromdate<br>";
-				//echo $picker_fromdate;
-				//echo "<br>previous picker todate<br>";
-				//echo $picker_todate;
 				$picker = anchor("$base/index.php/$controller/$view?fromdate=$picker_fromdate&todate=$picker_todate&page=$page&type=$type$report_var$report_val", "<<<<< Previous ||");
 				
-				
-				
-				//NEXT DATE
+				//NEXT DATE (ff)
 				$date = new DateTime($fromdate);
 				//this is always the first day of next month
 				$picker_fromdate = date_format($date->modify('first day of next month'), 'Y-m-d');
 				$date = new DateTime($picker_fromdate);
 				//this is always the 15th of next month, so add 15 days to the first day of next month.
 				$picker_todate = date_format(date_add($date, date_interval_create_from_date_string($middle_day -2 . ' days')), 'Y-m-d');
-				//echo "<br>next picker fromdate<br>";
-				//echo $picker_fromdate;
-				//echo "<br>next picker todate<br>";
-				//echo $picker_todate;
 				$picker .= anchor("$base/index.php/$controller/$view?fromdate=$picker_fromdate&todate=$picker_todate&page=$page&type=$type$report_var$report_val", " Next >>>>>>");	
-			
 			} else {
 				//we are in the first half of the month. Rewind.
 				//fromdate is now the last half of the previous month.
-				
-				///CURRENT DATE
-				//$date = new DateTime($fromdate);
-				//$fromdate = date_format($date->modify('first day of this month'), 'Y-m-d');
-				//echo "<br>current from date you're looking at here<br>";
-				//echo $fromdate;
-				//this is always the 15th of the month
-				//$todate = $year_of_month . "-" . $month_of_month . "-" . ($middle_day-1);
-				//echo "<br>current todate you're looking at<br>";
-				//echo $todate;
 				
 				//PREVIOUS DATE
 				//this is always the last day of the previous month.
@@ -154,10 +125,6 @@ class DatePicker{
 				$date = new DateTime($picker_fromdate);
 				//this is always the last day of last month.
 				$picker_todate = date_format($date->modify('last day of this month'), 'Y-m-d');
-				//echo "<br>previous picker fromdate<br>";
-				//echo $picker_fromdate;
-				//echo "<br>previous picker todate<br>";
-				//echo $picker_todate;
 				$picker = anchor("$base/index.php/$controller/$view?fromdate=$picker_fromdate&todate=$picker_todate&page=$page&type=$type$report_var$report_val", "<<<<< Previous ||");
 				
 				
@@ -169,10 +136,6 @@ class DatePicker{
 
 				//this is always the last day of this month.
 				$picker_todate = date_format($date->modify('last day of this month'), 'Y-m-d');
-				//echo "<br>next picker fromdate<br>";
-				//echo $picker_fromdate;
-				//echo "<br>next picker todate<br>";
-				//echo $picker_todate;
 				$picker .= anchor("$base/index.php/$controller/$view?fromdate=$picker_fromdate&todate=$picker_todate&page=$page&type=$type$report_var$report_val", " Next >>>>>>");
 			}
 		} elseif ($type == 'month') {
@@ -184,10 +147,7 @@ class DatePicker{
 			$date->modify('-1 month');
 			$date = $date->format('Y-m-d');
 			$fromdate = $date;
-			//these are the links for the previous week
-			//echo $fromdate;
-			//echo $todate;
-		    $picker = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&page=$page&type=$type$report_var$report_val", "<<<<< Previous ||");
+			$picker = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&page=$page&type=$type$report_var$report_val", "<<<<< Previous ||");
 			$date = new DateTime($todate);
 			$date->modify('+2 months');
 			$date = $date->format('Y-m-d');
@@ -206,10 +166,7 @@ class DatePicker{
 			$date->modify('-1 year');
 			$date = $date->format('Y-m-d');
 			$fromdate = $date;
-			//these are the links for the previous week
-			//echo $fromdate;
-			//echo $todate;
-		    $picker = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&page=$page&type=$type$report_var$report_val", "<<<<< Previous ||");
+			$picker = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&page=$page&type=$type$report_var$report_val", "<<<<< Previous ||");
 			$date = new DateTime($todate);
 			$date->modify('+2 years');
 			$date = $date->format('Y-m-d');
@@ -294,9 +251,6 @@ class DatePicker{
 			$date->modify('-1 week');
 			$date = $date->format('Y-m-d');
 			$fromdate = $date;
-			//these are the links for the previous week
-			//echo $fromdate;
-			//echo $todate;
 			$picker = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&page=$page&type=$type$report_var$report_val", "<<<<< Previous ||");
 			$date = new DateTime($todate);
 			$date->modify('+2 week');
@@ -308,8 +262,6 @@ class DatePicker{
 			$fromdate = $date;
 			$picker .= anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&page=$page&type=$type$report_var$report_val", " Next >>>>>>");
 		}
-		//add the client_id, project_id, task_id or person_id to the picker if they are in the url.
-		//error_log($picker);
 		return $picker;
 	}
 }

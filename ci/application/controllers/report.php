@@ -1,5 +1,7 @@
 <?php
 /***this is the main controller for the repots section.*/
+//this is all of the data at the rolled up levels
+//for clients, projects, tasks, and people.
 
 
 class Report extends CI_Controller {
@@ -10,7 +12,7 @@ class Report extends CI_Controller {
 	var $client_id = "";
 	
 	function __construct() {
-		//this is common code to all of the pages that make up this part of the report.
+		//this is common code to all of the pages that make up these reports.
 		parent::__construct();
 		$this->load->library('javascript');
 		$data['library_src'] = $this->jquery->script();
@@ -18,28 +20,25 @@ class Report extends CI_Controller {
 		$this->load->helper(array('form', 'url'));
 		$this->load->library('form_validation');
 		$this->form_validation->set_rules('type', 'week', 'trim');
-
-		//start to implement types of reports here, this is very heavy handed, we probably want this to be a helper.
-		//THIS SHOULD FOLLOW THE DATE PICKER!
 		$this->type = $this->input->get('type');
 		$this->fromdate = $this->input->get('fromdate');
 		$this->todate = $this->input->get('todate');
 
 			
 		$client_id = $this->input->get('client_id');
-		//date picker code
+		//date picker code (the date picker is the previous and next code in the UI).
 		$this->load->library('DatePicker');   
-		//now we have the task object
-		//$this->load->library('Task');
 		$mypicker = $this->datepicker->show_picker();
 	    $this->data['picker'] = $mypicker;
-	    //time tracker url code
+	    //time tracker url code (these functions return anchors for the pages. ie: clients returns anchors for all projects, projects returns anchors for all tasks, etc.
 	    $this->load->library('TimeTrackerUrls');   
 	    
 		
 		$this->base=$this->config->item('base_url');
 		$this->css=$this->config->item('css');
-//		the menu is a third party library that lets us auto-generate the green menu on each page.
+		
+		
+////////the menu is a third party library that lets us auto-generate the green menu on each page.
 		$this->load->library('menu');
 		$this->menu_pages = array(
                     "report?fromdate=$this->fromdate&todate=$this->todate&type=$this->type&page=clients" => "Clients",
@@ -48,8 +47,6 @@ class Report extends CI_Controller {
                     "report?fromdate=$this->fromdate&todate=$this->todate&type=$this->type&page=staff" => "Staff"
                 );
  
-				//get the name of the active page
-				//$this->CI->load->library('uri');
 				$this->active = $this->uri->segment(1);
  
 				//setup the menu and load it ready for display in the view
@@ -57,13 +54,14 @@ class Report extends CI_Controller {
 				$this->data['css'] = $this->css;
 				$this->data['base'] = $this->base;
 		}
+//////end menu
 	
-	//this is the main index function
+////this is the main index function, so it is called whenever someone comes into the report controller.
 	function index() {
-	    //load the model
 	    $this->load->model('Report_model', '', TRUE);
 	    
 
+		//all data is all information used in these reports.
 		$all_data = $this->Report_model->getAllHours($this->todate, $this->fromdate);
 			//create the class here, so that if no data is available
 			//it actually gets created anyway, with blank values.
@@ -109,18 +107,16 @@ class Report extends CI_Controller {
 					$billable_time = "0.00";
 					$billable_amount = "0.00";
 				}
-				//$rate_temp['total_time'][] = $total_time;
+				//billable amount and billable time are now in the object.
 				$data->billable_amount = $billable_amount;
 				$data->billable_time = $billable_time;
-				//error_log(print_r($data, true));
 			}
 		
 		//uninvoiced amount
 		//wait to implement until invoicing is complete
 		
 		//top view common code
-		//this aggregates all data at the total level
-		//so we can display it in the UI.
+		//ROLL UP at the top level.
 		$billable_time_holder = 0;	
 		$total_time_holder = 0;
 		$billable_amount_holder = 0;
@@ -136,6 +132,7 @@ class Report extends CI_Controller {
 		//put the date in the data variable to get it out of the view!
 		$data->from_date = $this->fromdate;
 		$data->to_date = $this->todate;
+		//always display the header and the top view data.
 		$this->load->view('header_view');
 		$this->load->view('top_view', $data);
 		
@@ -151,7 +148,7 @@ class Report extends CI_Controller {
 		$client_url[]['client_billable_rate'] = array();
 		$client_url[]['client_billable_time'] = array();
 		$client_url[]['client_total_time'] = array();
-		//clientquery returns an array.
+		//ROLL UP all data at the client level.
 		$clientquery = $this->Report_model->getClientHours($this->todate, $this->fromdate);
 		foreach ($clientquery as $clients) {			
 			$running_total_time = 0;
@@ -178,13 +175,16 @@ class Report extends CI_Controller {
 			$data = $this->data;
 			$this->load->view('client_view', $data);
 		} elseif ($this->input->get('page') == "projects") {
-			//****PROJECT DATA******/
-			//*********************//
+		
+		////////////////////////
+		//****PROJECT DATA*****//
+		///////////////////////	
 		$this->data['view'] = "project_report";
 		$project_url = array();
 		$project_url[]['project_billable_rate'] = array();
 		$project_url[]['project_billable_time'] = array();
 		$project_url[]['project_total_time'] = array();
+		//ROLL UP all data at the project level.
 		$projectquery = $this->Report_model->getProjectHours($this->todate, $this->fromdate);
 		foreach ($projectquery as $projects) {			
 			$running_total_time = 0;
@@ -210,12 +210,17 @@ class Report extends CI_Controller {
 			$data = $this->data;
 			$this->load->view('project_view', $data);	
 		} elseif ($this->input->get('page') == "tasks") {
-			//****TASK DATA******/
+
+		////////////////////////
+		//****TASK DATA*****//
+		///////////////////////		
+		
 		$this->data['view'] = "task_report";
 		$task_url = array();
 		$task_url[]['task_billable_rate'] = array();
 		$task_url[]['task_billable_time'] = array();
 		$task_url[]['task_total_time'] = array();
+		//ROLL UP all data at the task level.
 		$taskquery = $this->Report_model->getTaskHours($this->todate, $this->fromdate);
 		foreach ($taskquery as $tasks) {			
 			$running_total_time = 0;
@@ -237,10 +242,11 @@ class Report extends CI_Controller {
 			$task_url[]['task_total_amount'] = $running_billable_amount;
 		}
 		
-			$data->task_url = $task_url;
-			//$data = $this->data;
+			$this->data['task_url'] = $task_url;
+			$data = $this->data;
 			//PROJECT LIFESPAN REPORT
 			if ($this->type=="lifespan") {
+				echo "CAN YOU SEE ME?";
 				$data = $this->Report_model->getProjectLifespan($this->todate, $this->fromdate);
 				$this->load->view('lifespan_view', $data);
 			} else {
@@ -248,11 +254,17 @@ class Report extends CI_Controller {
 			}
 			//****PERSON DATA******//			
 		} elseif ($this->input->get('page') == "staff") {
-			$this->data['view'] = "person_report";
-			$person_url = array();
+			
+			////////////////////////
+			//****TASK DATA*****//
+			///////////////////////
+			
+		$this->data['view'] = "person_report";
+		$person_url = array();
 		$person_url[]['person_billable_rate'] = array();
 		$person_url[]['person_billable_time'] = array();
 		$person_url[]['person_total_time'] = array();
+		//ROLL UP all data at the person level.
 		$personquery = $this->Report_model->getPersonHours($this->todate, $this->fromdate);
 		foreach ($personquery as $persons) {			
 			$running_total_time = 0;

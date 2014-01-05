@@ -53,31 +53,33 @@ background-color: aqua;
 			<h3 class="page-title"><?php echo date_format(new DateTime($_GET['fromdate']), "F j, Y");?> to <?php echo date_format(new DateTime($_GET['todate']), "F j, Y");?></h3>
 		</header>
 	<table width="100%" style="border:1px solid;">
-	<tr><td><?php echo $picker;?></td></tr>
-	<tr><td><?php echo $task_name[0]->task_name; ?>
+	<tr><td><?php echo $this->data['picker'];?>></td></tr>
+	<tr><td><?php $this->data['task_name'][0]; ?>
 	</td></tr>
 	<tr><td>
 	<b>Hours Tracked</b><br>
 	<?php 
-	print_r($total_time);
+	print_r($aggregate_total_time);
 	?>
 	</td><td><b>Billable Hours</b><br>
-	<?php print_r($billable_time);
+	<?php print_r($aggregate_billable_time);
 	?>		<h5>Unbillable Hours</h5><h3><?php 
 		//echo "ert";
+		echo $aggregate_total_time-$aggregate_billable_time;
+
 	?>
 	</h3></td><td>
 	<h5>Billable Amount</h5><h3>
 	<?php 
-	print_r($billable_rate) . ".00";
+	print_r($aggregate_billable_amount) . ".00";
 	echo ".00";?></h3></td></td></tr>
 
 	
 	</td></tr>
-	<tr><td colspan="4">	<div id="menucss"><?php echo $menu ?></div>
+	<tr><td colspan="4">	<div id="menucss"><?php echo $this->data['menu'] ?></div>
 </td></tr>
 	<tr><td><h5>Name</h5></td><td><h5>Hours</h5></td><td><h5>Billable Hours</h5></td><td><h5>Billable Amount</h5></td></tr>
-	<?php 
+	<?php
 	$i = 0;
 	foreach ($person_url as $key=>$value) {
 		//print_r($project_url);
@@ -92,7 +94,6 @@ background-color: aqua;
 		}
 	}
 	echo "<BR><BR>";
-	//error_log(print_r($client_url,true));
 ?>
 	</table>
 	</div>
