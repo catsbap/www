@@ -189,6 +189,13 @@ class Report_model extends CI_Model {
 		return $rows;	}
 	*/
 	function getClientHours($to, $from) {
+		//active projects only?
+		$activeToggle = '%';
+		if(isset($_GET['toggleVar'])) {
+			if($_GET['toggleVar'] == 0) {
+				$activeToggle = 0;
+			}
+		}
 		$rows = array(); //will hold all results
 		$clienthoursquery = $this->db->select('client.client_name');
 		$clienthoursquery = $this->db->select('client.client_id');
@@ -198,6 +205,7 @@ class Report_model extends CI_Model {
 		$clienthoursquery = $this->db->join('timesheet_item', 'project.project_id = timesheet_item.project_id');
 		$clienthoursquery = $this->db->where('timesheet_item.timesheet_date <=', $to);
 		$clienthoursquery = $this->db->where('timesheet_item.timesheet_date >=', $from);
+		$clienthoursquery = $this->db->where('project.project_archived like', $activeToggle);
 		$clienthoursquery = $this->db->group_by('client.client_name');
 		$clienthoursquery = $this->db->having('count(*) > 0');
 		$clienthoursquery = $this->db->get();	
@@ -209,6 +217,13 @@ class Report_model extends CI_Model {
 	}
 	
 	function getProjectHours($to, $from) {
+		//active projects only?
+		$activeToggle = '%';
+		if(isset($_GET['toggleVar'])) {
+			if($_GET['toggleVar'] == 0) {
+				$activeToggle = 0;
+			}
+		}
 		$rows = array();
 		$projecthoursquery = $this->db->select('project.project_name');
 		$projecthoursquery = $this->db->select('project.project_id');
@@ -217,6 +232,7 @@ class Report_model extends CI_Model {
 		$projecthoursquery = $this->db->join('timesheet_item', 'project.project_id = timesheet_item.project_id');
 		$projecthoursquery = $this->db->where('timesheet_date <=', $to);
 		$projecthoursquery = $this->db->where('timesheet_date >=', $from);
+		$projecthoursquery = $this->db->where('project.project_archived like', $activeToggle);
 		$projecthoursquery = $this->db->group_by('project.project_name');
 		$projecthoursquery = $this->db->having('count(*) > 0');
 		$projecthoursquery = $this->db->get();	
@@ -228,14 +244,24 @@ class Report_model extends CI_Model {
 	}
 	
 	function getTaskHours($to, $from) {
+		//active projects only?
+		$activeToggle = '%';
+		if(isset($_GET['toggleVar'])) {
+			if($_GET['toggleVar'] == 0) {
+				$activeToggle = 0;
+			}
+		}
 		$rows = array();
 		$taskhoursquery = $this->db->select('task.task_name');
 		$taskhoursquery = $this->db->select('task.task_id');
 		$taskhoursquery = $this->db->select_sum('timesheet_hours');
 		$taskhoursquery = $this->db->from('task');
 		$taskhoursquery = $this->db->join('timesheet_item', 'task.task_id = timesheet_item.task_id');
+		$taskhoursquery = $this->db->join('project_task', 'project_task.task_id = task.task_id');
+		$taskhoursquery = $this->db->join('project', 'project.project_id = project_task.project_id');
 		$taskhoursquery = $this->db->where('timesheet_date <=', $to);
 		$taskhoursquery = $this->db->where('timesheet_date >=', $from);
+		$taskhoursquery = $this->db->where('project.project_archived like', $activeToggle);
 		$taskhoursquery = $this->db->group_by('task.task_name');
 		$taskhoursquery = $this->db->having('count(*) > 0');
 		$taskhoursquery = $this->db->get();	
@@ -525,6 +551,13 @@ class Report_model extends CI_Model {
 	//what if we get ALL data
 	//YEAH!!
 	function getAllHours($to, $from) {
+		//active projects only?
+		$activeToggle = '%';
+		if(isset($_GET['toggleVar'])) {
+			if($_GET['toggleVar'] == 0) {
+				$activeToggle = 0;
+			}
+		}	
 		$rows = array(); //will hold all results
 		$projecthoursquery = $this->db->select('client.client_id');
 		$projecthoursquery = $this->db->select('client.client_name');
@@ -546,6 +579,7 @@ class Report_model extends CI_Model {
 		$projecthoursquery = $this->db->join('person', 'timesheet_item.person_id = person.person_id');
 		$projecthoursquery = $this->db->where('timesheet_item.timesheet_date <=', $to);
 		$projecthoursquery = $this->db->where('timesheet_item.timesheet_date >=', $from);
+		$projecthoursquery = $this->db->where('project.project_archived like', $activeToggle);
 		$projecthoursquery = $this->db->group_by('client.client_name');
 		$projecthoursquery = $this->db->group_by('project.project_name');
 		$projecthoursquery = $this->db->group_by('person.person_id');
