@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
-	//require_once("/Applications/MAMP/htdocs/time_tracker/common/common.inc.php");
+	require_once("/Applications/MAMP/htdocs/time_tracker/common/common.inc.php");
 	//probably shouldn't be in the view, but we'll leave it here for now
 	//take this out for now until I can figure out what's wrog
-	//checklogin();
+	checklogin();
 	//include('header.php'); //add header.php to page moved to only be called when page is rendered so it's not sent back when page saved via JS/Ajax
 ?>
 <style>
@@ -50,6 +50,41 @@ background-color: aqua;
 <script>
 
 $(document).ready(function() { 
+	//active project only toggle
+	    //this sets up the active toggle checkbox to be on or off and to maintain state after reload.
+    	var toggleVar = 1;
+    	var query = window.location.search.substring(1);
+		var vars = query.split("&");
+		for (var i=0;i<vars.length;i++) {
+        	var pair = vars[i].split("=");
+			if(pair[0] == 'toggleVar'){
+				toggleVar = pair[1];
+			}
+		}
+		if (toggleVar == 0) {
+	        	$('#activeToggle').attr('checked','checked');
+        } else if (toggleVar == 1) {
+	        	$('#activeToggle').attr('unchecked','unchecked');
+        } else {
+	        toggleVar = 1;
+        }
+        $("#activeToggle").change(function(){ 
+        	var toggleVar = $('#activeToggle').prop('checked');
+        	//change and reload the URL based on what is in the URL. 	
+        	//the value here is the value in the db for the project, so 1 means the project is archived.
+        	if (toggleVar == true) {
+	        	toggleVar = 0;
+        	} else {
+	        	toggleVar = 1;
+        	}
+        	var queryParameters = {}, queryString = location.search.substring(1),
+			re = /([^&=]+)=([^&]*)/g, m;
+			while (m = re.exec(queryString)) {
+				queryParameters[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+			}
+			queryParameters['toggleVar'] = toggleVar;
+			location.search = $.param(queryParameters); // Causes page to reload
+    });
     //grab the timeframe out of the drop down
     //and update the URL with the correct dates.
     //we are omitting custom dates and semimonthly for now.
@@ -133,7 +168,8 @@ $(document).ready(function() {
 	<table width="100%" border=1px solid;>
 	<tr><td><form><?php $options = array('type=week' => 'Week', 'type=month' => 'Month', 'type=year' => 'Year', 'type=quarter' => 'Quarter');
 echo form_dropdown('timeframe', $options, 'type=' . $this->input->get('type'), 'id=timeframe');
-?></td></tr></form>
+?></td><td><input class="check" type="checkbox" name="activeToggle" id="activeToggle">
+Active Projects Only</td></tr></form>
 	<tr><td width=25%><h5>Hours Tracked</h5><h3><?php 
 	print_r($aggregate_total_time);
 	?></h3>
