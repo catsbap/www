@@ -125,7 +125,7 @@ class Search_model extends CI_Model {
 		return $rows;	
 	}
 	
-	function getAllHours($to, $from, $client_name, $project_name, $task_name, $person_name, $department_name, $activeToggle) {
+	function getAllHours($to, $from, $client_name, $project_name, $task_name, $person_name, $department_name, $activeToggle, $billableDropDown) {
 		$rows = array(); //will hold all results
 		$allhoursquery = $this->db->select('client.client_id');
 		$allhoursquery = $this->db->select('client.client_name');
@@ -154,6 +154,7 @@ class Search_model extends CI_Model {
 		$allhoursquery = $this->db->where('client.client_name like', $client_name);
 		$allhoursquery = $this->db->where('project.project_name like', $project_name);
 		$allhoursquery = $this->db->where('project.project_archived like', $activeToggle);
+		$allhoursquery = $this->db->where('project.project_billable like', $billableDropDown);
 		$allhoursquery = $this->db->where('task.task_name like', $task_name);
 		$allhoursquery = $this->db->where('person.person_first_name like', $person_name);
 		$allhoursquery = $this->db->where('person.person_department like', $department_name);

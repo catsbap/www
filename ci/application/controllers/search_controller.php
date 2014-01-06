@@ -42,6 +42,7 @@ class Search_controller extends CI_Controller {
 		 $department_name = $this->input->post('department');
 		 //get the activeToggle to determine if we should include only active projects
 		 $activeToggle= $this->uri->segment(5);	 
+		 $billableDropDown = $this->uri->segment(6);
 		 //lets just do this the long way.
 		 if ($client_name == "") {
 			 $client_name = "%";
@@ -61,7 +62,14 @@ class Search_controller extends CI_Controller {
 		 if ($activeToggle == 1) {
 			 $activeToggle = "%";
 		 }
-		 $data['results'] = $this->Search_model->getAllHours($this->data['fromdate'],$this->data['todate'],$client_name, $project_name, $task_name, $person_name, $department_name, $activeToggle);
+		 if ($billableDropDown == "billable_hours") {
+			 $billableDropDown = 1;
+		 } elseif ($billableDropDown == "non_billable_hours") {
+			 $billableDropDown = 0;
+		 } else {
+			 $billableDropDown = "%";
+		 }
+		 $data['results'] = $this->Search_model->getAllHours($this->data['fromdate'],$this->data['todate'],$client_name, $project_name, $task_name, $person_name, $department_name, $activeToggle, $billableDropDown);
 		 //get out the total hours to display in the UI
 		 $running_total = 0;
 		 foreach($data['results'] as $row){

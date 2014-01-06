@@ -120,7 +120,7 @@ $(document).ready( function() {
 			$('#todate').val(todate);
 		}
 		
-		var url = "<?php echo base_url();?>index.php/<?php echo $this->uri->segment(1)?>/<?php echo $this->uri->segment(2)?>/" + fromdate + "/" + todate;
+		var url = "<?php echo base_url();?>index.php/<?php echo $this->uri->segment(1)?>/<?php echo $this->uri->segment(2)?>/" + fromdate + "/" + todate + "/0/all_hours";
 		window.location.href = url;
 
     });
@@ -131,7 +131,7 @@ $(document).ready( function() {
 <tr>
 <td align="center" colspan=2><h1>Detailed Time Report</h1></td></tr><tr> 
 <td> 
-<form action="<?php echo site_url('search_controller/search_data/' . $this->uri->segment(4) . '/' . $this->uri->segment(3))?>" method = "post">
+<form action="<?php echo site_url('search_controller/search_data/' . $this->uri->segment(4) . '/' . $this->uri->segment(3)) . '/0/all_hours' ?>" method = "post">
 <tr><td align="right" width="40%">Timeframe: </td><td align="left">
 <?
 $options = array('type=thisweek' => 'This Week', 'type=lastweek' => 'Last Week',
