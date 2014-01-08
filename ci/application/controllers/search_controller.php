@@ -42,7 +42,17 @@ class Search_controller extends CI_Controller {
 		 $department_name = $this->input->post('department');
 		 //get the activeToggle to determine if we should include only active projects
 		 $activeToggle= $this->uri->segment(5);	 
+		 //get the billable drop down value to determine if we should include billable/nonbillable/all projects
 		 $billableDropDown = $this->uri->segment(6);
+		 $group_by = $this->uri->segment(7);
+		 $data['group_by'] = $group_by;
+		 //use the group_by variable to determine what values to exclude from the UI.
+		 $data['exclude_vars'] = array($group_by, "project_billable", "project_invoice_by", "project_hourly_rate", "person_hourly_rate", "task_hourly_rate", "project_id", "task_id", "client_id", "person_id");
+		 //use the group_by variable to determine what values to put in the header.
+		 $header_vars = array("timesheet_date"=>"Date", "client_name"=>"Client", "project_name"=>"Project", "task_name"=>"Task", "person_name"=>"Person", "person_departement"=>"Department", "Hours"=>"Hours");
+		 unset($header_vars[$group_by]);
+		 $data['header_vars'] = $header_vars;
+		 
 		 //lets just do this the long way.
 		 if ($client_name == "") {
 			 $client_name = "%";
