@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <?php echo $library_src;?>
 
 
@@ -131,7 +132,7 @@ $(document).ready( function() {
 <tr>
 <td align="center" colspan=2><h1>Detailed Time Report</h1></td></tr><tr> 
 <td> 
-<form action="<?php echo site_url('search_controller/search_data/' . $this->uri->segment(4) . '/' . $this->uri->segment(3)) . '/0/all_hours' ?>" method = "post">
+<form action="<?php echo site_url('search_controller/search_data/' . $this->uri->segment(4) . '/' . $this->uri->segment(3)) . '/0/all_hours/timesheet_date' ?>" method = "post">
 <tr><td align="right" width="40%">Timeframe: </td><td align="left">
 <?
 $options = array('type=thisweek' => 'This Week', 'type=lastweek' => 'Last Week',

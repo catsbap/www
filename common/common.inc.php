@@ -52,7 +52,18 @@ function checkLogin() {
 		//$_SESSION["callLoginFromPage"] = $page;
 		//error_log("no session!");
 		//error_log(print_r($_SESSION["person"],true));
-		header("Location: login.php");
+		//this refers the application back to the login screen so we can leave CI.
+		//$url = ($_SERVER['HTTP_REFERER']);
+		$url = $_SERVER["REQUEST_URI"];
+		$get_page_name = explode('/', $url);
+		$page_name = $get_page_name[2];
+		if ($page_name == "ci") {
+			
+			//this needs to be more dynamic.
+			header("Location: http://localhost:8888/time_tracker/ui/login.php");
+		} else {
+			header("Location: login.php");
+		}
 	}
 	//else{
 		//not logging right now.

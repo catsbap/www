@@ -1,4 +1,12 @@
 <!DOCTYPE html>
+<?php
+require_once("/Applications/MAMP/htdocs/time_tracker/common/common.inc.php");
+	//probably shouldn't be in the view, but we'll leave it here for now
+	//take this out for now until I can figure out what's wrog
+	checklogin();
+	//include('header.php'); //add header.php to page moved to only be called when page is rendered so it's not sent back when page saved via JS/Ajax
+	
+?>
 <html lang="en">
 <head>
 	<title>Manage</title>
@@ -46,11 +54,11 @@
 	<nav id="section-nav" class="section-nav timesheets">
 		<h1 class="section-nav-title">Reports: </h1>
 		<ul class="section-menu">
-			<li class="section-menu-item"><a class="section-menu-link" href="../index.php/report?fromdate=<?php echo date("Y-m-d", strtotime("last monday", strtotime(date("Y-m-d"))));?>&todate=<?php echo date("Y-m-d", strtotime("this sunday", strtotime(date("Y-m-d"))))?>&page=clients&type=week">Time</a></li>
+			<li class="section-menu-item"><a class="section-menu-link" href="/time_tracker/ci/index.php/report?fromdate=<?php echo date("Y-m-d", strtotime("last monday", strtotime(date("Y-m-d"))));?>&todate=<?php echo date("Y-m-d", strtotime("this sunday", strtotime(date("Y-m-d"))));?>&page=clients&type=week">Time</a></li>
 			<!--li class="section-menu-item"><a class="section-menu-link" href="#">Expenses</a></li-->
 			<li class="section-menu-item"><a class="section-menu-link" href="http://<?php echo $_SERVER['SERVER_NAME'];?>:8888/time_tracker/ci/index.php/search_controller/index/<?php echo date("Y-m-d", strtotime("last monday", strtotime(date("Y-m-d"))));?>/<?php echo date("Y-m-d", strtotime("this sunday", strtotime(date("Y-m-d"))));?>">Detailed Time</a></li>
 			<li class="section-menu-item"><a class="section-menu-link" href="#">Uninvoiced</a></li>
-			<li class="section-menu-item"><a class="section-menu-link" href="../index.php/budget_controller/index">Project Budget</a></li>
+			<li class="section-menu-item"><a class="section-menu-link" href="/time_tracker/ci/index.php/budget_controller/index">Project Budget</a></li>
 
 		</ul>
 	</nav>
