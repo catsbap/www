@@ -165,7 +165,7 @@ class Report_controller extends CI_Controller {
 		$billable_amount_holder = 0;
 		
 		//CLIENT AGGREGATE DATA TO DISPLAY IN THE TOP OF THE PAGE//
-		foreach ($all_data as $data) {
+		foreach ($all_data as $data) {	
 			$billable_time_holder = $billable_time_holder + $data->billable_time;
 			$total_time_holder = $total_time_holder + $data->timesheet_hours;
 			$billable_amount_holder = $billable_amount_holder + $data->billable_amount;
@@ -182,7 +182,7 @@ class Report_controller extends CI_Controller {
 		$this->load->view('report_client_view', $data);
 	}
 	
-	//SHOWS THE PROJECT REPORT, WHICH AGGREGATES THE DATA AT THE TASK LEVEL
+	//SHOWS THE PROJECT REPORT, WHICH AGGREGATES THE DATA AT THE PROJECTS AND SHOWS LINKS LEVEL
 	function project_report() {
 		
 		//breadcrumb, build up as we go.
