@@ -50,12 +50,11 @@ background-color: aqua;
 	<div id="page-content" class="page-content">
 		<header class="page-header">
 			<h1>This week:</h1>
-			<h3 class="page-title"><?php echo date_format(new DateTime($_GET['fromdate']), "F j, Y");?> to <?php echo date_format(new DateTime($_GET['todate']), "F j, Y");?></h3>
+			<h3 class="page-title"><?php echo date_format(new DateTime($this->input->get('fromdate')), "F j, Y");?> to <?php echo date_format(new DateTime($this->input->get('todate')), "F j, Y");?></h3>
 		</header>
 	<table width="100%" style="border:1px solid;">
 	<tr><td><?php echo $this->data['picker'];?>></td></tr>
-	<tr><td><?php $this->data['task_name'][0]; ?>
-	</td></tr>
+	<tr><td><?php echo $task_name[0]->task_name;?></td></tr>
 	<tr><td>
 	<b>Hours Tracked</b><br>
 	<?php 

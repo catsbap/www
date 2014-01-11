@@ -130,9 +130,10 @@ $(document).ready(function() {
 			<h3 class="page-title"><?php echo date_format(new DateTime($this->input->get('fromdate')), "F j, Y");?> to <?php echo date_format(new DateTime($this->input->get('todate')), "F j, Y");?></h3>
 		</header>
 	<table width="100%" border=1px solid>
-	<tr><td><?php echo $this->data['picker'] ?></td></tr>
+	<tr><td><?php 
+	echo $picker ?></td></tr>
 	<tr><td><?php echo $client_name[0]->client_name;?></td></tr>
-		<tr><td><?php echo $this->data['breadcrumb'] ?></td></tr>
+		<tr><td><?php echo $breadcrumb ?></td></tr>
 	<tr><td><form><?php $options = array('type=week' => 'Week', 'type=month' => 'Month', 'type=year' => 'Year', 'type=quarter' => 'Quarter');
 echo form_dropdown('timeframe', $options, 'type=' . $this->input->get('type'), 'id=timeframe');
 ?></td></tr></form>
@@ -155,7 +156,7 @@ echo form_dropdown('timeframe', $options, 'type=' . $this->input->get('type'), '
 
 	
 	</td></tr>
-	<tr><td colspan="4">	<div id="menucss"><?php echo $this->data['menu'] ?></div>
+	<tr><td colspan="4">	<div id="menucss"><?php echo $menu ?></div>
 </td></tr>
 	<tr><td><h5>Name</h5></td><td><h5>Hours</h5></td><td><h5>Billable Hours</h5></td><td><h5>Billable Amount</h5></td></tr>
 	<?php 

@@ -159,13 +159,13 @@ $(document).ready(function() {
 	<div id="page-content" class="page-content">
 		<header class="page-header">
 			<h1>This week:</h1>
-			<h3 class="page-title"><?php echo date_format(new DateTime($_GET['fromdate']), "F j, Y");?> to <?php echo date_format(new DateTime($_GET['todate']), "F j, Y");?></h3>
+			<h3 class="page-title"><?php echo date_format(new DateTime($this->input->get('fromdate')), "F j, Y");?> to <?php echo date_format(new DateTime($this->input->get('todate')), "F j, Y");?></h3>
+
 		</header>
 	<table width="100%" style="border:1px solid;">
-	<tr><td><?php echo $this->data['picker'];?>
-	<tr><td><?php $this->data['project_name'][0];
-	?>
-	<tr><td><?php echo $this->data['breadcrumb'] ?></td></tr>
+	<tr><td><?php echo $picker ?></td></tr>
+	<tr><td><?php echo $project_name[0]->project_name;?></td></tr>
+	<tr><td><<?php echo $breadcrumb ?></td></tr>
 	<tr><td><form><?php $options = array('type=week' => 'Week', 'type=month' => 'Month', 'type=year' => 'Year', 'type=quarter' => 'Quarter');
 echo form_dropdown('timeframe', $options, 'type=' . $this->input->get('type'), 'id=timeframe');;?></td></tr></form>
 	<tr><td>
@@ -196,19 +196,16 @@ echo form_dropdown('timeframe', $options, 'type=' . $this->input->get('type'), '
 	<?php 
 	$i = 0;
 	//print_r($this->data);
-	foreach ($this->data['task_url'] as $key=>$value) {
+	foreach ($task_url as $key=>$value) {
 		//print_r($task_url);
-		foreach ($value as $key=>$val) {
-			if ($key == 'task_id') {
-				echo "<tr>";
-				//$this->timetrackerurls->display_person($value['task_id'], $project_id);
-				echo "</tr>";
-			} else {
-				if ($val || $val == "0.00") {
-					echo "<td>$val</td>";
+		foreach ($value as $val) {
+			if ($val || $val == "0.00") {
+				echo "<td>$val</td>";
+				if ($i%4 == 3) {
+					echo "</tr><tr>";
 				}
-				$i++;
 			}
+			$i++;
 		}
 	}
 						

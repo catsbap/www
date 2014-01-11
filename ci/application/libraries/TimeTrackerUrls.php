@@ -1,16 +1,28 @@
 <?php
 
 class TimeTrackerUrls{
+
+
+/*
+$this->type = $this->uri->segment(6);
+		$this->fromdate = $this->uri->segment(3);
+		$this->todate = $this->uri->segment(4);
+		$this->page = $this->uri->segment(5);
+*/
 	function generate_client_url($client_id = "", $client_name="", $controller, $view) {
 		$obj =& get_instance();
 		$base = $obj->config->item('base_url');
 		$obj->load->helper('url');
 		$obj->load->library('session');
-		$fromdate = $_GET['fromdate'];
-		$todate = $_GET['todate'];
-		$type=$_GET['type'];
-		$page = $_GET['page'];
-		$anchor = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&client_id=$client_id&page=$page&type=$type", "$client_name");
+		//$fromdate = $_GET['fromdate'];
+		$fromdate = $obj->uri->segment(3);
+		//$todate = $_GET['todate'];
+		$todate = $obj->uri->segment(4);
+		//$type=$_GET['type'];
+		$type = $obj->uri->segment(6);
+		//$page = $_GET['page'];
+		$page = $obj->uri->segment(5);
+		$anchor = anchor("$base/index.php/$controller/$view/$fromdate/$todate/$page/$type/$client_id", "$client_name");
 		return $anchor;
 	}
 
@@ -19,11 +31,15 @@ class TimeTrackerUrls{
 		$base = $obj->config->item('base_url');
 		$obj->load->helper('url');
 		$obj->load->library('session');
-		$fromdate = $_GET['fromdate'];
-		$todate = $_GET['todate'];
-		$type=$_GET['type'];
-		$page = $_GET['page'];
-		$anchor = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&project_id=$project_id&page=$page&type=$type", "$project_name");
+		//$fromdate = $_GET['fromdate'];
+		$fromdate = $obj->uri->segment(3);
+		//$todate = $_GET['todate'];
+		$todate = $obj->uri->segment(4);
+		//$type=$_GET['type'];
+		$type = $obj->uri->segment(6);
+		//$page = $_GET['page'];
+		$page = $obj->uri->segment(5);
+		$anchor = anchor("$base/index.php/$controller/$view/$fromdate/$todate/$page/$type/$project_id", "$project_name");
 		return $anchor;
 	}
 	
@@ -32,11 +48,15 @@ class TimeTrackerUrls{
 		$base = $obj->config->item('base_url');
 		$obj->load->helper('url');
 		$obj->load->library('session');
-		$fromdate = $_GET['fromdate'];
-		$todate = $_GET['todate'];
-		$type=$_GET['type'];
-		$page = $_GET['page'];
-		$anchor = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&task_id=$task_id&page=$page&type=$type", "$task_name");
+		//$fromdate = $_GET['fromdate'];
+		$fromdate = $obj->uri->segment(3);
+		//$todate = $_GET['todate'];
+		$todate = $obj->uri->segment(4);
+		//$type=$_GET['type'];
+		$type = $obj->uri->segment(6);
+		//$page = $_GET['page'];
+		$page = $obj->uri->segment(5);
+		$anchor = anchor("$base/index.php/$controller/$view/$fromdate/$todate/$page/$type/$task_id", "$task_name");
 		//$anchor = "<div class='button_$task_id'><a href=#>$task_name</a></div>";
 		return $anchor;
 	}
@@ -46,11 +66,15 @@ class TimeTrackerUrls{
 		$base = $obj->config->item('base_url');
 		$obj->load->helper('url');
 		$obj->load->library('session');
-		$fromdate = $_GET['fromdate'];
-		$todate = $_GET['todate'];
-		$type=$_GET['type'];
-		$page = $_GET['page'];
-		$anchor = anchor("$base/index.php/$controller/$view?fromdate=$fromdate&todate=$todate&person_id=$person_id&page=$page&type=$type", "$person_first_name");
+		//$fromdate = $_GET['fromdate'];
+		$fromdate = $obj->uri->segment(3);
+		//$todate = $_GET['todate'];
+		$todate = $obj->uri->segment(4);
+		//$type=$_GET['type'];
+		$type = $obj->uri->segment(6);
+		//$page = $_GET['page'];
+		$page = $obj->uri->segment(5);
+		$anchor = anchor("$base/index.php/$controller/$view/$fromdate/$todate/$page/$type/$person_id", "$person_first_name");
 		return $anchor;
 	}
 	
