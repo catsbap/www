@@ -44,8 +44,13 @@ background-color: aqua;
 <script>
 
 $(document).ready(function() { 
+	//set up the currently selected type when the user comes into the page.
+	var pathArray = window.location.pathname.split( '/' );
+	var dropdownVal = pathArray[9];
+	$('#timeframe').val('type=' + dropdownVal);
+	
 	//active project only toggle
-	    //this sets up the active toggle checkbox to be on or off and to maintain state after reload.
+	   //this sets up the active toggle checkbox to be on or off and to maintain state after reload.
     	var toggleVar = 1;
     	var query = window.location.search.substring(1);
 		var vars = query.split("&");
@@ -128,25 +133,16 @@ $(document).ready(function() {
 			todate = d2.toString('yyyy-M-d');
 			$('#todate').val(todate);
 		}
-    
-    var queryParameters = {}, queryString = location.search.substring(1),
-    re = /([^&=]+)=([^&]*)/g, m;
- 
-	// Creates a map with the query string parameters
-	while (m = re.exec(queryString)) {
-    	queryParameters[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
-		}
- 
-		// Add new parameters or update existing ones
-		//queryParameters['newParameter'] = '';
-		queryParameters['todate'] = todate;
-		queryParameters['fromdate'] = fromdate;
-		var val = $('#timeframe').val(); //get the value from the timeframe drop down
-        var val = val.split('=')[1];
-		queryParameters['type'] = val;
 
-			//Replace the query portion of the URL.
-			location.search = $.param(queryParameters); // Causes page to reload
+			//get out the segments (6=fromdate, 7=todate, 9=week) and update them.
+			var pathArray = window.location.pathname.split( '/' );
+			pathArray[6] = fromdate;
+			pathArray[7] = todate;
+			timeframe_val = $('#timeframe').val();
+			var val = timeframe_val.split('=')[1];
+			pathArray[9] = val;
+			pathArray = pathArray.join("/");
+			document.location.href = pathArray;
             });				
 });
 </script> 
@@ -174,7 +170,7 @@ Active Projects Only</td></tr></form>
 	<h5>Unbillable Hours</h5><h3><?php 
 	if (!$aggregate_total_time) {
 		echo "0";
-	} elseif (!$billable_time) {
+	} elseif (!$aggregate_billable_time) {
 		print_r($aggregate_total_time);
 	} else {
 		echo intval($aggregate_total_time - $aggregate_billable_time);

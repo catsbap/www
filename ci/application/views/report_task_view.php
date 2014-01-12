@@ -45,6 +45,77 @@ background-color: aqua;
 }
 
 </style>
+<script>
+
+$(document).ready(function() { 
+	//set up the currently selected type when the user comes into the page.
+	var pathArray = window.location.pathname.split( '/' );
+	var dropdownVal = pathArray[9];
+	$('#timeframe').val('type=' + dropdownVal);
+	
+	//grab the timeframe out of the drop down
+    //and update the URL with the correct dates.
+    //we are omitting custom dates and semimonthly for now.
+	//PULL THIS OUT INTO A LIBRARY!!	
+    $("#timeframe").change(function(){	
+    if($(this).val() == 'type=week') {
+        	var date = date || Date.today();
+        	d1 = date.is().monday() ? date : date.last().monday();
+			d2 = d1.clone().next().sunday();
+			fromdate = d1.toString('yyyy-M-d');
+			$('#fromdate').val(fromdate)
+			//d2 = Date.next().sunday();
+			todate = d2.toString('yyyy-M-d');
+			$('#todate').val(todate)		
+		} else if ($(this).val() == 'type=month') {
+			var date = date || Date.today();
+        	d1 = date.clearTime().moveToFirstDayOfMonth();
+			fromdate = d1.toString('yyyy-M-d');
+			$('#fromdate').val(fromdate)
+			var date = date || Date.today();
+			d2 = date.clearTime().moveToLastDayOfMonth();
+			todate = d2.toString('yyyy-M-d');
+			$('#todate').val(todate)
+		} else if ($(this).val() == 'type=year') {
+			var date = date || Date.today();
+        	d1 = date.add(-1).year();
+			fromdate = d1.toString('yyyy-M-d');
+			$('#fromdate').val(fromdate);
+			var date = date || Date.today();
+			d2 = date.add(1).year();
+			todate = d2.toString('yyyy-M-d');
+			$('#todate').val(todate);
+		} else if ($(this).val() == 'type=quarter') {
+			var today = Date.parse('today').toString('yyyy-MM-dd');
+			var year = Date.parse('today').toString('yyyy');
+			var month = Date.parse('today').toString('MM');
+			var quarterMonth = (Math.floor((month-1)/3)*3)+1;
+			var quarter = (Math.floor(month-1)/3)+1;
+			var lastQuarter = (quarter > 1) ? quarter - 1 : lastQuarter = 4;
+			var quarterStartDate = (quarterMonth < 10) ? year+'-0'+quarterMonth+'-01' : year+'-'+quarterMonth+'-01';
+			fromdate = quarterStartDate.toString('yyyy-M-d');
+			$('#fromdate').val(fromdate);
+			//var date = date || Date.today();
+			var date = Date.parse(quarterStartDate);
+			tempdate = date.add(3).months();
+			d2 = tempdate.add(-1).day();
+			todate = d2.toString('yyyy-M-d');
+			$('#todate').val(todate);
+		}
+    
+    //get out the segments (6=fromdate, 7=todate, 9=week) and update them.
+			var pathArray = window.location.pathname.split( '/' );
+			pathArray[6] = fromdate;
+			pathArray[7] = todate;
+			timeframe_val = $('#timeframe').val();
+			var val = timeframe_val.split('=')[1];
+			pathArray[9] = val;
+			pathArray = pathArray.join("/");
+			document.location.href = pathArray;
+            });				
+});
+</script>
+
 
 <body>
 	<div id="page-content" class="page-content">
@@ -55,6 +126,10 @@ background-color: aqua;
 	<table width="100%" style="border:1px solid;">
 	<tr><td><?php echo $this->data['picker'];?>></td></tr>
 	<tr><td><?php echo $task_name[0]->task_name;?></td></tr>
+	<tr><td><?php echo $breadcrumb ?></td></tr>
+	<tr><td><form><?php $options = array('type=week' => 'Week', 'type=month' => 'Month', 'type=year' => 'Year', 'type=quarter' => 'Quarter');
+echo form_dropdown('timeframe', $options, 'type=' . $this->input->get('type'), 'id=timeframe');
+?></td></tr></form>
 	<tr><td>
 	<b>Hours Tracked</b><br>
 	<?php 

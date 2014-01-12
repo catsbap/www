@@ -29,12 +29,7 @@ class Report extends CI_Controller {
 		$this->todate = $this->uri->segment(4);
 		$this->page = $this->uri->segment(5);
 		
-		//echo $this->fromdate;
-		//echo $this->todate;
-		error_log($this->type);
-		//echo $this->page;
 			
-		$client_id = $this->input->get('client_id');
 		//date picker code (the date picker is the previous and next code in the UI).
 		$this->load->library('DatePicker');   
 		$mypicker = $this->datepicker->show_picker();
@@ -67,6 +62,7 @@ class Report extends CI_Controller {
 		$this->load->model('Report_model', '', TRUE);
 	    
 		//all data is all information used in these reports.
+		//$data = new stdClass;
 		$this->data['all_data'] = $this->Report_model->getAllHours($this->todate, $this->fromdate);
 			//create the class here, so that if no data is available
 			//it actually gets created anyway, with blank values.
@@ -136,6 +132,7 @@ class Report extends CI_Controller {
 			$total_time_holder = $total_time_holder + $data->timesheet_hours;
 			$billable_amount_holder = $billable_amount_holder + $data->billable_amount;
 		}
+		$data = new stdClass;
 		$data->aggregate_billable_time = $billable_time_holder;
 		$data->aggregate_total_time = $total_time_holder;
 		$data->aggregate_billable_amount = $billable_amount_holder;
@@ -276,14 +273,10 @@ class Report extends CI_Controller {
 	}	
 	
 	
-	//SATURDAY:
-	//CREATE THE REMAINING FUNCTIONS HERE.
-	//USE THE PROJECT/TASK QUERY TO PULL OUT THE INDIVIDUAL URLS
-	//THEN USE THE SAME FUNCTION TO ROLL UP TO THE LEVEL ABOVE THAT LEVEL (PROJECTS = CLIENTS, TASKS = PROJECTS, ETC).
-	//THEN WORK ON THE LIFESPAN REPORT
-	//& THE DATE FUNCTIONS (DATEPICKER).
-	//ALSO CHANGE THE DATES IN THE TIMEFRAME
-	//AND THE URLS IN THE HEADER.
+	//SUNDAY
+	//LIFESPAN REPORT
+	//HEADER
+	//BREADCRUMB
 	
 	
 	function client() {
@@ -307,6 +300,8 @@ class Report extends CI_Controller {
 		//end menu
 		$this->client_id = $this->uri->segment(7);
 		$projectquery = $this->Report_model->getProjectsByClient($this->todate, $this->fromdate, $this->client_id);
+		$project_url = array();
+		$data = new stdClass;
 		
 		////////////////////////
 		//PROJECT DATA ROLLUP//
@@ -394,6 +389,8 @@ class Report extends CI_Controller {
 		//end menu
 		$this->project_id = $this->uri->segment(7);
 		$taskquery = $this->Report_model->getTasksByProject($this->todate, $this->fromdate, $this->project_id);
+		$task_url = array();
+		$data = new stdClass;
 
 		
 
@@ -490,7 +487,8 @@ class Report extends CI_Controller {
 		//end menu
 		$this->task_id = $this->uri->segment(7);
 		$personquery = $this->Report_model->getPersonsByTask($this->todate, $this->fromdate, $this->task_id);
-
+		$person_url = array();
+		$data = new stdClass;
 		
 
 		////////////////////////
@@ -504,7 +502,9 @@ class Report extends CI_Controller {
 			$anchored_person_url = 0;
 			foreach($this->data['all_data'] as $data) {
 				if (($persons['person_id'] == $data->person_id) && ($persons['task_id'] == $data->task_id)) {
-					$anchored_person_url = $this->timetrackerurls->generate_person_url($persons['person_id'], $persons['person_first_name'], 'report', 'person');
+					//$anchored_person_url = $this->timetrackerurls->generate_person_url($persons['person_id'], $persons['person_first_name'], 'report', 'person');
+					//don't display the person as a URL.
+					$anchored_person_url = $persons['person_first_name'];
 					$running_total_time = $data->timesheet_hours + $running_total_time;
 					$running_billable_time = $data->billable_time + $running_billable_time;
 					$running_billable_amount = money_format('%i', $data->billable_amount + $running_billable_amount);
@@ -558,5 +558,9 @@ class Report extends CI_Controller {
 		$data->task_name = $this->Report_model->getTaskName($this->task_id);
 		$this->load->view('header_view');
 		$this->load->view('report_task_view', $data);				
+	}
+	
+	function person() {
+		echo "invalid request.";
 	}
 }
