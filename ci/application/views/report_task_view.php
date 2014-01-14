@@ -126,7 +126,7 @@ $(document).ready(function() {
 	<table width="100%" style="border:1px solid;">
 	<tr><td><?php echo $this->data['picker'];?>></td></tr>
 	<tr><td><?php echo $task_name[0]->task_name;?></td></tr>
-	<tr><td><?php echo $breadcrumb ?></td></tr>
+	<tr><td><?php //echo $breadcrumb ?></td></tr>
 	<tr><td><form><?php $options = array('type=week' => 'Week', 'type=month' => 'Month', 'type=year' => 'Year', 'type=quarter' => 'Quarter');
 echo form_dropdown('timeframe', $options, 'type=' . $this->input->get('type'), 'id=timeframe');
 ?></td></tr></form>
@@ -157,14 +157,16 @@ echo form_dropdown('timeframe', $options, 'type=' . $this->input->get('type'), '
 	$i = 0;
 	foreach ($person_url as $key=>$value) {
 		//print_r($project_url);
-		foreach ($value as $val) {
-			if ($val || $val == "0.00") {
-				echo "<td>$val</td>";
-				if ($i%4 == 3) {
-					echo "</tr><tr>";
+		foreach ($value as $key=>$val) {
+			if ($key != "person_total_hours") {
+				if ($val || $val == "0.00") {
+					echo "<td>$val</td>";
+					if ($i%4 == 3) {
+						echo "</tr><tr>";
+					}
 				}
+				$i++;
 			}
-			$i++;
 		}
 	}
 	echo "<BR><BR>";

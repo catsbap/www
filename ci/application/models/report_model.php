@@ -152,7 +152,8 @@ class Report_model extends CI_Model {
 		}
 		return $rows;
 	}
-		function getProjectsByClient($to, $from, $client_id) {
+	
+	function getProjectsByClient($to, $from, $client_id) {
 		$rows = array();
 		$projectquery = $this->db->select('project.project_name');
 		$projectquery = $this->db->select('project.project_id');
@@ -175,6 +176,53 @@ class Report_model extends CI_Model {
 		}
 		return $rows;	
 	}
+	
+	//this just gets the client out of the db so we have it for our detailed time report URLS.
+	function getClientsByProject($project_id) {
+		$rows = array();
+		$projectquery = $this->db->select('client.client_name');
+		$projectquery = $this->db->select('client.client_id');
+		$projectquery = $this->db->from('client');
+		//$projectquery = $this->db->select_sum('timesheet_item.timesheet_hours');
+		$projectquery = $this->db->join('project', 'client.client_id = project.client_id');
+		//$projectquery = $this->db->join('timesheet_item', 'project.project_id = timesheet_item.project_id');
+		$projectquery = $this->db->where('project.project_id =', $project_id);
+		//$projectquery = $this->db->where('timesheet_item.timesheet_date <=', $to);
+		//$projectquery = $this->db->where('timesheet_item.timesheet_date >=', $from);
+		//$projectquery = $this->db->group_by('client.client_name');
+		$projectquery = $this->db->group_by('client.client_name');
+		$projectquery = $this->db->having('count(*) > 0');
+		$projectquery = $this->db->get();	
+		foreach($projectquery->result() as $row)
+		{    
+        $rows[] = $row; //add the fetched result to the result array;
+		}
+		return $rows;	
+	}
+	
+	//this just gets the project out of the db so we have it for our detailed time report URLS.
+	function getProjectByTask($task_id) {
+		$rows = array();
+		$projectquery = $this->db->select('project.project_name');
+		$projectquery = $this->db->select('project.project_id');
+		$projectquery = $this->db->from('project');
+		//$projectquery = $this->db->select_sum('timesheet_item.timesheet_hours');
+		$projectquery = $this->db->join('project_task', 'project_task.project_id = project.project_id');
+		//$projectquery = $this->db->join('timesheet_item', 'project.project_id = timesheet_item.project_id');
+		$projectquery = $this->db->where('project_task.task_id =', $task_id);
+		//$projectquery = $this->db->where('timesheet_item.timesheet_date <=', $to);
+		//$projectquery = $this->db->where('timesheet_item.timesheet_date >=', $from);
+		//$projectquery = $this->db->group_by('client.client_name');
+		$projectquery = $this->db->group_by('project.project_name');
+		$projectquery = $this->db->having('count(*) > 0');
+		$projectquery = $this->db->get();	
+		foreach($projectquery->result() as $row)
+		{    
+        $rows[] = $row; //add the fetched result to the result array;
+		}
+		return $rows;	
+	}	
+	
 	
 	function getTasksByProject($to, $from, $project_id) {
 		$rows = array();

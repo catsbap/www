@@ -160,7 +160,7 @@ class Report extends CI_Controller {
 		////////////////////////
 		//****PROJECT DATA*****//
 		///////////////////////	
-		$this->data['view'] = "project_report";
+		$this->data['view'] = "project";
 		$project_url = array();
 		$project_url[]['project_billable_rate'] = array();
 		$project_url[]['project_billable_time'] = array();
@@ -175,6 +175,7 @@ class Report extends CI_Controller {
 				if ($projects['project_id'] == $data->project_id) {		
 					
 					$anchored_project_url = $this->timetrackerurls->generate_project_url($projects['project_id'], $projects['project_name'], $this->data['controller'], $this->data['view']);
+					
 					$running_total_time = $data->timesheet_hours + $running_total_time;
 					$running_billable_time = $data->billable_time + $running_billable_time;
 					$running_billable_amount = money_format('%i', $data->billable_amount + $running_billable_amount);
@@ -182,13 +183,20 @@ class Report extends CI_Controller {
 			}
 			
 			$project_url[]['project_url'] = $anchored_project_url;
-			$project_url[]['project_total_hours'] = $running_total_time;
+			$cid = "";
+			$pid = urlencode($projects['project_name']);
+			$tid = "";
+			$did = "";
+			$plid = "";
+			$project_url[]['project_total_hours'] = "<a href=http://127.0.0.1:8888/time_tracker/ci/index.php/search_controller/search_data/2014-1-12/2013-1-12/0/all_hours/timesheet_date?clients=$cid&projects=$pid&tasks=$tid&department=$did&people=>$running_total_time</a>";
+			//$project_url[]['project_total_hours'] = $running_total_time;
 			$project_url[]['project_billable_hours'] = $running_billable_time;
 			$project_url[]['project_total_amount'] = $running_billable_amount;
 		}
 		
 			$this->data['project_url'] = $project_url;
 			$data = $this->data;
+			
 			$this->load->view('project_view', $data);	
 		} elseif ($this->page == "tasks") {
 
@@ -196,7 +204,7 @@ class Report extends CI_Controller {
 		//****TASK DATA*****//
 		///////////////////////		
 		
-		$this->data['view'] = "task_report";
+		$this->data['view'] = "task";
 		$task_url = array();
 		$task_url[]['task_billable_rate'] = array();
 		$task_url[]['task_billable_time'] = array();
@@ -218,7 +226,13 @@ class Report extends CI_Controller {
 			}
 			
 			$task_url[]['task_url'] = $anchored_task_url;
-			$task_url[]['task_total_hours'] = $running_total_time;
+			$cid = "";
+			$pid = "";
+			$tid = urlencode($tasks['task_name']);
+			$did = "";
+			$plid = "";
+			$task_url[]['task_total_hours'] = "<a href=http://127.0.0.1:8888/time_tracker/ci/index.php/search_controller/search_data/2014-1-12/2013-1-12/0/all_hours/timesheet_date?clients=$cid&projects=$pid&tasks=$tid&department=$did&people=$plid>$running_total_time</a>";
+			//$task_url[]['task_total_hours'] = $running_total_time;
 			$task_url[]['task_billable_hours'] = $running_billable_time;
 			$task_url[]['task_total_amount'] = $running_billable_amount;
 		}
@@ -226,13 +240,13 @@ class Report extends CI_Controller {
 			$this->data['task_url'] = $task_url;
 			$data = $this->data;
 			//PROJECT LIFESPAN REPORT
-			if ($this->type=="lifespan") {
-				echo "CAN YOU SEE ME?";
-				$data = $this->Report_model->getProjectLifespan($this->todate, $this->fromdate);
-				$this->load->view('lifespan_view', $data);
-			} else {
-				$this->load->view('task_view', $data);
-			}
+			//if ($this->type=="lifespan") {
+			//	echo "CAN YOU SEE ME?";
+			//	$data = $this->Report_model->getProjectLifespan($this->todate, $this->fromdate);
+			//	$this->load->view('lifespan_view', $data);
+			//} else {
+			//	$this->load->view('task_view', $data);
+			//}
 			//****PERSON DATA******//			
 		} elseif ($this->page == "staff") {
 			
@@ -240,7 +254,7 @@ class Report extends CI_Controller {
 			//****PERSON DATA*****//
 			///////////////////////
 			
-		$this->data['view'] = "person_report";
+		$this->data['view'] = "person";
 		$person_url = array();
 		$person_url[]['person_billable_rate'] = array();
 		$person_url[]['person_billable_time'] = array();
@@ -254,14 +268,20 @@ class Report extends CI_Controller {
 			foreach($this->data['all_data'] as $data) {
 				if ($persons['person_id'] == $data->person_id) {		
 					
-					$anchored_person_url = $this->timetrackerurls->generate_person_url($persons['person_id'], $persons['person_first_name'], $this->data['controller'], $this->data['view']);
+					$anchored_person_url = $persons['person_first_name'];
 					$running_total_time = $data->timesheet_hours + $running_total_time;
 					$running_billable_time = $data->billable_time + $running_billable_time;
 					$running_billable_amount = money_format('%i', $data->billable_amount + $running_billable_amount);
 				}
 			}
 			$person_url[]['person_url'] = $anchored_person_url;
-			$person_url[]['person_total_hours'] = $running_total_time;
+			$cid = "";
+			$pid = "";
+			$tid = "";
+			$did = "";
+			$plid = urlencode($persons['person_first_name']);;
+			$person_url[]['person_total_hours'] = "<a href=http://127.0.0.1:8888/time_tracker/ci/index.php/search_controller/search_data/2014-1-12/2013-1-12/0/all_hours/timesheet_date?clients=$cid&projects=$pid&tasks=$tid&department=$did&people=$plid>$running_total_time</a>";
+			//$person_url[]['person_total_hours'] = $running_total_time;
 			$person_url[]['person_billable_hours'] = $running_billable_time;
 			$person_url[]['person_total_amount'] = $running_billable_amount;
 		}
@@ -271,14 +291,7 @@ class Report extends CI_Controller {
 			$this->load->view('person_view', $data);		
 		}
 	}	
-	
-	
-	//SUNDAY
-	//LIFESPAN REPORT
-	//HEADER
-	//BREADCRUMB
-	
-	
+		
 	function client() {
 		//client_rollup helper is used to show aggregate in top area of client report.
 		//$this->load->library('client_rollup');
@@ -288,7 +301,7 @@ class Report extends CI_Controller {
 		$this->data['last_url'] = $_SERVER['HTTP_REFERER'];
 		$this->load->library('breadcrumb');	
 		$this->breadcrumb->clear();	
-		$this->breadcrumb->add_crumb('Time Report', $this->data['current_url']); // this will be a link
+		$this->breadcrumb->add_crumb('Project Time Report', $this->data['current_url']); // this will be a link
 		/////////end breadcrumb
 		//load datepicker
 		//the datepicker is the previous and next buttons.
@@ -322,6 +335,12 @@ class Report extends CI_Controller {
 			}
 						
 			$project_url[]['project_url'] = $anchored_project_url;
+			$cid = urlencode($this->Report_model->getClientName($this->client_id)[0]->client_name);
+			$pid = urlencode($projects['project_name']);
+			$tid = "";
+			$did = "";
+			$plid = "";
+			$project_url[]['project_total_hours_link'] = "<a href=http://127.0.0.1:8888/time_tracker/ci/index.php/search_controller/search_data/2014-1-12/2013-1-12/0/all_hours/timesheet_date?clients=$cid&projects=$pid&tasks=$tid&department=$did&people=>$running_total_time</a>";
 			$project_url[]['project_total_hours'] = $running_total_time;
 			$project_url[]['project_billable_hours'] = $running_billable_time;
 			$project_url[]['project_total_amount'] = $running_billable_amount;
@@ -372,12 +391,16 @@ class Report extends CI_Controller {
 
 	function project() {
 		//load breadcrumb
+		$this->load->library('breadcrumb');	
 		$url = current_url();
 		$this->data['current_url'] = $url . '?' . $_SERVER['QUERY_STRING'];
 		$this->data['last_url'] = $_SERVER['HTTP_REFERER'];
+		$this->breadcrumb->add_crumb('Project Time Report', $this->data['last_url']); // this will be a link
+		$bread_url = $this->Report_model->getProjectName($this->uri->segment(7));
+		$this->breadcrumb->add_crumb($bread_url[0]->project_name, $this->data['current_url']); // this will be a link
 		$this->load->library('breadcrumb');	
-		$this->breadcrumb->clear();	
-		$this->breadcrumb->add_crumb('Time Report', $this->data['current_url']); // this will be a link
+		//$this->breadcrumb->clear();	
+		//$this->breadcrumb->add_crumb('Time Report', $this->data['current_url']); // this will be a link
 		/////////end breadcrumb
 		//load datepicker
 		//the datepicker is the previous and next buttons.
@@ -416,6 +439,12 @@ class Report extends CI_Controller {
 			}
 			
 			$task_url[]['task_url'] = $anchored_task_url;
+			$cid = urlencode($this->Report_model->getClientsByProject($this->project_id)[0]->client_name);
+			$pid = urlencode($this->Report_model->getProjectName($this->project_id)[0]->project_name);
+			$tid = urlencode($tasks['task_name']);
+			$did = "";
+			$plid = "";
+			$task_url[]['task_total_hours_link'] = "<a href=http://127.0.0.1:8888/time_tracker/ci/index.php/search_controller/search_data/2014-1-12/2013-1-12/0/all_hours/timesheet_date?clients=$cid&projects=$pid&tasks=$tid&department=$did&people=$plid>$running_total_time</a>";
 			$task_url[]['task_total_hours'] = $running_total_time;
 			$task_url[]['task_billable_hours'] = $running_billable_time;
 			$task_url[]['task_total_amount'] = $running_billable_amount;
@@ -465,7 +494,75 @@ class Report extends CI_Controller {
 		$data->task_url = $task_url;
 		$data->project_name = $this->Report_model->getProjectName($this->project_id);
 		$this->load->view('header_view');
-		$this->load->view('report_project_view', $data);				
+		
+		
+		////////////////////
+		//LIFESPAN REPORT//
+		//////////////////
+		
+		if ($this->type=="lifespan") {
+				$this->data['results'] = $this->Report_model->getProjectLifespan($this->project_id);
+				
+				//the lifespan report includes budgeted hours for the project. Get them out of the $this->data variable, which has already been created.
+				//get out how we invoice this project. Do we allow projects to be budgeted when they are not invoiced? This code currently allows this, but won't show the invoice info.
+				$invoice_by = $this->data['results'][0]->project_invoice_by;
+				$this->data['billable_hours'] = 0;
+				$this->data['billable_amount'] = 0.0;
+				if ($invoice_by == 'Project hourly rate') {
+					$projects = $this->Report_model->getLifespanByProject($this->data['results'][0]->to_date, $this->data['results'][0]->from_date, $this->project_id);
+					//get out all of the hours for this project.
+					foreach ($projects as $project) {
+						$this->data['billable_hours'] = $project['timesheet_hours'];
+						$this->data['billable_amount'] = $project['project_hourly_rate'] * $project['timesheet_hours'];;
+						$this->data['rate'] = $project['project_hourly_rate'];
+					}
+				} elseif ($invoice_by == 'Person hourly rate') {
+					//get out the people for this project
+					$people = $this->Report_model->getLifespanPeopleByProject($this->data['results'][0]->to_date, $this->data['results'][0]->from_date, $this->project_id);
+					foreach($people as $person) {;
+						$this->data['billable_hours'] = $person['timesheet_hours'];
+						$this->data['billable_amount'] = $person['person_hourly_rate'] * $person['timesheet_hours'];
+						$this->data['rate'] = $person['person_hourly_rate'];
+					}				
+				} elseif ($invoice_by == 'Task hourly rate') {
+					//get out the tasks for this project
+					$tasks =  $this->Report_model->getLifespanTasksByProject($this->data['results'][0]->to_date, $this->data['results'][0]->from_date, $this->project_id);
+					foreach ($tasks as $task) {
+						$this->data['billable_hours'] = $task['timesheet_hours'];
+						$this->data['billable_amount'] = $task['task_hourly_rate'] * $task['timesheet_hours']; 
+						$this->data['rate'] = $task['task_hourly_rate'];
+					}
+				} else {
+					echo "This project is not invoiced; no data to display.";
+				}
+				//get out the budget information, regardless of the invoice type.
+				//THIS IS A BUSINESS QUESTION...IF A PROJECT IS INVOICED BY PERSON, CAN THEY BE BUDGETED BY TASK (FOR EXAMPLE). IF SO,
+				//HOW WOULD WE KNOW WOULD WE KNOW THE TASK RATE?
+				//FOR NOW, ASSUME THE INVOICE TYPE IS THE SAME AS THE BUDGET TYPE.
+				if ($this->data['results'][0]->project_budget_by == "Total project hours") {
+					//ACCORDING TO HARVEST, THE TOTAL  PROJECT HOURS IS ALL HOURS TRACKED TO THE PROJECT.
+					$this->data['budget'] = $this->data['results'][0]->project_budget_total_hours;
+					$this->data['spent'] = $this->data['billable_amount'];
+				} elseif ($this->data['results'][0]->project_budget_by == "Total project fees") {
+					//ACCORDING TO HARVEST, THE TOTAL PROJECT FEES ARE THE BILLABLE HOURS X THE HOURLY RATE.
+					//the rates are based on the invoices, so they are managed above.
+					$this->data['budget'] = $this->data['results'][0]->project_budget_total_fees;
+					$this->data['spent'] = $this->data['billable_amount'];
+				} elseif ($this->data['results'][0]->project_budget_by == "Hours per task") {
+					//ACCORDING TO HARVEST, THE HOURS PER TASK ARE THE HOURS SPENT ON THE TASKS FOR THE PROJECT.
+					$this->data['budget'] = $this->data['results'][0]->task_budget_hours;
+					$this->data['spent'] = $this->data['billable_amount'];
+				} elseif ($this->data['results'][0]->project_budget_by == "Hours per person") {
+					//ACCORDING TO HARVEST, THE HOURS PER PERSON ARE THE HOURS SPENT THE PEOPLE ON THE PROJECT.
+					$this->data['budget'] = $this->data['results'][0]->person_budget_hours;
+					$this->data['spent'] = $this->data['billable_amount'];
+				}
+				
+				$this->load->view('lifespan_view', $data);
+			} else {
+				$this->load->view('report_project_view', $data);
+			}
+		//$this->load->view('report_project_view', $data);				
 	}
 	
 	function task() {
@@ -473,9 +570,9 @@ class Report extends CI_Controller {
 		$url = current_url();
 		$this->data['current_url'] = $url . '?' . $_SERVER['QUERY_STRING'];
 		$this->data['last_url'] = $_SERVER['HTTP_REFERER'];
-		$this->load->library('breadcrumb');	
-		$this->breadcrumb->clear();	
-		$this->breadcrumb->add_crumb('Time Report', $this->data['current_url']); // this will be a link
+		//$this->load->library('breadcrumb');	
+		//$this->breadcrumb->clear();	
+		//$this->breadcrumb->add_crumb('Time Report', $this->data['current_url']); // this will be a link
 		/////////end breadcrumb
 		//load datepicker
 		//the datepicker is the previous and next buttons.
@@ -510,8 +607,21 @@ class Report extends CI_Controller {
 					$running_billable_amount = money_format('%i', $data->billable_amount + $running_billable_amount);
 				}
 			}
-						
+			
+			//WORK ON THIS ON MONDAY!
+			
+			$pid_holder = $this->Report_model->getProjectByTask($this->task_id)[0]->project_id;
+			//this is blank, find out why.
+			$cid = urlencode($this->Report_model->getClientsByProject($pid_holder)[0]->client_name);
+			$pid = urlencode($this->Report_model->getProjectName($pid_holder)[0]->project_name);
+			$tid = urlencode($this->Report_model->getTaskName($this->task_id)[0]->task_name);
 			$person_url[]['person_url'] = $anchored_person_url;
+			$cid = "";
+			//$pid = "";
+			//$tid = "";
+			$did = "";
+			$plid = $persons['person_first_name'];
+			$person_url[]['person_total_hours_link'] = "<a href=http://127.0.0.1:8888/time_tracker/ci/index.php/search_controller/search_data/2014-1-12/2013-1-12/0/all_hours/timesheet_date?clients=$cid&projects=$pid&tasks=$tid&department=$did&people=$plid>$running_total_time</a>";		
 			$person_url[]['person_total_hours'] = $running_total_time;
 			$person_url[]['person_billable_hours'] = $running_billable_time;
 			$person_url[]['person_total_amount'] = $running_billable_amount;
@@ -549,7 +659,7 @@ class Report extends CI_Controller {
 		$data->aggregate_total_time = $total_time_holder;
 		$data->aggregate_billable_amount = $billable_amount_holder;
 		$data->picker = $mypicker;
-		$data->breadcrumb =  $this->breadcrumb->output();
+		//$data->breadcrumb =  $this->breadcrumb->output();
 		$data->menu =  $this->data['menu'];
 
 		//////////////////////////////////////////////////////////

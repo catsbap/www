@@ -61,20 +61,10 @@ $(document).ready(function() {
 	//set up the currently selected type when the user comes into the page.
 	var pathArray = window.location.pathname.split( '/' );
 	var dropdownVal = pathArray[9];
-	
 	$('#timeframe').val('type=' + dropdownVal);
 
 	project_id = getParameterByName('project_id')  
     
-    $(".button_" + project_id).click(function(){	
-                $( "." + project_id ).toggle( "slow" );
-                //alert(getParameterByName('person_id'));
-    });
-    
-    //inicial settings
-    $("." + project_id).hide();
-
-	
     //this is to show the lifespan report, which is only on the project page.			
     //we'll have to do this differently now
      function changeUrlValue(name, value){
@@ -84,11 +74,13 @@ $(document).ready(function() {
         window.location.href = url.replace(tmpRegex, '$1'+value);
      }
     
-    $(".lifespan").click(function() {
-		var val = "type=lifespan";
-        var val = val.split('=')[1];
-        changeUrlValue('type', val);    
-    });
+    $(".lifespan").click(function() {    
+		var pathArray = window.location.pathname.split( '/' );
+		var val = "lifespan";
+		pathArray[9] = val;
+		pathArray = pathArray.join("/");
+		document.location.href = pathArray;    
+	});
 
     //grab the timeframe out of the drop down
     //and update the URL with the correct dates.
@@ -140,7 +132,7 @@ $(document).ready(function() {
 			$('#todate').val(todate);
 		}
     
-   //get out the segments (6=fromdate, 7=todate, 9=week) and update them.
+   //get out the segments (6=fromdate, 7=todate, 9=type) and update them.
 			var pathArray = window.location.pathname.split( '/' );
 			pathArray[6] = fromdate;
 			pathArray[7] = todate;
@@ -185,7 +177,7 @@ echo form_dropdown('timeframe', $options, 'type=' . $this->input->get('type'), '
 
 	
 	</td></tr>
-	<tr><td><a href="#" class="lifespan";>Project Lifespan Report</a></td></tr>
+	<tr><td><a href="#" class="lifespan">Project Lifespan Report</a></td></tr>
 
 	<tr><td colspan="4">	<div id="menucss"><?php echo $this->data['menu'] ?></div>
 </td></tr>
@@ -195,14 +187,16 @@ echo form_dropdown('timeframe', $options, 'type=' . $this->input->get('type'), '
 	//print_r($this->data);
 	foreach ($task_url as $key=>$value) {
 		//print_r($task_url);
-		foreach ($value as $val) {
-			if ($val || $val == "0.00") {
-				echo "<td>$val</td>";
-				if ($i%4 == 3) {
-					echo "</tr><tr>";
+		foreach ($value as $key=>$val) {
+			if ($key != "task_total_hours") {
+				if ($val || $val == "0.00") {
+					echo "<td>$val</td>";
+					if ($i%4 == 3) {
+						echo "</tr><tr>";
+					}
 				}
+				$i++;
 			}
-			$i++;
 		}
 	}
 						

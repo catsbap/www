@@ -157,15 +157,17 @@ echo form_dropdown('timeframe', $options, 'type=' . $this->input->get('type'), '
 	<?php 
 	$i = 0;
 	foreach ($project_url as $key=>$value) {
-		//print_r($project_url);
-		foreach ($value as $val) {
-			if ($val || $val == "0.00") {
-				echo "<td>$val</td>";
-				if ($i%4 == 3) {
-					echo "</tr><tr>";
+		foreach ($value as $key=>$val) {
+			//this needs to be rethought. It's too hard coded! The link is not the way to do this.
+			if ($key != "project_total_hours") {
+				if ($val || $val == "0.00") {
+					echo "<td>$val</td>";
+					if ($i%4 == 3) {
+						echo "</tr><tr>";
+					}
 				}
+				$i++;
 			}
-			$i++;
 		}
 	}
 	echo "<BR><BR>";

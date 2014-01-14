@@ -35,11 +35,12 @@ class Search_controller extends CI_Controller {
 
     function search_data()
     {
-         $client_name = $this->input->post('clients');
-		 $project_name = $this->input->post('projects');
-		 $task_name = $this->input->post('tasks');
-		 $person_name = $this->input->post('people');
-		 $department_name = $this->input->post('department');
+         //can we parse these values from the url segments?
+         $client_name = $this->input->get('clients');
+		 $project_name = $this->input->get('projects');
+		 $task_name = $this->input->get('tasks');
+		 $person_name = $this->input->get('people');
+		 $department_name = $this->input->get('department');
 		 //get the activeToggle to determine if we should include only active projects
 		 $activeToggle= $this->uri->segment(5);	 
 		 //get the billable drop down value to determine if we should include billable/nonbillable/all projects

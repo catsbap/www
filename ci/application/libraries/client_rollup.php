@@ -29,7 +29,13 @@ class Client_rollup{
 			}
 			
 			$client_url[]['client_url'] = $anchored_client_url;
-			$client_url[]['client_total_hours'] = $running_total_time;
+			$cid = urlencode($clients['client_name']);
+			$pid = "";
+			$tid = "";
+			$did = "";
+			$plid = "";
+			$client_url[]['client_total_hours'] = "<a href=http://127.0.0.1:8888/time_tracker/ci/index.php/search_controller/search_data/2014-1-12/2013-1-12/0/all_hours/timesheet_date?clients=$cid&projects=$pid&tasks=$tid&department=$did&people=>$running_total_time</a>";
+			//$client_url[]['client_total_hours'] = $running_total_time;
 			$client_url[]['client_billable_hours'] = $running_billable_time;
 			$client_url[]['client_total_amount'] = $running_billable_amount;
 		}
