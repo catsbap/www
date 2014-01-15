@@ -7,6 +7,11 @@
 <script>
 
 $(document).ready( function() {
+	//set up the currently selected type when the user comes into the page.
+	var pathArray = window.location.pathname.split( '/' );
+	var dropdownVal = pathArray[9];
+	$('#timeframe').val('type=' + dropdownVal);
+	
 	//initial value is hide departments
 	$( '.departmentInputDiv' ).hide();
 	$( '.staffInput' ).hide();
@@ -121,8 +126,16 @@ $(document).ready( function() {
 			$('#todate').val(todate);
 		}
 		
-		var url = "<?php echo base_url();?>index.php/<?php echo $this->uri->segment(1)?>/<?php echo $this->uri->segment(2)?>/" + fromdate + "/" + todate + "/0/all_hours";
-		window.location.href = url;
+		//var url = "<?php echo base_url();?>index.php/<?php echo $this->uri->segment(1)?>/<?php echo $this->uri->segment(2)?>/" + fromdate + "/" + todate + "/0/all_hours";
+		//window.location.href = url;
+			var pathArray = window.location.pathname.split( '/' );
+			pathArray[6] = fromdate;
+			pathArray[7] = todate;
+			timeframe_val = $('#timeframe').val();
+			var val = timeframe_val.split('=')[1];
+			pathArray[9] = val;
+			pathArray = pathArray.join("/");
+			document.location.href = pathArray;	
 
     });
 });
@@ -136,7 +149,7 @@ $(document).ready( function() {
 <tr><td align="right" width="40%">Timeframe: </td><td align="left">
 <?
 $options = array('type=thisweek' => 'This Week', 'type=lastweek' => 'Last Week',
-'type=thissmperiod' => 'This Semimonthly Period', 'type=lastsmperiod' => 'Last Semimonthly Period', 'type=thismonth' => 'This Month', 'type=lastmonth' => 'Last Month', 'type=thisquarter' => 'This Quarter', 'type=lastquarter' => 'Last Quarter', 'type=thisyear' => 'This Year', 'type=lastyear' => 'Last Year');
+'type=thismonth' => 'This Month', 'type=lastmonth' => 'Last Month', 'type=thisquarter' => 'This Quarter', 'type=lastquarter' => 'Last Quarter', 'type=thisyear' => 'This Year', 'type=lastyear' => 'Last Year');
 echo form_dropdown('timeframe', $options, 'type=' . $this->input->get('type'), 'id=timeframe');
 ?>
 <input type="hidden" name = "todate" id="fromdate"/>

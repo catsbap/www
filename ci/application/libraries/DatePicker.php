@@ -171,31 +171,36 @@ class DatePicker{
 			$date = new DateTime($todate);
 			//get the month, which will tell us what quarter we're in.
 			$month = $date->format('n') ;
+			echo $month;
 			//previous quarter code
 			if ($month < 4) {
-				//echo "we're in the first quarter going to the second quarter";
-                $todate = $date->modify('last day of june ' . $date->format('Y'));
+				echo "we're in the first quarter going to the third quarter";
+				$date = new DateTime($todate);
+				//$date = $date->modify('+1 year');
+				$todate = $date->modify('last day of september ' . $date->format('Y'));
                 $todate = $todate->format('Y-m-d');
-				$fromdate = $date->modify('first day of  april ' . $date->format('Y'));
+				$fromdate = $date->modify('first day of  july ' . $date->format('Y'));
 	         } elseif ($month > 9) {
-            	//echo "we're in the fourth going to first quarter";
+            	echo "we're in the fourth going to second quarter";
             	$date = new DateTime($todate);
-				$date = $date->modify('+1 year');
-				$todate = $date->modify('last day of march ' . $date->format('Y'));
+            	$date = $date->modify('+2 years');
+				$todate = $date->modify('last day of june' . $date->format('Y'));
                 $todate = $todate->format('Y-m-d');
-                $fromdate = $date->modify('first day of  january' . $date->format('Y'));
+                $fromdate = $date->modify('first day of april' . $date->format('Y'));	
             } elseif ($month > 6 && $month < 10) {
-            	//echo "we're in the third going to fourth quarter";
+            	echo "we're in the third going to first quarter";
             	$date = new DateTime($todate);
+            	//$date = $date->modify('+1 year');
+                $todate = $date->modify('last day of march ' . $date->format('Y'));
+                $todate = $todate->format('Y-m-d');
+                $fromdate = $date->modify('first day of january ' . $date->format('Y'));
+            } elseif ($month > 3 && $month < 7) {
+            	echo "we're in the second going to fourth quarter";
+            	$date = new DateTime($todate);
+            	//	$date = $date->modify('+1 year');
                 $todate = $date->modify('last day of december ' . $date->format('Y'));
                 $todate = $todate->format('Y-m-d');
                 $fromdate = $date->modify('first day of october ' . $date->format('Y'));
-            } elseif ($month > 3 && $month < 7) {
-            	//echo "we're in the second going to third quarter";
-            	$date = new DateTime($todate);
-                $todate = $date->modify('last day of september ' . $date->format('Y'));
-                $todate = $todate->format('Y-m-d');
-                $fromdate = $date->modify('first day of july ' . $date->format('Y'));
             }
 			$fromdate = $fromdate->format('Y-m-d');
 			$picker .= anchor("$base/index.php/$controller/$view/$fromdate/$todate/$page/$type/$id", " Next >>>>>>");

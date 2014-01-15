@@ -508,6 +508,8 @@ class Report extends CI_Controller {
 				$invoice_by = $this->data['results'][0]->project_invoice_by;
 				$this->data['billable_hours'] = 0;
 				$this->data['billable_amount'] = 0.0;
+				$this->data['rate'] = 0.0;
+
 				if ($invoice_by == 'Project hourly rate') {
 					$projects = $this->Report_model->getLifespanByProject($this->data['results'][0]->to_date, $this->data['results'][0]->from_date, $this->project_id);
 					//get out all of the hours for this project.
@@ -533,12 +535,16 @@ class Report extends CI_Controller {
 						$this->data['rate'] = $task['task_hourly_rate'];
 					}
 				} else {
-					echo "This project is not invoiced; no data to display.";
+						$this->data['billable_hours'] = 0;
+						$this->data['billable_amount'] = 0; 
+						$this->data['rate'] = 0;
 				}
 				//get out the budget information, regardless of the invoice type.
 				//THIS IS A BUSINESS QUESTION...IF A PROJECT IS INVOICED BY PERSON, CAN THEY BE BUDGETED BY TASK (FOR EXAMPLE). IF SO,
 				//HOW WOULD WE KNOW WOULD WE KNOW THE TASK RATE?
 				//FOR NOW, ASSUME THE INVOICE TYPE IS THE SAME AS THE BUDGET TYPE.
+				$this->data['budget'] = 0;
+				$this->data['spent'] = 0;
 				if ($this->data['results'][0]->project_budget_by == "Total project hours") {
 					//ACCORDING TO HARVEST, THE TOTAL  PROJECT HOURS IS ALL HOURS TRACKED TO THE PROJECT.
 					$this->data['budget'] = $this->data['results'][0]->project_budget_total_hours;
@@ -617,8 +623,7 @@ class Report extends CI_Controller {
 			$tid = urlencode($this->Report_model->getTaskName($this->task_id)[0]->task_name);
 			$person_url[]['person_url'] = $anchored_person_url;
 			$cid = "";
-			//$pid = "";
-			//$tid = "";
+
 			$did = "";
 			$plid = $persons['person_first_name'];
 			$person_url[]['person_total_hours_link'] = "<a href=http://127.0.0.1:8888/time_tracker/ci/index.php/search_controller/search_data/2014-1-12/2013-1-12/0/all_hours/timesheet_date?clients=$cid&projects=$pid&tasks=$tid&department=$did&people=$plid>$running_total_time</a>";		

@@ -336,6 +336,7 @@ class Report_controller extends CI_Controller {
 	//SHOWS THE TASK REPORT, WHICH AGGREGATES THE DATA AT THE PERSON LEVEL
 	function task_report() {
 		//breadcrumb, build up as we go.
+		
 		$this->breadcrumb->add_crumb('Time Report', $this->data['last_url']); // this will be a link
 		$this->breadcrumb->add_crumb(":{", $this->data['current_url']); // this will be a link
 		$this->data['breadcrumb'] =  $this->breadcrumb->output();
