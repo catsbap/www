@@ -46,9 +46,25 @@
 	
 ?>
 <script type="text/javascript">
+var tasks = [];
+
 function FillTasks(f) {
-    //alert(f.task_ids.value);
-    f.task_id.value = f.task_ids.value + "," + f.task_id.value;    
+	tasks.push(f.task_ids.value);
+	var x=document.getElementById("demo");
+	var budgetOptions=document.getElementById("project_budget_by");
+	var selectedBudgetOption = budgetOptions.options[budgetOptions.selectedIndex].text;
+	var taskTable = "<table><tr>";
+	for (var i=0;i<tasks.length;i++)	{ 	
+		taskTable = taskTable + "<tr><td>" + tasks[i] + "</td><td><input style=width:50px;display:inline; id=" + tasks[i] + "></td>";
+		f.task_id.value = tasks;
+	}
+	taskTable = taskTable + "</table>";
+	x.innerHTML=taskTable;
+	//alert(tasks);		
+	/*f.task_id.value = f.task_ids.value + "," + f.task_id.value; 
+    var tasksSelect = document.getElementById("task_ids");
+	var selectedTask = tasksSelect.options[tasksSelect.selectedIndex].text;
+	f.task_name.value = selectedTask + "," + f.task_name.value;*/
 }
 function FillPeople(f) {
     //alert(f.task_ids.value);
@@ -74,6 +90,13 @@ function showBudgetFields(f) {
         document.getElementById('project_budget_total_fees').style.display = "inline";
         document.getElementById('project_budget_includes_expenses'). style.display = "inline";
         document.getElementById('project_budget_includes_expenses_label'). style.display = "inline";
+	} else if (f.value == "Hours per task") {
+		var tasks = []; 
+		tasks = document.getElementById("task_id").value;
+		for (var i=0;i<tasks.length;i++) { 	
+		   alert(document.getElementById("demo").innerHTML.getElementById(tasks[i]));
+		   //document.getElementById(tasks[i]).innerHTML.style.display = "hidden";
+		}
 	} else {
 		document.getElementById('project_budget_total_hours').style.display = "none";
         document.getElementById('project_budget_total_fees').style.display = "none";
@@ -110,7 +133,7 @@ function showBudgetFields(f) {
 					</li>
 		   			<li class="client-details-item name">
 						<label for="client-name" <?php validateField("project_name", $missingFields)?> class="client-details-label">Project Name:</label>
-						<input id="client-name" name="project-name" class="client-name-input" type="text" tabindex="1" value="<?php echo $project->getValueEncoded("project_name")?>" /><br />
+						<input id="client-name" name="project_name" class="client-name-input" type="text" tabindex="1" value="<?php echo $project->getValueEncoded("project_name")?>" /><br />
 					</li>
 					<li class="client-details-item phoneNum">
 						<label for="client-phone" <?php validateField("project_code", $missingFields)?> class="client-details-label">Project Code (optional):</label>
@@ -140,10 +163,10 @@ function showBudgetFields(f) {
 						$row = Project::getEnumValues("project_budget_by");
 						$enumList = explode(",", str_replace("'", "", substr($row['COLUMN_TYPE'], 5, (strlen($row['COLUMN_TYPE'])-6))));
 						?>
-						<select name="project_budget_by" onchange="showBudgetFields(this)">
+						<select name="project_budget_by" id="project_budget_by" onchange="showBudgetFields(this)">
 						<?php
 						foreach($enumList as $value) { ?>
-							<option name="project_budget_by" value="<?php echo $value?>"><?php echo $value ?></option>
+							<option name="project_budget_by" id="project_budget_by" value="<?php echo $value?>"><?php echo $value ?></option>
 						<?php } ?>
 						</select>     <input id="project_budget_total_hours" name="project_budget_total_hours" style="width:50px;display:none;" value="Hours"/>
 						<input id="project_budget_total_fees" name="project_budget_total_fees" style="width:50px;display:none;" value="$"/><br/>
@@ -173,9 +196,15 @@ function showBudgetFields(f) {
 					<h4 class="required">= Required</h4>
 				</header>
 				<li class="client-details-item phoneNum">
-					<label for="client-phone" <?php validateField("task_id", $missingFields)?> class="client-details-label">Tasks associated with this project:</label>
-					<input id="client-phone" name="task_id" class="client-phone-input" type="text" tabindex="2" value="" />
+					<label for="client-phone" <?php validateField("task_id", $missingFields)?> class="client-details-label"></label>
+					<input id="task_id" name="task_id" class="task_id" type="text" tabindex="2" value="" />
 				</li>
+				<li class="client-details-item phoneNum">
+					<label for="client-phone" class="client-details-label">Tasks associated with this project:</label>
+					<input id="client-phone" name="task_name" class="task_name" type="text" tabindex="2" value="" />
+				</li>
+				<p id="demo">Click the button to add a new element to the array.</p>
+
 				<ul class="details-list client-details-list">
 				<?php 
 						//get the taskss out to populate the drop down.
@@ -183,9 +212,9 @@ function showBudgetFields(f) {
 					?>
 					<li class="client-details-item currency">
 						<label for="client-currency" class="client-details-label">Please choose a task:</label>
-                        <select name="task_ids" id="client_currency_index" size="1" onchange="FillTasks(this.form); return false;">    
+                        <select name="task_ids" id="task_ids" size="1" onchange="FillTasks(this.form); return false;">    
 						<?php foreach ($tasks as $task) { ?>
-   							<option value="<?php echo $task->getValue("task_id") ?>"><?php echo $task->getValue("task_name")?></option>
+   							<option value="<?php echo $task->getValue("task_id") ?>" name="<?php echo $task->getValue("task_name")?>"><?php echo $task->getValue("task_name")?></option>
     					<?php } ?>
     			 </select><br />
 					</li>
@@ -244,9 +273,10 @@ function showBudgetFields(f) {
 	
 	
 	//create the project object ($project)
+	
 	$project = new Project( array(
 		"project_code" => isset($_POST["project-code"]) ? preg_replace("/[^ \-\_a-zA-Z0-9]/", "", $_POST["project-code"]) : "",
-		"project_name" => isset($_POST["project-name"]) ? preg_replace("/[^ \-\_a-zA-Z0-9]/", "", $_POST["project-name"]) : "",
+		"project_name" => isset($_POST["project_name"]) ? preg_replace("/[^ \-\_a-zA-Z0-9]/", "", $_POST["project_name"]) : "",
 		"client_id" => isset($_POST["client_id"]) ? preg_replace("/[^ \-\_a-zA-Z0-9]/", "", $_POST["client_id"]) : "",
 		"project_billable" => isset($_POST["project_billable"]) ? preg_replace("/[^ A-Z]/", "", $_POST["project_billable"]) : "",
 		"project_invoice_by" => isset($_POST["project_invoice_by"])? preg_replace("/[^ a-zA-Z]/", "", $_POST["project_invoice_by"]) : "",
@@ -268,7 +298,7 @@ function showBudgetFields(f) {
 	//create the project_task object ($project_task)
 	$project_task = new Project_Task( array(
 		"task_id" => isset($_POST["task_id"]) ? preg_replace("/[^ \,\-\_a-zA-Z0-9]/", "", $_POST["task_id"]) : "",
-		"total_budget_hours" => isset($_POST["total_project_hours"]) ? preg_replace("/[^ \-\_a-zA-Z0-9]/", "", $_POST["total_project_hours"]) : "",
+		"total_budget_hours" => isset($_POST["total_budget_hours"]) ? preg_replace("/[^ \-\_a-zA-Z0-9]/", "", $_POST["total_budget_hours"]) : "",
 	));
 	
 	error_log("here is the post<br>");
@@ -359,6 +389,7 @@ function showBudgetFields(f) {
 						$project_assigned_by = Person::getByEmailAddress($_SESSION["logged_in"]);
 				} else {
 						error_log("Something is wrong here...this person is not logged in and you shouldn't be seeing this, timesheet.php.");
+						echo "please log in.";
 						exit();
 				}
 				$project_person->insertProjectPerson($person_id, $project_id["project_id"], $project_assigned_by->getValueEncoded("person_email"));
