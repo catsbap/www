@@ -49,7 +49,7 @@ class Project_Task extends DataObject {
 	}
 
 	
-	public function insertProjectTask($task_id, $project_id) {
+	public function insertProjectTask($task_id, $project_id, $budget_hours) {
 		$conn=parent::connect();
 		$sql = "INSERT INTO " . TBL_PROJECT_TASK . " (
 			project_id,
@@ -64,7 +64,7 @@ class Project_Task extends DataObject {
 			$st = $conn->prepare($sql);
 			$st->bindValue(":project_id", $project_id, PDO::PARAM_INT);
 			$st->bindValue(":task_id", $task_id, PDO::PARAM_INT);
-			$st->bindValue(":total_budget_hours", $this->data["total_budget_hours"], PDO::PARAM_INT);
+			$st->bindValue(":total_budget_hours", $budget_hours, PDO::PARAM_INT);
 			$st->execute();
 			parent::disconnect($conn);
 		} catch (PDOException $e) {

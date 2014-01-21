@@ -45,66 +45,87 @@
 	}
 	
 ?>
-<script type="text/javascript">
-var tasks = [];
+<script>
+$(document).ready( function() {
+	var task_ids = [];
+	var task_names = [];
+	 $('#task_ids').change( function() {
+		task_ids.push($('#task_ids').val());
+		task_names.push($("#task_ids option:selected").text());
+		var budgetOptions=document.getElementById("project_budget_by");
+		var selectedBudgetOption = budgetOptions.options[budgetOptions.selectedIndex].text;
 
-function FillTasks(f) {
-	tasks.push(f.task_ids.value);
-	var x=document.getElementById("demo");
-	var budgetOptions=document.getElementById("project_budget_by");
-	var selectedBudgetOption = budgetOptions.options[budgetOptions.selectedIndex].text;
-	var taskTable = "<table><tr>";
-	for (var i=0;i<tasks.length;i++)	{ 	
-		taskTable = taskTable + "<tr><td>" + tasks[i] + "</td><td><input style=width:50px;display:inline; id=" + tasks[i] + "></td>";
-		f.task_id.value = tasks;
-	}
-	taskTable = taskTable + "</table>";
-	x.innerHTML=taskTable;
-	//alert(tasks);		
-	/*f.task_id.value = f.task_ids.value + "," + f.task_id.value; 
-    var tasksSelect = document.getElementById("task_ids");
-	var selectedTask = tasksSelect.options[tasksSelect.selectedIndex].text;
-	f.task_name.value = selectedTask + "," + f.task_name.value;*/
-}
-function FillPeople(f) {
-    //alert(f.task_ids.value);
-    f.person_id.value = f.person_ids.value + "," + f.person_id.value;    
-}
-
-function showProjectHourlyRate(f) {
-	if(f.value == "Project hourly rate"){
-		document.getElementById('project_hourly_rate').style.display = "inline";
-    } else {
-	    document.getElementById('project_hourly_rate').style.display = "none";
-    }
-}
-
-function showBudgetFields(f) {
-	if (f.value == "Total project hours") {
-    	document.getElementById('project_budget_total_hours').style.display = "inline";
-        document.getElementById('project_budget_total_fees').style.display = "none";
-        document.getElementById('project_budget_includes_expenses'). style.display = "none";
-        document.getElementById('project_budget_includes_expenses_label'). style.display = "none";
-	} else if (f.value == "Total project fees") {
-		document.getElementById('project_budget_total_hours').style.display = "none";
-        document.getElementById('project_budget_total_fees').style.display = "inline";
-        document.getElementById('project_budget_includes_expenses'). style.display = "inline";
-        document.getElementById('project_budget_includes_expenses_label'). style.display = "inline";
-	} else if (f.value == "Hours per task") {
-		var tasks = []; 
-		tasks = document.getElementById("task_id").value;
-		for (var i=0;i<tasks.length;i++) { 	
-		   alert(document.getElementById("demo").innerHTML.getElementById(tasks[i]));
-		   //document.getElementById(tasks[i]).innerHTML.style.display = "hidden";
+		taskTable = "<table><tr><td>" + $("#task_ids option:selected").text() + "</td><td><input style=width:50px;display:none; name=" + $('#task_ids').val() + " class=input_field></td></tr></table>";
+		$('<div class="task_input">' + taskTable + '</div>').css({
+			width: 400,
+			height: 30
+		
+		}).appendTo('#demo');
+		$('.task_id').val(task_ids); 
+	}); 
+	
+	
+	$('#project_budget_by').change( function() {
+		$('.input_field').show();	
+	});
+	/*function FillTasks(f) {
+		tasks.push(f.task_ids.value);
+		var x=document.getElementById("demo");
+		var budgetOptions=document.getElementById("project_budget_by");
+		var selectedBudgetOption = budgetOptions.options[budgetOptions.selectedIndex].text;
+		var taskTable = "<table><tr>";
+		for (var i=0;i<tasks.length;i++)	{ 	
+			taskTable = taskTable + "<tr><td>" + tasks[i] + "</td><td><input style=width:50px;display:inline; id=" + tasks[i] + "></td>";
+			f.task_id.value = tasks;
 		}
-	} else {
-		document.getElementById('project_budget_total_hours').style.display = "none";
-        document.getElementById('project_budget_total_fees').style.display = "none";
-        document.getElementById('project_budget_includes_expenses'). style.display = "none";
-        document.getElementById('project_budget_includes_expenses_label'). style.display = "none";
+		taskTable = taskTable + "</table>";
+		x.innerHTML=taskTable;
+		//alert(tasks);		
+		/*f.task_id.value = f.task_ids.value + "," + f.task_id.value; 
+	    var tasksSelect = document.getElementById("task_ids");
+		var selectedTask = tasksSelect.options[tasksSelect.selectedIndex].text;
+		f.task_name.value = selectedTask + "," + f.task_name.value;
+	}*/
+	
+	function FillPeople(f) {
+	    //alert(f.task_ids.value);
+	    f.person_id.value = f.person_ids.value + "," + f.person_id.value;    
 	}
-}
-
+	
+	function showProjectHourlyRate(f) {
+		if(f.value == "Project hourly rate"){
+			document.getElementById('project_hourly_rate').style.display = "inline";
+	    } else {
+		    document.getElementById('project_hourly_rate').style.display = "none";
+	    }
+	}
+	
+	function showBudgetFields(f) {
+		if (f.value == "Total project hours") {
+	    	document.getElementById('project_budget_total_hours').style.display = "inline";
+	        document.getElementById('project_budget_total_fees').style.display = "none";
+	        document.getElementById('project_budget_includes_expenses'). style.display = "none";
+	        document.getElementById('project_budget_includes_expenses_label'). style.display = "none";
+		} else if (f.value == "Total project fees") {
+			document.getElementById('project_budget_total_hours').style.display = "none";
+	        document.getElementById('project_budget_total_fees').style.display = "inline";
+	        document.getElementById('project_budget_includes_expenses'). style.display = "inline";
+	        document.getElementById('project_budget_includes_expenses_label'). style.display = "inline";
+		} else if (f.value == "Hours per task") {
+			var tasks = []; 
+			tasks = document.getElementById("task_id").value;
+			for (var i=0;i<tasks.length;i++) { 	
+			   alert(document.getElementById("demo").innerHTML.getElementById(tasks[i]));
+			   //document.getElementById(tasks[i]).innerHTML.style.display = "hidden";
+			}
+		} else {
+			document.getElementById('project_budget_total_hours').style.display = "none";
+	        document.getElementById('project_budget_total_fees').style.display = "none";
+	        document.getElementById('project_budget_includes_expenses'). style.display = "none";
+	        document.getElementById('project_budget_includes_expenses_label'). style.display = "none";
+		}
+	}
+});
 </script>
 
 	<form action="project-add.php" method="post" style="margin-bottom:50px;" enctype="multipart/form-data">
@@ -163,7 +184,7 @@ function showBudgetFields(f) {
 						$row = Project::getEnumValues("project_budget_by");
 						$enumList = explode(",", str_replace("'", "", substr($row['COLUMN_TYPE'], 5, (strlen($row['COLUMN_TYPE'])-6))));
 						?>
-						<select name="project_budget_by" id="project_budget_by" onchange="showBudgetFields(this)">
+						<select name="project_budget_by" id="project_budget_by">
 						<?php
 						foreach($enumList as $value) { ?>
 							<option name="project_budget_by" id="project_budget_by" value="<?php echo $value?>"><?php echo $value ?></option>
@@ -195,15 +216,10 @@ function showBudgetFields(f) {
 					<h1 class="client-details-title">Enter Task details:</h1>
 					<h4 class="required">= Required</h4>
 				</header>
-				<li class="client-details-item phoneNum">
 					<label for="client-phone" <?php validateField("task_id", $missingFields)?> class="client-details-label"></label>
 					<input id="task_id" name="task_id" class="task_id" type="text" tabindex="2" value="" />
-				</li>
-				<li class="client-details-item phoneNum">
-					<label for="client-phone" class="client-details-label">Tasks associated with this project:</label>
-					<input id="client-phone" name="task_name" class="task_name" type="text" tabindex="2" value="" />
-				</li>
-				<p id="demo">Click the button to add a new element to the array.</p>
+
+				<p id="demo"><b>Tasks Associated with this project:</b></p>
 
 				<ul class="details-list client-details-list">
 				<?php 
@@ -212,7 +228,7 @@ function showBudgetFields(f) {
 					?>
 					<li class="client-details-item currency">
 						<label for="client-currency" class="client-details-label">Please choose a task:</label>
-                        <select name="task_ids" id="task_ids" size="1" onchange="FillTasks(this.form); return false;">    
+                        <select name="task_ids" id="task_ids" size="1">    
 						<?php foreach ($tasks as $task) { ?>
    							<option value="<?php echo $task->getValue("task_id") ?>" name="<?php echo $task->getValue("task_name")?>"><?php echo $task->getValue("task_name")?></option>
     					<?php } ?>
@@ -400,11 +416,17 @@ function showBudgetFields(f) {
 			foreach($commonTasks as $commonTask) {
 				$task_ids[] = $commonTask->getValue("task_id");
 			}
+			//don't try to insert common tasks twice if we are putting them in
+			$task_ids = array_unique($task_ids);
 			//print_r($task_ids);
 			foreach ($task_ids as $task_id) {				
 			if ($task_id) {
-				//echo "inserting task id " . $task_id . " and " . "project id " . $project_id["project_id"];
-				$project_task->insertProjectTask($task_id, $project_id["project_id"]);
+				$budget_hours = 0;
+				if (isset($_POST[$task_id])) {
+					$budget_hours = $_POST[$task_id];
+				}
+				//echo "inserting task id " . $task_id . " and " . "project id " . $project_id["project_id"] . " and " . $_POST[$task_id];
+				$project_task->insertProjectTask($task_id, $project_id["project_id"], $budget_hours);
 			}
 			}
 

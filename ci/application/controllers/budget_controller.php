@@ -26,13 +26,12 @@ class Budget_controller extends CI_Controller {
 		//the budget report uses all dates.
 		//get all of the hours out of the tables. There is no timeframe, and the query only includes
 		//projects that do not have "No Budget" in the project_budget_by field.
-		//budget types are project_budget_total_fees (all hours), project_budget_total_hours(billable_hours * hourly_rate)
+		//budget types are project_budget_total_hours (all hours), project_budget_total_fees(billable_hours * hourly_rate)
 		//total_budget_hours on person (total hours for person), total_budget_hours on task (total hours for task).
 		
-		//get all the objects out of the db.
-		$data = $this->Budget_model->getAllBudgetedHours();
-		foreach ($data as $item) {
-			if ($item->project_budget_by == "Total project hours") {
+		//total project hours
+		$project_hours = $this->Budget_model->getBudgetedHoursForTPH();
+		foreach ($project_hours as $item) {
 				//get the total hours
 				$item->budget = $item->project_budget_total_hours;
 				$hours = $item->timesheet_hours;
@@ -41,10 +40,13 @@ class Budget_controller extends CI_Controller {
 				//calculate the percentage of budget and add the total to the object.
 				$item->budget_percentage = ($item->budget - $hours) . "%";
 				//put the object back into the data array to send to the view.
-				$data['budget'][] = $item;
+				$data['budget_hours'][] = $item;
 				$item->rate = $hours;
-			}
-			if ($item->project_budget_by == "Total project fees") {
+		}
+		//total project fees
+		$project_fees = $this->Budget_model->getBudgetedHoursForTPF();
+		//print_r($project_fees);
+		foreach ($project_fees as $item) {
 				//get the total fees, but only billable hours.
 				$item->budget = $item->project_budget_total_fees;
 				if ($item->project_billable == 1) {
@@ -63,13 +65,30 @@ class Budget_controller extends CI_Controller {
 				//calculate the percentage of budget and add the total to the object.
 				$item->budget_percentage = ($item->budget - $item->rate)/10 . "%";
 				//put the object back into the data array to send to the view.
-				$data['budget'][] = $item;
+				$data['budget_fees'][] = $item;
 				//print_r($data);
-			}
+		}
+		$task_fees = $this->Budget_model->getBudgetedHoursForTTH();
+		//print_r($project_fees);
+		foreach ($task_fees as $item) {
+				//get the total fees, but only billable hours.
+				$item->budget = $item->total_budget_hours;
+				$hours = $item->timesheet_hours;
+				$item->hours_left = $item->budget - $hours;
+				//calculate the percentage of budget and add the total to the object.
+				$item->budget_percentage = ($item->budget - $hours) . "%";
+				//put the object back into the data array to send to the view.
+				$data['budget_tasks'][] = $item;
+				$item->rate = $hours;
+				//print_r($data);
+		}
 			//QA THESE REPORTS!!
-			if ($item->project_budget_by == "Hours per task") {
+			//this isn't working right
+			//check sql query. It is returning hours for all tasks, not just the overall project.
+			/*if ($item->project_budget_by == "Hours per task") {
 				$item->budget = $item->task_total_budget_hours;
 				$hours = $item->timesheet_hours;
+				error_log("XXXXXXXXXXXXXXXX" . $hours);
 				//how many hours are left in the budget?
 				$item->hours_left = $item->budget - $hours;
 				//calculate the percentage of budget and add the total to the object.
@@ -88,8 +107,8 @@ class Budget_controller extends CI_Controller {
 				//put the object back into the data array to send to the view.
 				$data['budget'][] = $item;
 				$item->rate = $hours;
-			}
-		}
+			}*/
+		//}
 		$this->load->view('header_view');
 		$this->load->view('budget_view', $data); //this loads the form  
     }
