@@ -52,7 +52,15 @@
     	<tr><td><?php echo $row->project_name?></td><td><?php echo $row->budget?> Hours </td><td><?php echo $row->rate?> Hours</td><td><?php echo $row->hours_left?> (<?php echo $row->budget_percentage?>)</td>
 		</tr>
 <?php } ?>
-<tr><td><b><?php //echo $row->task_name ?></b></td></tr>
+<tr bgcolor="lightgrey" ><td colspan=4>Budgeted by Person Hours</td></tr>
+<tr bgcolor="lightgrey";>
+        <td>Name</td><td>Budget</td><td>Spent</td><td>Budget Left</td>
+    </tr>
+<?php foreach($budget_persons as $row){
+	//if ($row->project_budget_total_fees > 0) {	?> 
+    	<tr><td><?php echo $row->project_name?></td><td><?php echo $row->budget?> Hours </td><td><?php echo $row->rate?> Hours</td><td><?php echo $row->hours_left?> (<?php echo $row->budget_percentage?>)</td>
+		</tr>
+<?php } ?>
 </table>
 
 </html>
