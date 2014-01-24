@@ -82,6 +82,20 @@ class Budget_controller extends CI_Controller {
 				$item->rate = $hours;
 				//print_r($data);
 		}
+		$person_fees = $this->Budget_model->getBudgetedHoursForHPP();
+		//print_r($project_fees);
+		foreach ($person_fees as $item) {
+				//get the total fees, but only billable hours.
+				$item->budget = $item->total_budget_hours;
+				$hours = $item->timesheet_hours;
+				$item->hours_left = $item->budget - $hours;
+				//calculate the percentage of budget and add the total to the object.
+				$item->budget_percentage = ($item->budget - $hours) . "%";
+				//put the object back into the data array to send to the view.
+				$data['budget_persons'][] = $item;
+				$item->rate = $hours;
+				//print_r($data);
+		}
 			//QA THESE REPORTS!!
 			//this isn't working right
 			//check sql query. It is returning hours for all tasks, not just the overall project.
