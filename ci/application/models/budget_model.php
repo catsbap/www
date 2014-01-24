@@ -126,5 +126,30 @@ class Budget_model extends CI_Model {
 		}
 		return $rows;	
 	}
+	
+	function getBudgetedHoursForHPP() {
+		$rows = array(); //will hold all results
+		$allhoursquery = $this->db->select('project.project_name');
+		$allhoursquery = $this->db->select('project.project_id');
+		$allhoursquery = $this->db->select('project_person.total_budget_hours');
+		$allhoursquery = $this->db->from('project');
+		$allhoursquery = $this->db->select_sum('timesheet_item.timesheet_hours');
+		$allhoursquery = $this->db->join('timesheet_item', 'timesheet_item.project_id = project.project_id');
+		$allhoursquery = $this->db->join('person', 'timesheet_item.person_id = person.person_id');
+		$allhoursquery = $this->db->join('project_person', 'project_person.person_id = person.person_id AND project_person.project_id = project.project_id');
+		$allhoursquery = $this->db->join('task', 'timesheet_item.task_id = task.task_id');
+		$allhoursquery = $this->db->group_by('project.project_name');
+		$allhoursquery = $this->db->group_by('task.task_id');
+		$allhoursquery = $this->db->group_by('person.person_id');
+		$allhoursquery = $this->db->where('project.project_budget_by =', "Hours per person");
+		$allhoursquery = $this->db->having('count(*) > 0');
+		$allhoursquery = $this->db->get();	
+		foreach($allhoursquery->result() as $row)
+		{
+		$rows[] = $row; //add the fetched result to the result array;
+		error_log(print_r($rows,true));
+		}
+		return $rows;	
+	}
 
 }
