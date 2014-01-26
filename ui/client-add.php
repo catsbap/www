@@ -1,5 +1,6 @@
 <?php
 	require_once("../common/common.inc.php");
+	//client and contacts
 	require_once("../classes/Client.class.php");
 	require_once("../classes/Contact.class.php");
 	require_once("../common/errorMessages.php");
@@ -232,7 +233,6 @@
 	if (isset($_FILES["client-logo-file"]) and $_FILES["client-logo-file"]["error"] == UPLOAD_ERR_OK) {
 		if ( $_FILES["client-logo-file"]["type"] != "image/jpeg") {
 			
-			//I'm hardcoding the client_currency_index, because it's in the wrong place. This should be with the rest of the validation.
 			$errorMessages[] = "<li>" . getErrorMessage("1","client_logo_link", "invalid_file") . "</li>";
 		} elseif ( !move_uploaded_file($_FILES["client-logo-file"]["tmp_name"], "images/" . basename($_FILES["client-logo-file"]["name"]))) {
 			$errorMessages[] = "<li>" . getErrorMessage("1","client_logo_link", "upload_problem") . "</li>";
