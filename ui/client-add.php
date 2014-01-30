@@ -230,7 +230,7 @@
 	$errorMessages = array();
 	
 		//this is for the photo upload, and it is in the wrong place.
-	if (isset($_FILES["client-logo-file"]) and $_FILES["client-logo-file"]["error"] == UPLOAD_ERR_OK) {
+		if (isset($_FILES["client-logo-file"]) and $_FILES["client-logo-file"]["error"] == UPLOAD_ERR_OK) {
 		if ( $_FILES["client-logo-file"]["type"] != "image/jpeg") {
 			
 			$errorMessages[] = "<li>" . getErrorMessage("1","client_logo_link", "invalid_file") . "</li>";

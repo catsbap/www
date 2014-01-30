@@ -54,77 +54,97 @@ $(document).ready( function() {
 		task_names.push($("#task_ids option:selected").text());
 		var budgetOptions=document.getElementById("project_budget_by");
 		var selectedBudgetOption = budgetOptions.options[budgetOptions.selectedIndex].text;
-
-		taskTable = "<table><tr><td>" + $("#task_ids option:selected").text() + "</td><td><input style=width:50px;display:none; name=" + $('#task_ids').val() + " class=input_field></td></tr></table>";
+		//create a table with the task names and task ids, they will be used to send the
+		//hours per task and task hourly rate fields to the db 
+		taskTable = "<table><tr><td>Task</td><td>Budget</td><td>Hourly Rate</td></tr><tr><td>" + $("#task_ids option:selected").text() + "</td><td><input style=width:50px;display:none; name=" + $('#task_ids').val() + "_hours_per_task class=hours_per_task></td><td><input style=width:50px;display:none; name=" + $('#task_ids').val() + "_task_hourly_rate class=task_hourly_rate></td></tr></table>";
 		$('<div class="task_input">' + taskTable + '</div>').css({
 			width: 400,
-			height: 30
+			height: 70
 		
-		}).appendTo('#demo');
+		}).appendTo('#associated_tasks');
 		$('.task_id').val(task_ids); 
+		if ($('#project_budget_by').val() == "Hours per task") {
+			$('.hours_per_task').show();	
+		} else {
+			$('.hours_per_task').hide();
+		}
+		if ($('#project_invoice_by').val() == "Task hourly rate") {
+			$('.task_hourly_rate').show();	
+		} else {
+			$('.task_hourly_rate').hide();
+		}
+	}); 
+	
+	
+	var person_ids = [];
+	var person_names = [];
+	 $('#person_ids').change( function() {
+		person_ids.push($('#person_ids').val());
+		person_names.push($("#person_ids option:selected").text());
+		var budgetOptions=document.getElementById("project_budget_by");
+		var selectedBudgetOption = budgetOptions.options[budgetOptions.selectedIndex].text;
+
+		personTable = "<table><tr><td>Person</td><td>Budget</td><td>Hourly Rate</td></tr><tr><td>" + $("#person_ids option:selected").text() + "</td><td><input style=width:50px;display:none; name=" + $('#person_ids').val() + "_hours_per_person class=hours_per_person></td><td><input style=width:50px;display:none; name=" + $('#person_ids').val() + "_person_hourly_rate class=person_hourly_rate></td></tr></table>";
+		$('<div class="person_input">' + personTable + '</div>').css({
+			width: 400,
+			height: 70
+		
+		}).appendTo('#associated_people');
+		$('.person_id').val(person_ids); 
+		if ($('#project_budget_by').val() == "Hours per person") {
+			$('.hours_per_person').show();	
+		} else {
+			$('.hours_per_person').hide();
+		}
+		if ($('#project_invoice_by').val() == "Person hourly rate") {
+			$('.person_hourly_rate').show();	
+		} else {
+			$('.person_hourly_rate').hide();
+		}
 	}); 
 	
 	
 	$('#project_budget_by').change( function() {
-		$('.input_field').show();	
-	});
-	/*function FillTasks(f) {
-		tasks.push(f.task_ids.value);
-		var x=document.getElementById("demo");
-		var budgetOptions=document.getElementById("project_budget_by");
-		var selectedBudgetOption = budgetOptions.options[budgetOptions.selectedIndex].text;
-		var taskTable = "<table><tr>";
-		for (var i=0;i<tasks.length;i++)	{ 	
-			taskTable = taskTable + "<tr><td>" + tasks[i] + "</td><td><input style=width:50px;display:inline; id=" + tasks[i] + "></td>";
-			f.task_id.value = tasks;
-		}
-		taskTable = taskTable + "</table>";
-		x.innerHTML=taskTable;
-		//alert(tasks);		
-		/*f.task_id.value = f.task_ids.value + "," + f.task_id.value; 
-	    var tasksSelect = document.getElementById("task_ids");
-		var selectedTask = tasksSelect.options[tasksSelect.selectedIndex].text;
-		f.task_name.value = selectedTask + "," + f.task_name.value;
-	}*/
-	
-	function FillPeople(f) {
-	    //alert(f.task_ids.value);
-	    f.person_id.value = f.person_ids.value + "," + f.person_id.value;    
-	}
-	
-	function showProjectHourlyRate(f) {
-		if(f.value == "Project hourly rate"){
-			document.getElementById('project_hourly_rate').style.display = "inline";
-	    } else {
-		    document.getElementById('project_hourly_rate').style.display = "none";
-	    }
-	}
-	
-	function showBudgetFields(f) {
-		if (f.value == "Total project hours") {
-	    	document.getElementById('project_budget_total_hours').style.display = "inline";
-	        document.getElementById('project_budget_total_fees').style.display = "none";
-	        document.getElementById('project_budget_includes_expenses'). style.display = "none";
-	        document.getElementById('project_budget_includes_expenses_label'). style.display = "none";
-		} else if (f.value == "Total project fees") {
-			document.getElementById('project_budget_total_hours').style.display = "none";
-	        document.getElementById('project_budget_total_fees').style.display = "inline";
-	        document.getElementById('project_budget_includes_expenses'). style.display = "inline";
-	        document.getElementById('project_budget_includes_expenses_label'). style.display = "inline";
-		} else if (f.value == "Hours per task") {
-			var tasks = []; 
-			tasks = document.getElementById("task_id").value;
-			for (var i=0;i<tasks.length;i++) { 	
-			   alert(document.getElementById("demo").innerHTML.getElementById(tasks[i]));
-			   //document.getElementById(tasks[i]).innerHTML.style.display = "hidden";
-			}
+		if ($('#project_budget_by').val() == "Hours per task") {
+			$('.hours_per_task').show();	
 		} else {
-			document.getElementById('project_budget_total_hours').style.display = "none";
-	        document.getElementById('project_budget_total_fees').style.display = "none";
-	        document.getElementById('project_budget_includes_expenses'). style.display = "none";
-	        document.getElementById('project_budget_includes_expenses_label'). style.display = "none";
+			$('.hours_per_task').hide();
 		}
-	}
+		if ($('#project_budget_by').val() == "Hours per person") {
+			$('.hours_per_person').show();	
+		} else {
+			$('.hours_per_person').hide();
+		}
+		if ($('#project_budget_by').val() == "Total project hours") {
+			$('.project_budget_total_hours').show();	
+		} else {
+			$('.project_budget_total_hours').hide();
+		}
+		if ($('#project_budget_by').val() == "Total project fees") {
+			$('.project_budget_total_hours').hide();	
+		} else {
+			$('.project_budget_total_hours').show();
+		}
+	});
+
+	
+	$('#project_invoice_by').change( function() {
+		if($('#project_invoice_by').val() == "Project hourly rate"){
+			$('#project_hourly_rate').show();
+	    } else {
+		    $('#project_hourly_rate').hide();
+	    }
+	    if($('#project_invoice_by').val() == "Task hourly rate"){
+			$('.task_hourly_rate').show();
+	    } else {
+		    $('.task_hourly_rate').hide();
+	    }
+	    if($('#project_invoice_by').val() == "Person hourly rate"){
+			$('.person_hourly_rate').show();
+	    } else {
+		    $('.person_hourly_rate').hide();
+	    }
+	});
 });
 </script>
 
@@ -172,7 +192,7 @@ $(document).ready( function() {
 						$row = Project::getEnumValues("project_invoice_by");
 						$enumList = explode(",", str_replace("'", "", substr($row['COLUMN_TYPE'], 5, (strlen($row['COLUMN_TYPE'])-6))));
 						?>
-						<select name="project_invoice_by" onchange="showProjectHourlyRate(this)">
+						<select name="project_invoice_by" id="project_invoice_by">
 						<?php
 						foreach($enumList as $value) { ?>
 							<option name="project_invoice_by" value="<?php echo $value?>"><?php echo $value ?></option>
@@ -219,7 +239,7 @@ $(document).ready( function() {
 					<label for="client-phone" <?php validateField("task_id", $missingFields)?> class="client-details-label"></label>
 					<input id="task_id" name="task_id" class="task_id" type="text" tabindex="2" value="" />
 
-				<p id="demo"><b>Tasks Associated with this project:</b></p>
+				<p id="associated_tasks"><b>Tasks Associated with this project:</b></p>
 
 				<ul class="details-list client-details-list">
 				<?php 
@@ -230,7 +250,8 @@ $(document).ready( function() {
 						<label for="client-currency" class="client-details-label">Please choose a task:</label>
                         <select name="task_ids" id="task_ids" size="1">    
 						<?php foreach ($tasks as $task) { ?>
-   							<option value="<?php echo $task->getValue("task_id") ?>" name="<?php echo $task->getValue("task_name")?>"><?php echo $task->getValue("task_name")?></option>
+   							<option value="<?php echo $task->getValue("task_id") ?>" name="<?php echo $task->getValue("task_name")?>" ><?php echo $task->getValue("task_name")?></option>
+
     					<?php } ?>
     			 </select><br />
 					</li>
@@ -247,18 +268,19 @@ $(document).ready( function() {
 					<h1 class="client-details-title">Enter Person details:</h1>
 					<h4 class="required">= Required</h4>
 				</header>
-				<li class="client-details-item phoneNum">
 					<label for="client-phone" <?php validateField("person_id", $missingFields)?> class="client-details-label">People assigned to this project:</label>
-					<input id="client-phone" name="person_id" class="client-phone-input" type="text" tabindex="2" value="" />
-				</li>
+					<input id="person_id" name="person_id" class="person_id" type="text" tabindex="2" value="" />
+				
+				<p id="associated_people"><b>People Associated with this project:</b></p>
+
 				<ul class="details-list client-details-list">
 				<?php 
 						//get the people out to populate the drop down.
-						list($people) = Person::getPeople();
+						list($people) = Person::getPeople("0");
 					?>
 					<li class="client-details-item currency">
 						<label for="client-currency" class="client-details-label">Please choose a person:</label>
-                        <select name="person_ids" id="client_currency_index" size="1" onchange="FillPeople(this.form); return false;">    
+                        <select name="person_ids" id="person_ids" size="1">    
 						<?php foreach ($people as $person) { ?>
    							<option value="<?php echo $person->getValue("person_id") ?>"><?php echo $person->getValue("person_first_name");echo " " . $person->getValue("person_last_name")?></option>
     					<?php } ?>
@@ -297,6 +319,8 @@ $(document).ready( function() {
 		"project_billable" => isset($_POST["project_billable"]) ? preg_replace("/[^ A-Z]/", "", $_POST["project_billable"]) : "",
 		"project_invoice_by" => isset($_POST["project_invoice_by"])? preg_replace("/[^ a-zA-Z]/", "", $_POST["project_invoice_by"]) : "",
 		"project_hourly_rate" => isset($_POST["project_hourly_rate"]) ? preg_replace("/[^ \-\_a-zA-Z0-9]/", "", $_POST["project_hourly_rate"]) : "",
+		"person_hourly_rate" => isset($_POST["person_hourly_rate"]) ? preg_replace("/[^ \-\_a-zA-Z0-9]/", "", $_POST["person_hourly_rate"]) : "",
+		"task_hourly_rate" => isset($_POST["task_hourly_rate"]) ? preg_replace("/[^ \-\_a-zA-Z0-9]/", "", $_POST["task_hourly_rate"]) : "",
 		"project_budget_by" => isset($_POST["project_budget_by"])? preg_replace("/[^ a-zA-Z]/", "", $_POST["project_budget_by"]) : "",
 		"project_budget_total_fees" => isset($_POST["project_budget_total_fees"])? preg_replace("/[^ \-\_a-zA-Z0-9]/", "", $_POST["project_budget_total_fees"]) : "",
 		"project_budget_total_hours" => isset($_POST["project_budget_total_hours"])? preg_replace("/[^ \-\_a-zA-Z0-9]/", "", $_POST["project_budget_total_hours"]) : "",
@@ -390,7 +414,7 @@ $(document).ready( function() {
 			if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"] != "") {
 				$person = Person::getByEmailAddress($_SESSION["logged_in"]);
 			} else {
-				error_log("Something is wrong here...this person is not logged in and you shouldn't be seeing this, timesheet.php.");
+				error_log("Something is wrong here...this person is not logged in and you shouldn't be seeing this, project_add.php.");
 				exit();
 			}
 			//insert the project into the project table.
@@ -404,11 +428,20 @@ $(document).ready( function() {
 				if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"] != "") {
 						$project_assigned_by = Person::getByEmailAddress($_SESSION["logged_in"]);
 				} else {
-						error_log("Something is wrong here...this person is not logged in and you shouldn't be seeing this, timesheet.php.");
+						error_log("Something is wrong here...this person is not logged in and you shouldn't be seeing this, project_add.php.");
 						echo "please log in.";
 						exit();
 				}
-				$project_person->insertProjectPerson($person_id, $project_id["project_id"], $project_assigned_by->getValueEncoded("person_email"));
+				$budget_hours = 0;
+				if (isset($_POST[$person_id."_hours_per_person"])) {
+					$budget_hours = $_POST[$person_id."_hours_per_person"];
+				}
+				$project_person->insertProjectPerson($person_id, $project_id["project_id"], $project_assigned_by->getValueEncoded("person_email"), $budget_hours);
+				$person_hourly_rate = 0;
+				if (isset($_POST[$person_id."_person_hourly_rate"])) {
+					$person_hourly_rate = $_POST[$person_id . "_person_hourly_rate"];
+				}
+				Person::updatePersonHourlyRate($person_id, $person_hourly_rate);
 			}
 			}
 			$task_ids = explode(',', $project_task->getValue("task_id"));
@@ -421,12 +454,20 @@ $(document).ready( function() {
 			//print_r($task_ids);
 			foreach ($task_ids as $task_id) {				
 			if ($task_id) {
+				//update the project_task table with the project and the task, and the budgeted hours if the project
+				//is budgeted by hours per task.
 				$budget_hours = 0;
-				if (isset($_POST[$task_id])) {
-					$budget_hours = $_POST[$task_id];
+				if (isset($_POST[$task_id."_hours_per_task"])) {
+					$budget_hours = $_POST[$task_id . "_hours_per_task"];
 				}
-				//echo "inserting task id " . $task_id . " and " . "project id " . $project_id["project_id"] . " and " . $_POST[$task_id];
+				//echo "inserting task id " . $task_id . " and " . "project id " . $project_id["project_id"] . " and " . $_POST[$task_id] . "with budget " . $budget_hours;
 				$project_task->insertProjectTask($task_id, $project_id["project_id"], $budget_hours);
+				//update the task table with the task hourly rate if the project is invoiced by task hourly rate.
+				$task_hourly_rate = 0;
+				if (isset($_POST[$task_id."_task_hourly_rate"])) {
+					$task_hourly_rate = $_POST[$task_id . "_task_hourly_rate"];
+				}
+				Task::updateTaskHourlyRate($task_id, $task_hourly_rate);
 			}
 			}
 

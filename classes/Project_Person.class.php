@@ -76,6 +76,28 @@ class Project_Person extends DataObject {
 		}
 	}
 	
+	//return the total budget hours for this project and person
+	public static function getBudgetHours($project_id, $person_id) {
+		$conn=parent::connect();
+		$sql = "SELECT total_budget_hours FROM " . TBL_PROJECT_PERSON . " WHERE project_id = :project_id and person_id = :person_id";
+		try {
+			$st = $conn->prepare($sql);
+			$st->bindValue(":person_id", $person_id, PDO::PARAM_INT);
+			$st->bindValue(":project_id", $project_id, PDO::PARAM_INT);
+			$st->execute();
+			$row=$st->fetch();
+			parent::disconnect($conn);
+			if ($row['total_budget_hours'] == NULL) {
+				return 0;
+			} else {
+				return $row['total_budget_hours'];
+			}
+		}catch(PDOException $e) {
+			parent::disconnect($conn);
+			die("query failed returning the project for the person: " . $e->getMessage() . "query is " . $sql);
+		}
+	}
+	
 	//delete the rows in the table for a person with a given project.
 	public function deleteProjectPerson($project_id) {
 		$conn=parent::connect();
@@ -107,7 +129,7 @@ class Project_Person extends DataObject {
 
 	
 	
-	public function insertProjectPerson($person_id, $project_id, $project_assigned_by) {
+	public function insertProjectPerson($person_id, $project_id, $project_assigned_by, $budget_hours) {
 		$conn=parent::connect();
 		$sql = "INSERT INTO " . TBL_PROJECT_PERSON . " (
 			project_id,
@@ -124,7 +146,7 @@ class Project_Person extends DataObject {
 			$st = $conn->prepare($sql);
 			$st->bindValue(":project_id", $project_id, PDO::PARAM_INT);
 			$st->bindValue(":person_id", $person_id, PDO::PARAM_INT);
-			$st->bindValue(":total_budget_hours", $this->data["total_budget_hours"], PDO::PARAM_INT);
+			$st->bindValue(":total_budget_hours", $budget_hours, PDO::PARAM_INT);
 			$st->bindValue(":project_assigned_by", $project_assigned_by, PDO::PARAM_STR);
 			$st->execute();
 			parent::disconnect($conn);

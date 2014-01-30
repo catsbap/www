@@ -33,6 +33,28 @@ class Project_Task extends DataObject {
 		}
 	}
 	
+	//return the total budget hours for this project and task
+	public static function getBudgetHours($project_id, $task_id) {
+		$conn=parent::connect();
+		$sql = "SELECT total_budget_hours FROM " . TBL_PROJECT_TASK . " WHERE project_id = :project_id and task_id = :task_id";
+		try {
+			$st = $conn->prepare($sql);
+			$st->bindValue(":task_id", $task_id, PDO::PARAM_INT);
+			$st->bindValue(":project_id", $project_id, PDO::PARAM_INT);
+			$st->execute();
+			$row=$st->fetch();
+			parent::disconnect($conn);
+			if ($row['total_budget_hours'] == NULL) {
+				return 0;
+			} else {
+				return $row['total_budget_hours'];
+			}
+		}catch(PDOException $e) {
+			parent::disconnect($conn);
+			die("query failed returning the project for the person: " . $e->getMessage() . "query is " . $sql);
+		}
+	}
+	
 	//delete the rows in the table for a given project.
 	public function deleteProjectTask($project_id) {
 		$conn=parent::connect();

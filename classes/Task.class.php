@@ -152,6 +152,27 @@ class Task extends DataObject {
 		}
 	}
 	
+	//return the hourly rate for the task.
+	public static function getHourlyRate($task_id) {
+		$conn=parent::connect();
+		$sql = "SELECT task_hourly_rate FROM " . TBL_TASK . " WHERE task_id = :task_id";
+		try {
+			$st = $conn->prepare($sql);
+			$st->bindValue(":task_id", $task_id, PDO::PARAM_INT);
+			$st->execute();
+			$row=$st->fetch();
+			parent::disconnect($conn);
+			if ($row['task_hourly_rate'] == NULL) {
+				return 0;
+			} else {
+				return $row['task_hourly_rate'];
+			}
+		} catch(PDOException $e) {
+			parent::disconnect($conn);
+			die("Query failed on you: " . $e->getMessage());
+		}
+	}
+	
 	//update the task's information based on the task_id.	
 	public function updateTask($task_id) {
 		$conn=parent::connect();
@@ -177,6 +198,25 @@ class Task extends DataObject {
 				die("Query failed on update of task: " . $e->getMessage() . " sql is " . $sql);
 			}
 	}
+
+//update the task's hourly rate field.	
+	public function updateTaskHourlyRate($task_id, $task_hourly_rate) {
+		$conn=parent::connect();
+		$sql = "UPDATE " . TBL_TASK . " SET
+				task_hourly_rate = :task_hourly_rate
+				WHERE task_id = :task_id";
+			try {
+				$st = $conn->prepare($sql);
+				$st->bindValue(":task_hourly_rate", $task_hourly_rate, PDO::PARAM_INT);
+				$st->bindValue(":task_id", $task_id, PDO::PARAM_INT);
+				$st->execute();	
+				parent::disconnect($conn);
+			} catch (PDOException $e) {
+				parent::disconnect($conn);
+				die("Query failed on update of task: " . $e->getMessage() . " sql is " . $sql);
+			}
+	}
+
 	
 	//archive this task, you also have to remove it from project_task.	
 	public function archiveTask($archive_flag, $task_id) {

@@ -77,6 +77,26 @@ class Person extends DataObject implements JsonSerializable {
 		}
 	}
 
+	//return the hourly rate for the person.
+	public static function getHourlyRate($person_id) {
+		$conn=parent::connect();
+		$sql = "SELECT person_hourly_rate FROM " . TBL_PERSON . " WHERE person_id = :person_id";
+		try {
+			$st = $conn->prepare($sql);
+			$st->bindValue(":person_id", $person_id, PDO::PARAM_INT);
+			$st->execute();
+			$row=$st->fetch();
+			parent::disconnect($conn);
+			if ($row['person_hourly_rate'] == NULL) {
+				return 0;
+			} else {
+				return $row['person_hourly_rate'];
+			}
+		} catch(PDOException $e) {
+			parent::disconnect($conn);
+			die("Query failed on you: " . $e->getMessage());
+		}
+	}
 	
 	//gets people out of the client table. We'll return this as an array and put it in a list once the
 	//data is out.
@@ -264,6 +284,24 @@ class Person extends DataObject implements JsonSerializable {
 			}
 	}
 	
+//update the person's hourly rate field.	
+	public function updatePersonHourlyRate($person_id, $person_hourly_rate) {
+		$conn=parent::connect();
+		$sql = "UPDATE " . TBL_PERSON . " SET
+				person_hourly_rate = :person_hourly_rate
+				WHERE person_id = :person_id";
+			try {
+				$st = $conn->prepare($sql);
+				$st->bindValue(":person_id", $person_id, PDO::PARAM_INT);
+				$st->bindValue(":person_hourly_rate", $person_hourly_rate, PDO::PARAM_INT);
+				$st->execute();	
+				parent::disconnect($conn);
+			} catch (PDOException $e) {
+				parent::disconnect($conn);
+				die("Query failed on update: " . $e->getMessage() . " sql is " . $sql);
+			}
+	}
+
 	public static function getImage($person_email) {
 		$conn=parent::connect();
 		$sql = "SELECT person_logo_link FROM " . TBL_PERSON . " WHERE person_email = :person_email";

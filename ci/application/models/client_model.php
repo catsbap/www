@@ -53,7 +53,7 @@ class Client_model extends CI_Model {
 		$this->db->insert('client', $data);
 		$id = $this->db->insert_id();		
 		error_log("ID IS " . $id);
-		$data = array(,
+		$data = array(
 			'client_id' =>$id,
 			'client_address' =>$client_address,
 			'client_state' => $client_state,
