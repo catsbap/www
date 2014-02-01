@@ -99,6 +99,7 @@ if (isset($_GET["func"])) {
 		} else {
 			$endDate = "";
 		}
+		error_log("XXXXXXXXXXXX" . $startDate);
 		echo returnTimesheetsJSON($id, $collection, $startDate, $endDate);
 	}
 
@@ -363,6 +364,7 @@ function returnTimesheetsJSON($id, $collection, $startDate, $endDate) {
 			}
 		}
 		error_log("### " . count($tsItems_JSON));
+		error_log(print_r($tsItems_JSON,true));
 		/*
 if ($timesheet_items == 0) {
 			$timesheet_items = array();
@@ -373,11 +375,12 @@ if ($timesheet_items == 0) {
 			"timesheet_id" => $timesheet->getValue("timesheet_id"),
 			"timesheet_approved" => $timesheet->getValue("timesheet_approved"),
 			"timesheet_submitted" => $timesheet->getValue("timesheet_submitted"),
-			"timesheet_start_date"=> $timesheet->getValue("timesheet_start_date"),
-			"timesheet_end_date"=> $timesheet->getValue("timesheet_end_date"),
+			"timesheet_start_date" => $timesheet->getValue("timesheet_start_date"),
+			"timesheet_end_date" => $timesheet->getValue("timesheet_end_date"),
 			"person_id" => $timesheet->getValue("person_id"),
 			"timesheet_items" => $tsItems_JSON
 		);
+		error_log(print_r($timesheetJSON, true));
 	}
 	
 	return json_encode($timesheetJSON);

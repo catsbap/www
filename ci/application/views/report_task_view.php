@@ -120,8 +120,7 @@ $(document).ready(function() {
 <body>
 	<div id="page-content" class="page-content">
 		<header class="page-header">
-			<h1>This week:</h1>
-			<h3 class="page-title"><?php echo date_format(new DateTime($this->input->get('fromdate')), "F j, Y");?> to <?php echo date_format(new DateTime($this->input->get('todate')), "F j, Y");?></h3>
+			<h3 class="page-title"><?php echo $this->uri->segment(3);?> to <?php echo $this->uri->segment(4);?></h3>
 		</header>
 	<table width="100%" style="border:1px solid;">
 	<tr><td><?php echo $this->data['picker'];?>></td></tr>

@@ -247,7 +247,8 @@ class Report extends CI_Controller {
 			//} else {
 			//	$this->load->view('task_view', $data);
 			//}
-			//****PERSON DATA******//			
+			//****PERSON DATA******//
+			$this->load->view('task_view', $data);	
 		} elseif ($this->page == "staff") {
 			
 			////////////////////////
@@ -540,9 +541,7 @@ class Report extends CI_Controller {
 						$this->data['rate'] = 0;
 				}
 				//get out the budget information, regardless of the invoice type.
-				//THIS IS A BUSINESS QUESTION...IF A PROJECT IS INVOICED BY PERSON, CAN THEY BE BUDGETED BY TASK (FOR EXAMPLE). IF SO,
-				//HOW WOULD WE KNOW WOULD WE KNOW THE TASK RATE?
-				//FOR NOW, ASSUME THE INVOICE TYPE IS THE SAME AS THE BUDGET TYPE.
+				
 				$this->data['budget'] = 0;
 				$this->data['spent'] = 0;
 				if ($this->data['results'][0]->project_budget_by == "Total project hours") {

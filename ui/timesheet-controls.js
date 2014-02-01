@@ -98,8 +98,7 @@ var TimesheetItem = function( timesheetItemId, projectId, taskId, personId, time
 		timesheet_date: timesheetDate,
 		timesheet_hours: timesheetHours,
 		timesheet_notes: timesheetNotes
-	}
-	
+	}	
 	return tsItem;
 }
 
@@ -107,7 +106,6 @@ function getTimesheet( id, week ) {
 	var timesheet = {};
 	var startDate = week.start.getFullYear() + "-" + (week.start.getMonth() + 1) + "-" + week.start.getDate();
 	var endDate = week.end.getFullYear() + "-" + (week.end.getMonth() + 1) + "-" + week.end.getDate();
-	
 	var getData = {
 		func: "returnTimesheetJSON",
 		id: id,
@@ -115,6 +113,7 @@ function getTimesheet( id, week ) {
 		startDate: startDate,
 		endDate: endDate
 	}
+	
 	
 	$( "#timesheet-tasks-list" )
 		.find( 'tbody' )
@@ -125,7 +124,7 @@ function getTimesheet( id, week ) {
 	
 	$.get( "returnJSON.php", getData )
 		.done( function( data ) {
-			//console.log( data );
+			console.log( " data: " + data );
 			timesheet = $.parseJSON( data );
 			$( "#timesheet-tasks-list" ).data( "timesheet_id", timesheet[0].timesheet_id );
 			$( "#timesheet-tasks-list" ).data( "timesheet_submitted", timesheet[0].timesheet_submitted );
@@ -133,7 +132,7 @@ function getTimesheet( id, week ) {
 			var tsItems = timesheet[0].timesheet_items;
 			
 			if ( timesheet[0].timesheet_items.length > 0 ) {
-				//console.log("we have items to display");
+				console.log("we have items to display");
 				
 				for ( var i = 0; i < tsItems.length; i+=7 ) {
 					var rowInfo = {
@@ -146,12 +145,14 @@ function getTimesheet( id, week ) {
 					}
 					var days = [];
 					for ( var d = i; d < i + 7; d++ ) {
+					console.log("timesheet date" + tsItems[d].timesheet_date);
 						days[d % 7] = {
 							timesheet_date: tsItems[d].timesheet_date,
 							timesheet_hours: tsItems[d].timesheet_hours,
 							timesheet_notes: tsItems[d].timesheet_notes
 						}
 					}
+					//console.log(rowInfo);
 					rowInfo.timesheet_days = days;
 					addTimesheetRow( rowInfo );
 					
@@ -185,15 +186,18 @@ function saveTimesheet( elem, deleteRow ) {
 	var $tsTable = $( elem ).find( 'tbody' );
 	var tsId = $( "#timesheet-tasks-list" ).data( "timesheet_id" );
 	var tsSubmitted = $( "#timesheet-tasks-list" ).data( "timesheet_submitted" );
-	console.log("saving to timesheet_id: " + tsId )
+	//console.log("saving to timesheet_id: " + tsId )
 	var personId = $( "#timesheet-tasks-list" ).data( "person_id" );
 	var dates = [];
 	var thisWeek = getWeekBookends( $( "#timesheet-tasks-list" ).data( "timesheet_start" ) );
+	//console.log("HERE" + $( "#timesheet-tasks-list" ).data( "timesheet_start" ));
 	for ( var d = 0; d < 7; d++ ) {
-		dates[d] = new Date();
+		dates[d] = new Date($( "#timesheet-tasks-list" ).data( "timesheet_start" ));
+		//console.log("Just making sure" + dates[d]);
 		dates[d].setDate( thisWeek.start.getDate() + d );
+		//console.log("Just making sure" + dates[d]);
 	}
-	//console.log(dates);
+	//console.log("AND NOW " + dates);
 	var tsItems = [];
 	
 	$tsTable.find( 'input' ).not( '.remove' )
@@ -441,7 +445,7 @@ function getWeekBookends( date ) {
 	}
 	weekEnd = new Date(weekStart);
 	weekEnd.setDate( weekEnd.getDate() + workWeekLength );
-
+	
 	bookends = {
 		start: weekStart,
 		end: weekEnd,
@@ -470,6 +474,7 @@ function getWeekBookends( date ) {
 	
 	$( "#timesheet-tasks-list" ).data( "timesheet_start", bookends.start.toDateString() );
 	
+	//console.log("XXX" + bookends[0]);
 	return bookends;
 }
 
@@ -562,16 +567,15 @@ function swapInputText( elem ) {
 
 
 $( function() {
-	console.log("start");
+	console.log("stat");
 	var thisWeek = getWeekBookends(); //leave blank to get current week
 	var timesheetData = getTimesheet( $( "#timesheet-tasks-list" ).data( "person_id" ), thisWeek );
-
+	
 	getTasksForProject( $( "#project-name" ).val() );
 	$( "#project-name" )
 		.change( function( evt ) {
 			getTasksForProject( $( this ).val() );
 		})
-		
 	$( '#add-ts-entry-modal' )
 		.dialog({
 			autoOpen: false,
@@ -619,7 +623,7 @@ $( function() {
 	
 });
 
-
+	
 $( function() {
 	$( "#timesheet-tasks-list thead th.day")
 		.click( function( evt ) {
@@ -726,7 +730,7 @@ $( function() {
 			
 			evt.preventDefault();
 		});
-		
+	
 			
 	$( "#date-picker" )
 		.datepicker({
@@ -756,3 +760,4 @@ $( ".date-picker-btn" )
 		});
 */
 });
+

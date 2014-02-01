@@ -208,6 +208,7 @@ class Report_controller extends CI_Controller {
 		////////////////////////
 		//TASK DATA ROLLUP//
 		//////////////////////
+		error_log("RE");
 		
 		foreach ($taskquery as $tasks) {	
 			$running_total_time = 0;
