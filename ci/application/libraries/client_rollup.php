@@ -1,5 +1,9 @@
 <?php
 
+//this is in a separate file, and only because I was trying to separate it out.
+//the code is not as modular in this case as I had hoped, so I did not do this
+//to the rest of the reports. This is why this is the only one. The savings just wasn't that great.
+
 class Client_rollup{
 	function client_rollup()
 	{
@@ -34,7 +38,7 @@ class Client_rollup{
 			$tid = "";
 			$did = "";
 			$plid = "";
-			$client_url[]['client_total_hours'] = "<a href=http://127.0.0.1:8888/time_tracker/ci/index.php/search_controller/search_data/2014-1-12/2013-1-12/0/all_hours/timesheet_date?clients=$cid&projects=$pid&tasks=$tid&department=$did&people=>$running_total_time</a>";
+			$client_url[]['client_total_hours'] = "<a href=http://127.0.0.1:8888/time_tracker/ci/index.php/search_controller/search_data/"  . $obj->uri->segment(3) . "/" . $obj->uri->segment(4) . "/0/all_hours/timesheet_date?clients=$cid&projects=$pid&tasks=$tid&department=$did&people=>$running_total_time</a>";
 			//$client_url[]['client_total_hours'] = $running_total_time;
 			$client_url[]['client_billable_hours'] = $running_billable_time;
 			$client_url[]['client_total_amount'] = $running_billable_amount;

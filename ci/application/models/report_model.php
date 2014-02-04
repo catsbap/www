@@ -40,6 +40,17 @@ class Report_model extends CI_Model {
 		return $query->result();
 	}
 	
+	///we need this function to get only the tasks for specific project ids.
+	///the items are passed in the client drilldown by name. This is the only one we need because we have
+	//the ids for all the other reports.
+	function getProjectId($project_name) {
+		$query = $this->db->select('project.project_id');
+		$query = $this->db->from('project');
+		$query = $this->db->where('project.project_name =', $project_name);
+		$query = $this->db->get();	
+		return $query->result();
+	}
+	
 	function getPersonName($task_id) {
 		$query = $this->db->select('person.person_first_name');
 		$query = $this->db->from('person');

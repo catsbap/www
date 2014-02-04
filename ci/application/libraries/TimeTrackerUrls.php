@@ -57,6 +57,7 @@ $this->type = $this->uri->segment(6);
 		//$page = $_GET['page'];
 		$page = $obj->uri->segment(5);
 		$anchor = anchor("$base/index.php/$controller/$view/$fromdate/$todate/$page/$type/$task_id", "$task_name");
+		//echo "HERE IS THE ANCHOR" . $anchor;
 		//$anchor = "<div class='button_$task_id'><a href=#>$task_name</a></div>";
 		return $anchor;
 	}

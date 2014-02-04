@@ -10,11 +10,23 @@ class Report extends CI_Controller {
 	var $to;
 	var $from;
 	var $client_id = "";
+	//set the variables for the individual drilldowns here. We will use them as we drill down.
+	var $cid;
+	var $pid;
+	var $tid;
+	var $did;
+	var $plid;
 	
 	
 	function __construct() {
 		//this is common code to all of the pages that make up these reports.
 		parent::__construct();
+		//initialize drilldown variables.
+		$this->cid = "";
+		$this->pid = "";
+		$this->tid = "";
+		$this->did = "";
+		$this->plid = "";
 		$this->load->library('javascript');
 		$data['library_src'] = $this->jquery->script();
 		$data['script_foot'] = $this->jquery->_compile();
@@ -147,10 +159,14 @@ class Report extends CI_Controller {
 		//$this->input->get('page');
 		if ($this->page == "clients") {
 		
+		
+		//THE DID VARIABLE IS NOT USED CURRENTLY FOR URLS (DEPARTMENT ID).
 		////////////////////////
 		//****CLIENT DATA*****//
 		///////////////////////
-		
+			//this is the only report
+			//where the urls are in a library, it can stay where it is or be taken out, it isn't much savings
+			//having it in the library, in fact, it adds complexity.
 			$this->load->library('client_rollup');
 			$this->data['client_url'] = $this->client_rollup->client_rollup();
 			$data = $this->data;
@@ -188,10 +204,14 @@ class Report extends CI_Controller {
 			$tid = "";
 			$did = "";
 			$plid = "";
-			$project_url[]['project_total_hours'] = "<a href=http://127.0.0.1:8888/time_tracker/ci/index.php/search_controller/search_data/2014-1-12/2013-1-12/0/all_hours/timesheet_date?clients=$cid&projects=$pid&tasks=$tid&department=$did&people=>$running_total_time</a>";
-			//$project_url[]['project_total_hours'] = $running_total_time;
-			$project_url[]['project_billable_hours'] = $running_billable_time;
-			$project_url[]['project_total_amount'] = $running_billable_amount;
+			//only display data that actually has records
+			if ($running_total_time) {
+
+				$project_url[]['project_total_hours'] = "<a href=http://127.0.0.1:8888/time_tracker/ci/index.php/search_controller/search_data/" . $this->uri->segment(3) . "/" . $this->uri->segment(4) . "/0/all_hours/timesheet_date?clients=$cid&projects=$pid&tasks=$tid&department=$did&people=>$running_total_time</a>";
+				//$project_url[]['project_total_hours'] = $running_total_time;
+				$project_url[]['project_billable_hours'] = $running_billable_time;
+				$project_url[]['project_total_amount'] = $running_billable_amount;
+			}
 		}
 		
 			$this->data['project_url'] = $project_url;
@@ -203,7 +223,6 @@ class Report extends CI_Controller {
 		////////////////////////
 		//****TASK DATA*****//
 		///////////////////////		
-		
 		$this->data['view'] = "task";
 		$task_url = array();
 		$task_url[]['task_billable_rate'] = array();
@@ -231,10 +250,13 @@ class Report extends CI_Controller {
 			$tid = urlencode($tasks['task_name']);
 			$did = "";
 			$plid = "";
-			$task_url[]['task_total_hours'] = "<a href=http://127.0.0.1:8888/time_tracker/ci/index.php/search_controller/search_data/2014-1-12/2013-1-12/0/all_hours/timesheet_date?clients=$cid&projects=$pid&tasks=$tid&department=$did&people=$plid>$running_total_time</a>";
-			//$task_url[]['task_total_hours'] = $running_total_time;
-			$task_url[]['task_billable_hours'] = $running_billable_time;
-			$task_url[]['task_total_amount'] = $running_billable_amount;
+			//only display data that is there.
+			if ($running_total_time) {
+				$task_url[]['task_total_hours'] = "<a href=http://127.0.0.1:8888/time_tracker/ci/index.php/search_controller/search_data/" . $this->uri->segment(3) . "/" . $this->uri->segment(4) . "/0/all_hours/timesheet_date?clients=$cid&projects=$pid&tasks=$tid&department=$did&people=$plid>$running_total_time</a>";
+				//$task_url[]['task_total_hours'] = $running_total_time;
+				$task_url[]['task_billable_hours'] = $running_billable_time;
+				$task_url[]['task_total_amount'] = $running_billable_amount;
+			}
 		}
 		
 			$this->data['task_url'] = $task_url;
@@ -281,10 +303,12 @@ class Report extends CI_Controller {
 			$tid = "";
 			$did = "";
 			$plid = urlencode($persons['person_first_name']);;
-			$person_url[]['person_total_hours'] = "<a href=http://127.0.0.1:8888/time_tracker/ci/index.php/search_controller/search_data/2014-1-12/2013-1-12/0/all_hours/timesheet_date?clients=$cid&projects=$pid&tasks=$tid&department=$did&people=$plid>$running_total_time</a>";
-			//$person_url[]['person_total_hours'] = $running_total_time;
-			$person_url[]['person_billable_hours'] = $running_billable_time;
-			$person_url[]['person_total_amount'] = $running_billable_amount;
+			if ($running_total_time) {
+				$person_url[]['person_total_hours'] = "<a href=http://127.0.0.1:8888/time_tracker/ci/index.php/search_controller/search_data/" . $this->uri->segment(3) . "/" . $this->uri->segment(4) . "/0/all_hours/timesheet_date?clients=$cid&projects=$pid&tasks=$tid&department=$did&people=$plid>$running_total_time</a>";
+				//$person_url[]['person_total_hours'] = $running_total_time;
+				$person_url[]['person_billable_hours'] = $running_billable_time;
+				$person_url[]['person_total_amount'] = $running_billable_amount;
+			}
 		}
 		
 			$this->data['person_url'] = $person_url;
@@ -293,7 +317,7 @@ class Report extends CI_Controller {
 		}
 	}	
 		
-	function client() {
+	public function client() {
 		//client_rollup helper is used to show aggregate in top area of client report.
 		//$this->load->library('client_rollup');
 		//load breadcrumb
@@ -336,15 +360,25 @@ class Report extends CI_Controller {
 			}
 						
 			$project_url[]['project_url'] = $anchored_project_url;
-			$cid = urlencode($this->Report_model->getClientName($this->client_id)[0]->client_name);
-			$pid = urlencode($projects['project_name']);
+			//this is a one to one for client and project
+			//so get the client name for the CID and the project name for the PID, and store the data
+			//in session variables so we have them throughout the application.
+			$this->cid = urlencode($this->Report_model->getClientName($this->client_id)[0]->client_name);
+			$this->session->set_userdata('cid', $this->cid); 
+			$this->pid = urlencode($projects['project_name']);
+			$this->session->set_userdata('pid', $this->pid); 
+			$cid = $this->session->userdata('cid');
+			$pid = $this->session->userdata('pid');
 			$tid = "";
 			$did = "";
 			$plid = "";
-			$project_url[]['project_total_hours_link'] = "<a href=http://127.0.0.1:8888/time_tracker/ci/index.php/search_controller/search_data/2014-1-12/2013-1-12/0/all_hours/timesheet_date?clients=$cid&projects=$pid&tasks=$tid&department=$did&people=>$running_total_time</a>";
-			$project_url[]['project_total_hours'] = $running_total_time;
-			$project_url[]['project_billable_hours'] = $running_billable_time;
-			$project_url[]['project_total_amount'] = $running_billable_amount;
+			//only display data that actually exists.
+			if ($running_total_time) {
+				$project_url[]['project_total_hours_link'] = "<a href=http://127.0.0.1:8888/time_tracker/ci/index.php/search_controller/search_data/" . $this->uri->segment(3) . "/" . $this->uri->segment(4) . "/0/all_hours/timesheet_date?clients=$cid&projects=$pid&tasks=$tid&department=$did&people=>$running_total_time</a>";
+				$project_url[]['project_total_hours'] = $running_total_time;
+				$project_url[]['project_billable_hours'] = $running_billable_time;
+				$project_url[]['project_total_amount'] = $running_billable_amount;
+			}
 		}
 		
 		
@@ -390,8 +424,9 @@ class Report extends CI_Controller {
 		$this->load->view('report_client_view', $data);				
 	}
 
-	function project() {
+	public function project() {
 		//load breadcrumb
+		//echo "here" . $this->session->userdata('cid');
 		$this->load->library('breadcrumb');	
 		$url = current_url();
 		$this->data['current_url'] = $url . '?' . $_SERVER['QUERY_STRING'];
@@ -438,17 +473,25 @@ class Report extends CI_Controller {
 					$running_billable_amount = money_format('%i', $data->billable_amount + $running_billable_amount);
 				}
 			}
-			
+
 			$task_url[]['task_url'] = $anchored_task_url;
-			$cid = urlencode($this->Report_model->getClientsByProject($this->project_id)[0]->client_name);
-			$pid = urlencode($this->Report_model->getProjectName($this->project_id)[0]->project_name);
-			$tid = urlencode($tasks['task_name']);
+			$cid = $this->session->userdata('cid');
+			$pid = $this->session->userdata('pid');
+			$this->tid = urlencode($tasks['task_name']);
+			$this->session->set_userdata('tid', $this->tid);
+			$tid = $this->session->userdata('tid');
 			$did = "";
 			$plid = "";
-			$task_url[]['task_total_hours_link'] = "<a href=http://127.0.0.1:8888/time_tracker/ci/index.php/search_controller/search_data/2014-1-12/2013-1-12/0/all_hours/timesheet_date?clients=$cid&projects=$pid&tasks=$tid&department=$did&people=$plid>$running_total_time</a>";
-			$task_url[]['task_total_hours'] = $running_total_time;
-			$task_url[]['task_billable_hours'] = $running_billable_time;
-			$task_url[]['task_total_amount'] = $running_billable_amount;
+			//echo $cid;
+			//echo $pid;
+			//echo $tid;
+			//only display data that has valid data.
+			if ($running_total_time) {
+				$task_url[]['task_total_hours_link'] = "<a href=http://127.0.0.1:8888/time_tracker/ci/index.php/search_controller/search_data/" . $this->uri->segment(3) . "/" . $this->uri->segment(4) . "/0/all_hours/timesheet_date?clients=$cid&projects=$pid&tasks=$tid&department=$did&people=$plid>$running_total_time</a>";
+				$task_url[]['task_total_hours'] = $running_total_time;
+				$task_url[]['task_billable_hours'] = $running_billable_time;
+				$task_url[]['task_total_amount'] = $running_billable_amount;
+			}
 			//foreach ($task_id as $task) {
 			//	$task_url[]['task_id'] = $task;
 			//}			
@@ -468,7 +511,6 @@ class Report extends CI_Controller {
 		//PROJECT DATA TO DISPLAY IN THE TOP OF THE PAGE//
 		//this can be just be the summarized project data that we already have above.
 		foreach ($task_url as $key=>$value) {	
-			//echo $key;
 			foreach ($value as $key=>$val) {
 				if ($key == "task_billable_hours") {
 					$billable_time_holder = $billable_time_holder + $val;
@@ -493,6 +535,8 @@ class Report extends CI_Controller {
 		//////////////////////////////////////////////////////////
 		
 		$data->task_url = $task_url;
+		//echo "this is where we need to be";
+		//print_r($task_url);
 		$data->project_name = $this->Report_model->getProjectName($this->project_id);
 		$this->load->view('header_view');
 		
@@ -567,7 +611,6 @@ class Report extends CI_Controller {
 			} else {
 				$this->load->view('report_project_view', $data);
 			}
-		//$this->load->view('report_project_view', $data);				
 	}
 	
 	function task() {
@@ -575,6 +618,7 @@ class Report extends CI_Controller {
 		$url = current_url();
 		$this->data['current_url'] = $url . '?' . $_SERVER['QUERY_STRING'];
 		$this->data['last_url'] = $_SERVER['HTTP_REFERER'];
+		//print_r($this->project_id);
 		//$this->load->library('breadcrumb');	
 		//$this->breadcrumb->clear();	
 		//$this->breadcrumb->add_crumb('Time Report', $this->data['current_url']); // this will be a link
@@ -598,37 +642,41 @@ class Report extends CI_Controller {
 		//////////////////////
 		
 		foreach ($personquery as $persons) {	
+			//print_r($persons);
+			//print_r("<BR>");
+			//print_r($data->project_id);
+			//print_r($this->uri->segment(7));
 			$running_total_time = 0;
 			$running_billable_time = 0;
 			$running_billable_amount = 0;
 			$anchored_person_url = 0;
 			foreach($this->data['all_data'] as $data) {
-				if (($persons['person_id'] == $data->person_id) && ($persons['task_id'] == $data->task_id)) {
+				//print_r($data->project_id);
+				//echo $this->session->userdata('pid');
+				$session_project_id = $this->Report_model->getProjectId(urldecode($this->session->userdata('pid')))[0]->project_id;
+				if (($persons['person_id'] == $data->person_id) && ($persons['task_id'] == $data->task_id) && ($session_project_id == $data->project_id)) {
 					//$anchored_person_url = $this->timetrackerurls->generate_person_url($persons['person_id'], $persons['person_first_name'], 'report', 'person');
-					//don't display the person as a URL.
+					//don't display the person as a URL in this branch, even though variable is named anchored_person_url.
 					$anchored_person_url = $persons['person_first_name'];
 					$running_total_time = $data->timesheet_hours + $running_total_time;
 					$running_billable_time = $data->billable_time + $running_billable_time;
 					$running_billable_amount = money_format('%i', $data->billable_amount + $running_billable_amount);
 				}
 			}
+						
+			$cid = $this->session->userdata('cid');
+			$pid = $this->session->userdata('pid');
+			$tid = $this->session->userdata('tid');
 			
-			//WORK ON THIS ON MONDAY!
-			
-			$pid_holder = $this->Report_model->getProjectByTask($this->task_id)[0]->project_id;
-			//this is blank, find out why.
-			$cid = urlencode($this->Report_model->getClientsByProject($pid_holder)[0]->client_name);
-			$pid = urlencode($this->Report_model->getProjectName($pid_holder)[0]->project_name);
-			$tid = urlencode($this->Report_model->getTaskName($this->task_id)[0]->task_name);
-			$person_url[]['person_url'] = $anchored_person_url;
-			$cid = "";
-
 			$did = "";
 			$plid = $persons['person_first_name'];
-			$person_url[]['person_total_hours_link'] = "<a href=http://127.0.0.1:8888/time_tracker/ci/index.php/search_controller/search_data/2014-1-12/2013-1-12/0/all_hours/timesheet_date?clients=$cid&projects=$pid&tasks=$tid&department=$did&people=$plid>$running_total_time</a>";		
-			$person_url[]['person_total_hours'] = $running_total_time;
-			$person_url[]['person_billable_hours'] = $running_billable_time;
-			$person_url[]['person_total_amount'] = $running_billable_amount;
+			if ($running_total_time) {
+				$person_url[]['person_url'] = $anchored_person_url;
+				$person_url[]['person_total_hours_link'] = "<a href=http://127.0.0.1:8888/time_tracker/ci/index.php/search_controller/search_data/" . $this->uri->segment(3) . "/" . $this->uri->segment(4) . "/0/all_hours/timesheet_date?clients=$cid&projects=$pid&tasks=$tid&department=$did&people=$plid>$running_total_time</a>";		
+				$person_url[]['person_total_hours'] = $running_total_time;
+				$person_url[]['person_billable_hours'] = $running_billable_time;
+				$person_url[]['person_total_amount'] = $running_billable_amount;
+			}
 		}
 		
 		

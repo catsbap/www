@@ -18,8 +18,9 @@ class Search_controller extends CI_Controller {
 		$this->data['site_url'] = $url . '?' . $_SERVER['QUERY_STRING'];
 		$this->load->model('Search_model', '', TRUE);
 		//Get the fromdate and todate, in segments 3 & 4.
-		$this->data['todate'] = date_format(new DateTime($this->uri->segment(4)), 'Y-m-d');
-		$this->data['fromdate'] = date_format(new DateTime($this->uri->segment(3)), 'Y-m-d');
+		//not sure why these were backwards, put a pin in this!
+		$this->data['todate'] = date_format(new DateTime($this->uri->segment(3)), 'Y-m-d');
+		$this->data['fromdate'] = date_format(new DateTime($this->uri->segment(4)), 'Y-m-d');
 	}
 	
 	function index() {
