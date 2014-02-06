@@ -8,8 +8,6 @@
 <tr><td colspan=4><?php echo $this->data['results'][0]->project_name?></td></tr>
 <tr><td><b>Hours Tracked</b></td><td><b>Billable Hours</b></td><td><b>Billable Amount</b></td><td><b>Rate</b></td></tr>
 <tr><td><?php echo $this->data['billable_hours'];?></td><td><?php echo $this->data['billable_hours'];?></td><td>$<?php echo $this->data['billable_amount']?></td><td>$<?php echo $this->data['rate']?></td></tr>
-<tr><td><b>Budget</b></td><td><b>Budget</b></td><td><b>Spent</b></td><td><b>Left</b></td></tr>
-<tr><td><?php echo $this->data['results'][0]->project_budget_by?></td><td>$<?php echo $this->data['budget']?></td><td>$<?php echo ($this->data['spent']) ?></td><td>$<?php echo ($this->data['budget']-$this->data['billable_amount'])?></td></tr>
 </table>
 	</table>
 	</div>

@@ -74,13 +74,6 @@ $(document).ready(function() {
         window.location.href = url.replace(tmpRegex, '$1'+value);
      }
     
-    $(".lifespan").click(function() {    
-		var pathArray = window.location.pathname.split( '/' );
-		var val = "lifespan";
-		pathArray[9] = val;
-		pathArray = pathArray.join("/");
-		document.location.href = pathArray;    
-	});
 
     //grab the timeframe out of the drop down
     //and update the URL with the correct dates.
@@ -131,6 +124,7 @@ $(document).ready(function() {
 			todate = d2.toString('yyyy-M-d');
 			$('#todate').val(todate);
 		}
+		
     
    //get out the segments (6=fromdate, 7=todate, 9=type) and update them.
 			var pathArray = window.location.pathname.split( '/' );
@@ -142,13 +136,43 @@ $(document).ready(function() {
 			pathArray = pathArray.join("/");
 			document.location.href = pathArray;
             });				
+
+			$(".lifespan").click(function() {    
+			/*var pathArray = window.location.pathname.split( '/' );
+			var val = "lifespan";
+			pathArray[9] = val;
+			pathArray = pathArray.join("/");
+			document.location.href = pathArray;    
+			*/
+			var d1 = Date.parse('1/1/1970').toString('yyyy-MM-dd');
+			fromdate = d1;
+			$('#fromdate').val(fromdate)
+			var d2 = Date.parse('1/1/2070').toString('yyyy-MM-dd');
+			todate = d2;
+			$('#todate').val(todate)		
+			var pathArray = window.location.pathname.split( '/' );
+			pathArray[6] = fromdate;
+			pathArray[7] = todate;
+			timeframe_val = $('#timeframe').val();
+			var val = timeframe_val.split('=')[1];
+			pathArray[9] = val;
+			pathArray[11] = 'lifespan';
+			pathArray = pathArray.join("/");
+			document.location.href = pathArray;
+			});
 });
+
+
 </script>
 <body>
 	<div id="page-content" class="page-content">
 		<header class="page-header">
-			<h3 class="page-title"><?php echo $this->uri->segment(3);?> to <?php echo $this->uri->segment(4);?></h3>
-
+			<h3 class="page-title"><?php 
+			if ($this->uri->segment(8) == 'lifespan') {
+				echo "Lifespan Report";
+			} else {
+				echo $this->uri->segment(3);?> to <?php echo $this->uri->segment(4);?></h3>
+			<?php } ?>
 		</header>
 	<table width="100%" style="border:1px solid;">
 	<tr><td><?php echo $picker ?></td></tr>

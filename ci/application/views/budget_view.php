@@ -19,16 +19,7 @@
 	//if ($row->project_budget_total_fees > 0) {	?> 
     	<tr><td><?php echo $row->project_name?></td><td><?php echo $row->budget?> Hours</td><td><?php echo $row->rate?> Hours</td><td><?php echo $row->hours_left?> Hours (<?php echo $row->budget_percentage?>)</td>
 		</tr>
-	<?php /*} elseif ($row->project_budget_total_hours > 0) {?>
-	<tr><td><?php echo $row->project_name?></td><td><?php echo $row->budget?> Hours</td><td>$<?php echo $row->rate?></td><td><?php echo $row->hours_left?> Hours (<?php echo $row->budget_percentage?>)</td>
-		</tr>
-	<?php } elseif ($row->task_total_budget_hours > 0) { ?>
-	<tr><td><?php echo $row->project_name?></td><td><?php echo $row->budget?> Hours</td><td>$<?php echo $row->rate?></td><td><?php echo $row->hours_left?> Hours (<?php echo $row->budget_percentage?>)</td>
-		</tr>
-	<?php } elseif ($row->task_total_budget_hours > 0) { ?>
-	<tr><td><?php echo $row->project_name?></td><td><?php echo $row->budget?> Hours</td><td>$<?php echo $row->rate?></td><td><?php echo $row->hours_left?> Hours (<?php echo $row->budget_percentage?>)</td>
-		</tr>
-	<?php } */?>
+
 <?php } 
 
 ?>

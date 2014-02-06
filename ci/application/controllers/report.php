@@ -261,14 +261,7 @@ class Report extends CI_Controller {
 		
 			$this->data['task_url'] = $task_url;
 			$data = $this->data;
-			//PROJECT LIFESPAN REPORT
-			//if ($this->type=="lifespan") {
-			//	echo "CAN YOU SEE ME?";
-			//	$data = $this->Report_model->getProjectLifespan($this->todate, $this->fromdate);
-			//	$this->load->view('lifespan_view', $data);
-			//} else {
-			//	$this->load->view('task_view', $data);
-			//}
+
 			//****PERSON DATA******//
 			$this->load->view('task_view', $data);	
 		} elseif ($this->page == "staff") {
@@ -427,6 +420,13 @@ class Report extends CI_Controller {
 	public function project() {
 		//load breadcrumb
 		//echo "here" . $this->session->userdata('cid');
+		/*if ($this->type=="lifespan") {
+			$this->fromdate = '1/1/1970';
+			$this->todate = '1/1/2020';
+		}
+		
+		*/
+			
 		$this->load->library('breadcrumb');	
 		$url = current_url();
 		$this->data['current_url'] = $url . '?' . $_SERVER['QUERY_STRING'];
@@ -545,11 +545,11 @@ class Report extends CI_Controller {
 		//LIFESPAN REPORT//
 		//////////////////
 		
-		if ($this->type=="lifespan") {
+		/*if ($this->type=="lifespan") {
 				$this->data['results'] = $this->Report_model->getProjectLifespan($this->project_id);
 				
-				//the lifespan report includes budgeted hours for the project. Get them out of the $this->data variable, which has already been created.
-				//get out how we invoice this project. Do we allow projects to be budgeted when they are not invoiced? This code currently allows this, but won't show the invoice info.
+				//the lifespan report includes hours for the project. Get them out of the $this->data variable, which has already been created.
+				//get out how we invoice this project.
 				$invoice_by = $this->data['results'][0]->project_invoice_by;
 				$this->data['billable_hours'] = 0;
 				$this->data['billable_amount'] = 0.0;
@@ -608,9 +608,9 @@ class Report extends CI_Controller {
 				}
 				
 				$this->load->view('lifespan_view', $data);
-			} else {
+			} else {*/
 				$this->load->view('report_project_view', $data);
-			}
+			//}
 	}
 	
 	function task() {
