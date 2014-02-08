@@ -38,7 +38,7 @@ $(document).ready(function() {
 		<h1 class="page-title">Add New Client</h1>
 		<nav class="page-controls-nav">
 			<ul class="page-controls-list client">
-				<li class="page-controls-item"><a class="view-all-link" href="clients.php">View All</a></li>
+				<li class="page-controls-item"><a class="view-all-link" href="view_clients">View All</a></li>
 			</ul>
 		</nav>
 	</header>
