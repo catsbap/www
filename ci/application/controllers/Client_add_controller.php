@@ -38,9 +38,18 @@ class Client_add_controller extends CI_Controller {
 		 $this->form_validation->set_rules('client-name', 'client-name', 'required|is_unique[client.client_name]');
 		 $this->form_validation->set_rules('client-phone', 'client-phone', 'numeric');
 		 $this->form_validation->set_rules('client-email', 'client-email', 'trim|required|valid_email');
-		 $this->form_validation->set_rules('client-fax', 'client-fax', 'numeric');
+		 $this->form_validation->set_rules('client-fax', 'client-fax');
+		 $this->form_validation->set_rules('contact-primary', 'contact-primary');
+		 $this->form_validation->set_rules('client-zip', 'client-zip', 'numeric');
+		 $this->form_validation->set_rules('client-city', 'client-city');
+		 $this->form_validation->set_rules('client-state', 'client-state');
 		 $this->form_validation->set_rules('client-address', 'client-address');
 		 $this->form_validation->set_rules('contact-name', 'contact-name', 'required');
+		 $this->form_validation->set_rules('contact-id', 'contact-id');
+		 $this->form_validation->set_rules('contact-officePhone', 'contact-officePhone');
+		 $this->form_validation->set_rules('contact-mobilePhone', 'contact-mobilePhone');
+		 $this->form_validation->set_rules('contact-email', 'contact-email');
+		 $this->form_validation->set_rules('contact-fax', 'contact-fax');
 		 $this->form_validation->set_rules('client_logo_link', 'client_logo_link');
 		 
 		 if ($this->form_validation->run() == FALSE) {
@@ -88,6 +97,14 @@ class Client_add_controller extends CI_Controller {
 		$this->load->view('client_edit_view', $data);
 	}
 	
+	function client_detail() {
+		$client_id = $this->uri->segment(3);
+		$data['client'] = $this->Client_model->display_clients_by_id($client_id);
+		$data['contact'] = $this->Client_model->display_contacts_by_client_id($client_id);
+		$this->load->view('header_view');
+		$this->load->view('client_detail_view', $data);
+	}
+	
 	function update_client() {
 		//this is the form validation
 		$data = $this->data;
@@ -95,13 +112,24 @@ class Client_add_controller extends CI_Controller {
 		$data['client'] = $this->Client_model->display_clients_by_id($client_id);
 		$data['contact'] = $this->Client_model->display_contacts_by_client_id($client_id);
 		$this->form_validation->set_rules('client-name', 'client-name', 'required');
-		$this->form_validation->set_rules('client-phone', 'client-phone');
+		$this->form_validation->set_rules('client-phone', 'client-phone', 'numeric');
 		$this->form_validation->set_rules('client-email', 'client-email', 'trim|required|valid_email');
-		$this->form_validation->set_rules('client-fax', 'client-fax');
+		$this->form_validation->set_rules('client-fax', 'client-fax', 'numeric');
+		$this->form_validation->set_rules('client-zip', 'client-zip', 'numeric');
+		$this->form_validation->set_rules('client-city', 'client-city');
+		$this->form_validation->set_rules('client-state', 'client-state');
 		$this->form_validation->set_rules('client-address', 'client-address');
 		$this->form_validation->set_rules('contact-name', 'contact-name', 'required');
+		$this->form_validation->set_rules('contact-id', 'contact-id');
+		$this->form_validation->set_rules('contact-officePhone', 'contact-officePhone');
+		$this->form_validation->set_rules('contact-mobilePhone', 'contact-mobilePhone');
+		$this->form_validation->set_rules('contact-email', 'contact-email');
+		$this->form_validation->set_rules('contact-fax', 'contact-fax');
 		$this->form_validation->set_rules('client_logo_link', 'client_logo_link');
-		 
+		$this->form_validation->set_rules('contact-primary', 'contact-primary');
+
+
+				 
 		if ($this->form_validation->run() == FALSE) {
 			$this->load->view('header_view');
 			$this->load->view('client_edit_view', $data);

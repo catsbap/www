@@ -59,7 +59,7 @@
 		<h1 class="section-nav-title">Manage: </h1>
 		<ul class="section-menu">
 			<li class="section-menu-item"><a class="section-menu-link" href="/time_tracker/ui/projects.php">Projects</a></li>
-			<li class="section-menu-item"><a class="section-menu-link" href="/time_tracker/ui/clients.php">Clients</a></li>
+			<li class="section-menu-item"><a class="section-menu-link" href="view_clients/">Clients</a></li>
 			<li class="section-menu-item"><a class="section-menu-link" href="/time_tracker/ui/people.php">People</a></li>
 			<li class="section-menu-item"><a class="section-menu-link" href="/time_tracker/ui/tasks.php">Tasks</a></li>
 		</ul>

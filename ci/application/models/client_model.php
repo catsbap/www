@@ -66,6 +66,9 @@ class Client_model extends CI_Model {
 		$contact_name = $this->input->post('contact-name');
 		$client_city = $this->input->post('contact-title');
 		$contact_primary = $this->input->post('contact-primary');
+		if (!$contact_primary) {
+			$contact_primary = 0;
+		}
 		$contact_officePhone = $this->input->post('contact-officePhone'); 
 		$contact_mobilePhone = $this->input->post('contact-mobilePhone'); 
 		$contact_email = $this->input->post('contact-email');
@@ -119,6 +122,9 @@ class Client_model extends CI_Model {
 		$contact_name = $this->input->post('contact-name');
 		$client_city = $this->input->post('contact-title');
 		$contact_primary = $this->input->post('contact-primary');
+		if (!$contact_primary) {
+			$contact_primary = 0;
+		}
 		$contact_officePhone = $this->input->post('contact-officePhone'); 
 		$contact_mobilePhone = $this->input->post('contact-mobilePhone'); 
 		$contact_email = $this->input->post('contact-email');
@@ -146,9 +152,15 @@ class Client_model extends CI_Model {
 		$this->db->update('client_address', $data);
 		//error_log(print_r($data, true));
 		//update each contact here. 
+		//contacts are added and removed in the UI first,
+		//and then added here as one group from those remaining
+		//as active in the UI.
+		$this->db->where('client_id', $client_id);
+		$this->db->delete('contact');
 		$num_items = (count($contact_id));
 		for ($i=0; $i<$num_items; $i++) {
 			$data = array(
+				'client_id' => $client_id,
 				'contact_id' => $contact_id[$i],
 				'contact_name' =>$contact_name[$i],
 				'contact_primary' => $contact_primary[$i],
@@ -156,10 +168,17 @@ class Client_model extends CI_Model {
 				'contact_mobile_number' => $contact_mobilePhone[$i],
 				'contact_fax_number' => $contact_fax[$i]
 			);
-			$this->db->where('contact_id', $data['contact_id']);
-			$this->db->update('contact', $data);
+				$this->db->insert('contact', $data);
+				//error_log(print_r($data, true));
 		}
-		//error_log(print_r(array_keys($data),true));
+	}
+	
+	function delete_client($client_id) {
+		//stub
+	}
+	
+	function delete_contact($contact_id) {
+		//$this->db->delete('contact', array('contact_id' => $contact_id)); 
 	}
 
 }

@@ -3,7 +3,7 @@
 		<h1 class="page-title">Clients</h1>
 		<nav class="page-controls-nav">
 			<ul class="page-controls-list client">
-				<li class="page-controls-item link-btn"><a class="add-client-link" href="client-add.php">+ Add Client</a></li>
+				<li class="page-controls-item link-btn"><a class="add-client-link" href="../../../display_client">+ Add Client</a></li>
 				<!--<li class="page-controls-item add-client-button"><a class="add-client-link" href="client-add.html">+ Add Client</a></li>-->
 				<li class="page-controls-item"><a class="view-client-archive-link" href="client-archives.php">View Archives</a></li>
 			</ul>
@@ -40,7 +40,7 @@
 				<img class="client-logo-thumbnail thumbnail" src="<?php echo "$this->base/uploads/" . $client->client_logo_link ?>" title="Client Logo" alt="Client Logo" />
 				<ul class="entity-info-list client">
 				<!--just sending this link to client-edit for now.-->
-					<li class="entity-info-item client"><a class="client-info-name-link" href="<?php echo "edit_client/" . $client->client_id ?>" title="View client details"><?php echo $client->client_name?></a></li>
+					<li class="entity-info-item client"><a class="client-info-name-link" href="<?php echo "client_detail/" . $client->client_id ?>" title="View client details"><?php echo $client->client_name?></a></li>
 					<li class="entity-info-item client">Contact: <a class="client-info-contact-link" href="#" title="View contact details"><?php //echo $primary_contact->getValue("contact_name") ?></a></li>
 					
 					<?php 

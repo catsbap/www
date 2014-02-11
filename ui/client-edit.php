@@ -262,20 +262,6 @@
 						<label for="contact-name" class="contact-details-label required">Your contact's name:</label>
 						<input id="contact-name" name="contact-name[]" class="contact-info-input" type="text" value="<?php echo $contacts->getValueEncoded("contact_name")?>" /><br />
 						<label for="contact-primary" class="contact-details-label">This the primary contact: </label>
-						<?php /*
-						<select id="contact-primary" name="contact-primary[]" class="contact-info-input">
-							<?php if ($contacts->getValueEncoded("contact_primary") == 1) {
-								?><option value="1"	selected="selected">Yes</option>
-									<option value="0">No</option>
-							<?php } else {	
-								?>
-								<option value="1"> Yes</option>
-									<option value="0" selected="selected">No</option><?php } ?>
-						
-						</select>
-						*/
-						//whether or not the radio button is checked comes from the database, it should not be hard-coded to be default on.
-						?>
 						<input id="contact-primary" name="contact-primary[<?php echo $i?>]" class="contact-info-input" type="checkbox" <?php setChecked($contacts, "contact_primary", "1") ?> />
 
 					</li>

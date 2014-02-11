@@ -86,7 +86,7 @@ $(document).ready(function() {
 					</li>
 					<li class="client-details-item fax">
 						<label for="client-fax" class="client-details-label">Fax number:</label>
-						<input id="client-fax" name="client-fax" class="client-fax-input" type="text" tabindex="4" value="" value="<?php echo set_value('client-fax'); ?>"/>
+						<input id="client-fax" name="client-fax" class="client-fax-input" type="text" tabindex="4" value="<?php echo set_value('client-fax'); ?>"/>
 					</li>
 					<li class="client-details-item address">
 						<label for="client-streetAddress" class="client-details-label">Street Address:</label>
@@ -94,67 +94,71 @@ $(document).ready(function() {
 						<label for="client-city" class="client-details-label" >City:</label>
 						<input id="client-city" name="client-city" class="client-city-input" type="text" tabindex="6" value="<?php echo set_value('client-city'); ?>"/><br />
 						<label for="client-state" class="client-details-label">State:</label>
-						<select id="client-state" name="client-state" class="client-state-select" tabindex="7" value="<?php echo set_value('client-state	'); ?>">
-							<option selected="selected" value="default">Select state</option>
-							<option value="AL">Alabama</option>
-							<option value="AK">Alaska</option>
-							<option value="AZ">Arizona</option>
-							<option value="AR">Arkansas</option>
-							<option value="CA">California</option>
-							<option value="CO">Colorado</option>
-							<option value="CT">Connecticut</option>
-							<option value="DE">Delaware</option>
-							<option value="FL">Florida</option>
-							<option value="GA">Georgia</option>
-							<option value="HI">Hawaii</option>
-							<option value="ID">Idaho</option>
-							<option value="IL">Illinois</option>
-							<option value="IN">Indiana</option>
-							<option value="IA">Iowa</option>
-							<option value="KS">Kansas</option>
-							<option value="KY">Kentucky</option>
-							<option value="LA">Louisiana</option>
-							<option value="ME">Maine</option>
-							<option value="MD">Maryland</option>
-							<option value="MA">Massachusetts</option>
-							<option value="MI">Michigan</option>
-							<option value="MN">Minnesota</option>
-							<option value="MS">Mississippi</option>
-							<option value="MO">Missouri</option>
-							<option value="MT">Montana</option>
-							<option value="NE">Nebraska</option>
-							<option value="NV">Nevada</option>
-							<option value="NH">New Hampshire</option>
-							<option value="NJ">New Jersey</option>
-							<option value="NM">New Mexico</option>
-							<option value="NY">New York</option>
-							<option value="NC">North Carolina</option>
-							<option value="ND">North Dakota</option>
-							<option value="OH">Ohio</option>
-							<option value="OK">Oklahoma</option>
-							<option value="OR">Oregon</option>
-							<option value="PA">Pennsylvania</option>
-							<option value="RI">Rhode Island</option>
-							<option value="SC">South Carolina</option>
-							<option value="SD">South Dakota</option>
-							<option value="TN">Tennessee</option>
-							<option value="TX">Texas</option>
-							<option value="UT">Utah</option>
-							<option value="VT">Vermont</option>
-							<option value="VA">Virginia</option>
-							<option value="WA">Washington</option>
-							<option value="WV">West Virginia</option>
-							<option value="WI">Wisconsin</option>
-							<option value="WY">Wyoming</option>
-							<option value="DC">Washington DC</option>
-							<option value="PR">Puerto Rico</option>
-							<option value="VI">U.S. Virgin Islands</option>
-							<option value="AS">American Samoa</option>
-							<option value="GU">Guam</option>
-							<option value="MP">Northern Mariana Islands</option>
-						</select><br />
+						<?php 
+						
+						$state_list = array(
+							'default' => 'Please select a state',
+							'AL' => 'Alabama',
+							'AK' => 'Alaska',
+							'AZ' => 'Arizona',
+							'AR' => 'Arkansas',
+							'CA' => 'California',
+							'CO' => 'Colorado',
+							'CT' => 'Connecticut',
+							'DE' => 'Delaware',
+							'FL' => 'Florida',
+							'GA' => 'Georgia',
+							'HI' => 'Hawaii',
+							'ID' => 'Idaho',
+							'IL' => 'Illinois',
+							'IN' => 'Indiana',
+							'IA' => 'Iowa',
+							'KS' => 'Kansas',
+							'KY' => 'Kentucky',
+							'LA' => 'Louisiana',
+							'ME' => 'Maine',
+							'MD' => 'Maryland',
+							'MA' => 'Massachusetts',
+							'MI' => 'Michigan',
+							'MN' => 'Minnesota',
+							'MS' => 'Mississippi',
+							'MO' => 'Missouri',
+							'MT' => 'Montana',
+							'NE' => 'Nebraska',
+							'NV' => 'Nevada',
+							'NH' => 'New Hampshire',
+							'NJ' => 'New Jersey',
+							'NM' => 'New Mexico',
+							'NY' => 'New York',
+							'NC' => 'North Carolina',
+							'ND' => 'North Dakota',
+							'OH' => 'Ohio',
+							'OK' => 'Oklahoma',
+							'OR' => 'Oregon',
+							'PA' => 'Pennsylvania',
+							'RI' => 'Rhode Island',
+							'SC' => 'South Carolina',
+							'SD' => 'South Dakota',
+							'TN' => 'Tennessee',
+							'TX' => 'Texas',
+							'UT' => 'Utah',
+							'VT' => 'Vermont',
+							'VA' => 'Virginia',
+							'WA' => 'Washington',
+							'WV' => 'West Virginia',
+							'WI' => 'Wisconsin',
+							'WY' => 'Wyoming',
+							'DC' => 'Washington DC',
+							'PR' => 'Puerto Rico',
+							'VI' => 'U.S. Virgin Islands',
+							'AS' => 'American Samoa',
+							'GU' => 'Guam',
+							'MP' => 'Northern Mariana Islands',
+							);
+							echo form_dropdown('client-state', $state_list, set_value('client-state'));
+							?>
 						<label for="client-zip" class="client-details-label">Zip code:</label>
-						<input id="client-zip" name="client-zip" class="client-zip-input" type="text" tabindex="8" /><br />
+						<input id="client-zip" name="client-zip" class="client-zip-input" type="text" tabindex="8" value="<?php echo set_value('client-zip'); ?>"/><br />
 						<label for="client-country" class="client-details-label">Client's country:</label>
 						<select id="client-country" name="client-country" class="client-country-select" tabindex="9">
 							<option value="">Select client's country...</option>
@@ -177,23 +181,25 @@ echo form_dropdown('client_currency_index', $options, '1');
 				<ul class="details-list client-details-list">
 					<li class="client-details-item name">
 						<label for="contact-name" class="client-details-label">Your contact's name:</label>
-						<input id="contact-name" name="contact-name" class="contact-contact-info-input" type="text" tabindex="12" /><br />
+						<input id="contact-name" name="contact-name" class="contact-contact-info-input" type="text" tabindex="12" value="<?php echo set_value('contact-name'); ?>"/><br />
 						<label for="contact-primary" class="client-details-label">This the primary contact: </label>
-						<input id="contact-primary" name="contact-primary" class="contact-info-input" type="checkbox" checked="checked" tabindex="13" value="1" />
+						<?php echo form_checkbox('contact-primary', '1', set_checkbox('contact-primary', '1')); ?>
+
+						<!--input id="contact-primary" name="contact-primary" class="contact-info-input" type="checkbox" checked="checked" tabindex="13" value="1" /-->
 					</li>
 					<li class="client-details-item phoneNum">
 						<label for="contact-officePhone" class="client-details-label">Office phone:</label>
-						<input id="contact-officePhone" name="contact-officePhone" class="contact-contact-info-input" type="text" tabindex="14" value="" /><br />
+						<input id="contact-officePhone" name="contact-officePhone" class="contact-contact-info-input" type="text" tabindex="14" value="<?php echo set_value('contact-officePhone'); ?>" /><br />
 						<label for="contact-mobilePhone" class="client-details-label">Mobile phone:</label>
-						<input id="contact-mobilePhone" name="contact-mobilePhone" class="contact-info-input" type="text" tabindex="15" value="" />
+						<input id="contact-mobilePhone" name="contact-mobilePhone" class="contact-info-input" type="text" tabindex="15" value="<?php echo set_value('contact-mobilePhone'); ?>" />
 					</li>
 					<li class="client-details-item email">
 						<label for="contact-email" class="client-details-label">Email:</label>
-						<input id="contact-email" name="contact-email" class="contact-contact-info-input" type="text" tabindex="16" value="" />
+						<input id="contact-email" name="contact-email" class="contact-contact-info-input" type="text" tabindex="16" value="<?php echo set_value('contact-email'); ?>" />
 					</li>
 					<li class="client-details-item fax">
 						<label for="contact-fax" class="client-details-label">Fax:</label>
-						<input id="contact-fax" name="contact-fax" class="contact-contact-info-input" type="text" tabindex="17" value="" />
+						<input id="contact-fax" name="contact-fax" class="contact-contact-info-input" type="text" tabindex="17" value="<?php echo set_value('contact-fax'); ?>" />
 					</li>
 				</ul>
 			</fieldset>
