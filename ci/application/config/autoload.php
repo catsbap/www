@@ -39,7 +39,6 @@
 
 $autoload['packages'] = array();
 
-
 /*
 | -------------------------------------------------------------------
 |  Auto-load Libraries
@@ -53,6 +52,8 @@ $autoload['packages'] = array();
 */
 
 $autoload['libraries'] = array();
+$autoload['libraries'] = array('database', 'session', 'email', 'ion_auth', 'form_validation');
+
 
 
 /*
@@ -65,6 +66,7 @@ $autoload['libraries'] = array();
 */
 
 $autoload['helper'] = array();
+$autoload['helper'] = array('form', 'url');
 
 
 /*

@@ -31,9 +31,14 @@
 	</nav>
 	<nav id="util-nav" class="util-nav">
 		<ul id="util-menu" class="util-menu">
-			<li class="section-menu-item"><a class="section-menu-link" href="logout.php">Log Out <?php //echo $header_controller->getValue("person_email");?></a></li>
+			<li class="section-menu-item"><a class="section-menu-link" href="<?php echo "$this->base/index.php/auth/logout/"?>">Log Out <?php 
+	//$this->load->library('ion_auth');
+
+	$user = $this->ion_auth->user()->row();
+	echo $user->email?></a></li>
 		</ul>
 	</nav>
+	
 	<nav id="section-nav" class="section-nav timesheets">
 		<h1 class="section-nav-title">Timesheets: </h1>
 		<ul class="section-menu">
