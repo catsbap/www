@@ -47,6 +47,10 @@ class Person_controller extends CI_Controller {
 	
 	function insert_person() {
 		//this is the form validation
+		
+		//OK, what about this. We use ion_auth and groups to set up the user's permissions. the fields we need that are custom to this app are
+		//person_logo_link, hourly rate, department, everything else is in the "USER" table.
+		//what if we let the user log in using the user table to update the ion_auth
 		 $data = $this->data;
 		 $data['success_email'] = "";
 		 $this->form_validation->set_rules('person-first-name', 'person-first-name', 'required');
