@@ -55,7 +55,6 @@ $autoload['libraries'] = array();
 $autoload['libraries'] = array('database', 'session', 'email', 'ion_auth', 'form_validation');
 
 
-
 /*
 | -------------------------------------------------------------------
 |  Auto-load Helper Files
