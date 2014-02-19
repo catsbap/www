@@ -40,6 +40,18 @@ class Data_controller extends CI_Controller {
 			$data['tasks'] = $this->Task_model->display_archived_tasks();
 			//error_log(print_r($data['tasks'], true));
 			echo json_encode($data['tasks']);
+		} elseif ($func == "returnClientJSON") {
+			$this->load->model('Client_model', '', TRUE);
+			$data['clients'] = $this->Client_model->display_clients();
+			echo json_encode($data['clients']);
+		} elseif ($func == "returnProjectJSON") {
+			$this->load->model('Project_model', '', TRUE);
+			$data['projects'] = $this->Project_model->display_projects();
+			echo json_encode($data['projects']);
+		} elseif ($func == "returnPeopleJSON") {
+			$this->load->model('Person_model', '', TRUE);
+			$data['people'] = $this->Person_model->display_people();
+			echo json_encode($data['people']);
 		}
 		//build other functions here as they come up.
 	}
