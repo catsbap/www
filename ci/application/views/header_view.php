@@ -63,10 +63,10 @@
 	<nav id="section-nav" class="section-nav manage">
 		<h1 class="section-nav-title">Manage: </h1>
 		<ul class="section-menu">
-			<li class="section-menu-item"><a class="section-menu-link" href="/time_tracker/ui/projects.php">Projects</a></li>
-			<li class="section-menu-item"><a class="section-menu-link" href="view_clients/">Clients</a></li>
-			<li class="section-menu-item"><a class="section-menu-link" href="/time_tracker/ui/people.php">People</a></li>
-			<li class="section-menu-item"><a class="section-menu-link" href="/time_tracker/ui/tasks.php">Tasks</a></li>
+			<li class="section-menu-item"><a class="section-menu-link" href="<?php echo "$this->base/index.php/project_controller/display_projects"?>">Projects</a></li>
+			<li class="section-menu-item"><a class="section-menu-link" href="<?php echo "$this->base/index.php/client_add_controller/view_clients"?>">Clients</a></li>
+			<li class="section-menu-item"><a class="section-menu-link" href="<?php echo "$this->base/index.php/person_controller/view_people"?>">People</a></li>
+			<li class="section-menu-item"><a class="section-menu-link" href="<?php echo "$this->base/index.php/task_controller/display_task"?>">Tasks</a></li>
 		</ul>
 	</nav>
 </header>
