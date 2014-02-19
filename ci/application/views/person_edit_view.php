@@ -275,6 +275,6 @@ showP(document.getElementById('person-perm-id'));
 <footer id="site-footer" class="site-footer">
 
 </footer>
-<script src="client-controls.js" type="text/javascript"></script>
+<script src="<?php echo "$this->base/js/client-controls.js" ?>" type="text/javascript"></script>
 </body>
 </html>
