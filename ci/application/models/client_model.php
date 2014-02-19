@@ -178,7 +178,7 @@ class Client_model extends CI_Model {
 	}
 	
 	function delete_contact($contact_id) {
-		//$this->db->delete('contact', array('contact_id' => $contact_id)); 
+		//stub
 	}
 
 }
