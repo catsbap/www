@@ -140,7 +140,7 @@
 <footer id="site-footer" class="site-footer">
 
 </footer>
-<script src="../../application/controllers/task-controls.js"></script>
+<script src="<?php echo "$this->base/js/task-controls.js" ?>"></script>
 </body>
 </html>
 <?php //} ?>
