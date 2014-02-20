@@ -37,9 +37,9 @@ class Project_model extends CI_Model {
 	}	
 		
 	function insert_project() {
-		$project_name = $this->input->post('project_name');
-		$project_code = $this->input->post('project_code');
-		$project_notes = $this->input->post('project_notes');
+		$project_name = $this->input->post('project-name');
+		$project_code = $this->input->post('project-code');
+		$project_notes = $this->input->post('project-notes');
 		$client_id = $this->input->post('client_ids');
 		$project_billable = $this->input->post('project_billable');
 		$project_invoice_by = $this->input->post('project_invoice_by');
