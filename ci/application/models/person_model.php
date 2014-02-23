@@ -92,7 +92,20 @@ class Person_model extends CI_Model {
 		$person_hourly_rate = $this->input->post('person-hourly-rate');
 		$person_perms = $this->input->post('person-perms');
 		$person_type = $this->input->post('person-type');
+		
+		//first, update ion auth with the user's name and all of their info. 
+		$username = "Please set username";
+		$password = "Please set password";
+		$email = $person_email;
+		$additional_data = array(
+			'first_name' => $person_first_name,
+			'last_name' => $person_last_name,
+		);
+		$this->ion_auth->register($username, $password, $email, $additional_data);
+		$id = $this->db->insert_id();		
+		//use the insert id to put the user into the person's table.
 		$data = array(
+			'person_id' => $id,
 			'person_first_name'=>$person_first_name,
 			'person_last_name'=>$person_last_name,
 			'person_email'=>$person_email,
@@ -103,8 +116,7 @@ class Person_model extends CI_Model {
 		);
 		error_log(print_r($data, true));
 		$this->db->insert('person', $data);
-		$id = $this->db->insert_id();		
-		error_log("ID IS " . $id);
+		//add this person to the ion_auth db so we can use that system.
 		$create_projects = "";
 		$view_rates = "";
 		$create_invoices = "";
