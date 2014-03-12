@@ -12,7 +12,14 @@
     //return false;
     
 //}
-/*function showP(elem){
+/*
+function FillProjects(f) {
+    f.projectidselectname.value = f.projectidselectname.value + f.projectid[f.projectid.selectedIndex].text + ",";
+    f.projectidselect.value = f.projectidselect.value + f.projectid.value + ",";    
+}
+
+
+function showP(elem){
    if(elem.value == "Regular User"){
       document.getElementById('perm_ru').style.display = "block";
       document.getElementById('perm_pm').style.display = "none";
@@ -29,38 +36,45 @@
 }
 */
 $(document).ready( function() {
-$('#person-perms').val($('#dropdown_value').val());
+	$('#person-perms').val($('#dropdown_value').val());
 	if ($('#person-perms').val() == "Regular User") {
-      $('#perm_ru').show();
-      $('#perm_pm').hide();
-      $('#perm_a').hide();
-   } else if ($('#person-perms').val() == "Project Manager") {
-      $('#perm_ru').hide();
-      $('#perm_pm').show();
-      $('#perm_a').hide();
-   } else if ($('#person-perms').val() == "Administrator") {  
-   	 $('#perm_ru').hide();
-      $('#perm_pm').hide();
-      $('#perm_a').show();
-	}
-$('#person-perms').change( function() {
-	$('#dropdown_value').val($('#person-perms').val());
-	if ($('#person-perms').val() == "Regular User") {
-      $('#perm_ru').show();
-      $('#perm_pm').hide();
-      $('#perm_a').hide();
-   } else if ($('#person-perms').val() == "Project Manager") {
-      $('#perm_ru').hide();
-      $('#perm_pm').show();
-      $('#perm_a').hide();
-   } else if ($('#person-perms').val() == "Administrator") {  
-   	 $('#perm_ru').hide();
-      $('#perm_pm').hide();
-      $('#perm_a').show();
-	}
+		$('#perm_ru').show();
+		$('#perm_pm').hide();
+		$('#perm_a').hide();
+	 } else if ($('#person-perms').val() == "Project Manager") {
+	 	$('#perm_ru').hide();
+	 	$('#perm_pm').show();
+	 	$('#perm_a').hide();
+	 } else if ($('#person-perms').val() == "Administrator") {  
+	   	$('#perm_ru').hide()
+	   	$('#perm_pm').hide();
+	   	$('#perm_a').show();
+	 }
+	$('#person-perms').change( function() {
+		$('#dropdown_value').val($('#person-perms').val());
+			if ($('#person-perms').val() == "Regular User") {
+				$('#perm_ru').show();
+				$('#perm_pm').hide();
+				$('#perm_a').hide();
+			} else if ($('#person-perms').val() == "Project Manager") {
+				$('#perm_ru').hide();
+				$('#perm_pm').show();
+				$('#perm_a').hide();
+			} else if ($('#person-perms').val() == "Administrator") {  
+				$('#perm_ru').hide();
+				$('#perm_pm').hide();
+				$('#perm_a').show();
+			}
+	});
+//3/12 FIRST, UPDATE THIS SO THAT IT WORKS PROPERLY. 
+//SECOND, UPDATE THE RESEND INVITATION FEATURE AND MAKE SURE IT IS WORKING PROPERLY
+//THIRD WALK THROUGH TO MAKE SURE ALL VALUES ARE WORKING IN JS
+//TIMESHEETS
+	$('#assign_projects').click( function() {
+		$("#projectidselectname").val($("#projectid").val() + "," + $("#projectidselectname").val());
+	});
+});
 
-});
-});
 
 </script>
 			<? $person_id = $this->uri->segment(3);?>
@@ -132,14 +146,13 @@ $('#person-perms').change( function() {
 							'Administrator' => 'Administrator',
 						);
 							
-						$js = 'id="person-perms" onChange="showP(this)"';
 						echo form_dropdown('person-perms', $person_perms, '', 'id="person-perms"', set_value('person-perms')); ?>
 						<input type="text" id="dropdown_value" name="dropdown-value" value="<?php echo set_value('dropdown-value', 'default'); ?>">
 						<p id="perm_ru" style="display: none;">This person can track time and expenses.</p>
 						<div id="perm_pm" style="display: none;">
-						<input type="checkbox" name="create_projects" id="create_projects" value="<?php echo set_value('create_projects');?>">Create projects for all clients<br>
-						<input type="checkbox" name="view_rates" id="view_notes" value="<?php echo set_value('view_notes');?>">View rates<br>
-						<input type="checkbox" name="create_invoices" id="create_invoices" value="<?php echo set_value('create_invoices');?>">Create invoices for projects they manage<br>
+						<?php echo form_checkbox('create_projects', 'on', set_checkbox('create_projects', "on")); ?>Create projects for all clients<br>
+						<?php echo form_checkbox('view_rates', 'on', set_checkbox('view_rates', "on")); ?>View rates<br>
+						<?php echo form_checkbox('create_invoices', 'on', set_checkbox('create_invoices', "on")); ?>Create invoices for projects they manage<br>						
 						</div>
 						<p id="perm_a" style="display: none;">This person can see all projects, invoices and reports in Time Tracker.</p>
 					</li>
@@ -173,12 +186,10 @@ $('#person-perms').change( function() {
 		<form action="person-basic-info.php" method="post" style="margin-bottom:50px;" enctype="multipart/form-data">
 		<label for="client-zip" class="client-details-label"></label>
 		<input id="projectidselectname" name="projectidselectname" class="projectidselectname" type="text" tabindex="8" value="<?php
-		//output all of this users current projects in name form.
-		//list($projectForPerson) = Project_Person::getProjectsForPerson($person->getValue("person_id"));
 		foreach ($person_projects as $projects) {
-				 echo $projects->project_name . ",";
-		} 
-		?>">
+				 echo $projects->project_id . ",";
+		}
+		echo set_value('projectidselectname'); ?>">
 		
 		
 		<input id="projectidselect" name="projectidselect" class="projectidselect" type="text" tabindex="8" value="<?php
@@ -189,7 +200,7 @@ $('#person-perms').change( function() {
 		foreach ($person_projects as $projects) {
 				 echo $projects->project_id . ",";
 		} ?>">
-		<button name="Assign New Projects" onclick="FillProjects(this.form); return false;" >Assign New Projects</button>
+		<button name="Assign New Projects" id="assign_projects" >Assign New Projects</button>
 		<br />
 	
 	
@@ -237,7 +248,7 @@ $('#person-perms').change( function() {
 	//$password_is_set = Person::isPasswordSet($person->getValue("person_email"));
 	//if (!$password_is_set) {
 	?>
-			<h1 class="page-title">Resend <?php //echo $person->getValueEncoded("person_first_name")?>'s Invitation</h1>
+			<h1 class="page-title">Resend <?php echo $person[0]->person_first_name?>'s Invitation</h1>
 			<ul class="details-list client-details-submit">
 					<li class="client-details-item submit-client">
 						<label for="client-add-btn" class="client-details-label"></label>
@@ -270,7 +281,7 @@ $('#person-perms').change( function() {
 </form>
 <script type="text/javascript">
 //yeah, OK, so my javascript is rusty.
-showP(document.getElementById('person-perm-id'));
+//showP(document.getElementById('person-perm-id'));
 </script>
 <footer id="site-footer" class="site-footer">
 

@@ -47,7 +47,7 @@ class Person_model extends CI_Model {
 		return $rows;
 	}
 	
-		function display_person_types() {
+	function display_person_types() {
 		$rows = array();
 		$query = $this->db->distinct('person_type');
 		$query = $this->db->from('person');	
@@ -93,70 +93,96 @@ class Person_model extends CI_Model {
 		$person_perms = $this->input->post('person-perms');
 		$person_type = $this->input->post('person-type');
 		
-		//first, update ion auth with the user's name and all of their info. 
-		$username = "Please set username";
-		$password = "Please set password";
+		//first, update ion auth with the user's email address as their login. 
+		//there are only three arguments required by ion auth, so we are using email for two of them.
+		$username = $person_email;
+		//password is set to default value when the user is first set up.
+		//set up the user's permission level here to be consistent with ion auth.
+		//in the future, we should update the application
+		//so that it's not using the string from the UI, but rather a number 1=admin, 2=pm, 3=regular user
+		if ($person_perms == "Administrator") {
+			$ion_auth_level = "1";
+		} elseif ($person_perms = "Project Manager") {
+			$ion_auth_level = "3";
+		} else {
+			$ion_auth_level = "2";
+		}
+		$password = "12345";
 		$email = $person_email;
 		$additional_data = array(
 			'first_name' => $person_first_name,
 			'last_name' => $person_last_name,
 		);
-		$this->ion_auth->register($username, $password, $email, $additional_data);
-		$id = $this->db->insert_id();		
-		//use the insert id to put the user into the person's table.
-		$data = array(
-			'person_id' => $id,
-			'person_first_name'=>$person_first_name,
-			'person_last_name'=>$person_last_name,
-			'person_email'=>$person_email,
-			'person_department'=>$person_department,
-			'person_hourly_rate'=>$person_hourly_rate,
-			'person_perm_id'=>$person_perms,
-			'person_type'=>$person_type,
-		);
-		error_log(print_r($data, true));
-		$this->db->insert('person', $data);
-		//add this person to the ion_auth db so we can use that system.
-		$create_projects = "";
-		$view_rates = "";
-		$create_invoices = "";
-		if ($person_perms == "Administrator") {
-			$create_projects = "1";
-			$view_rates = "1";
-			$create_invoices = "1";
-		} else if ($person_perms == "Regular User") {
+		//update the auth table with the user's email, but blank password. they will set it later when they receive the invitation email.
+		$id = "";
+
+		if (!$this->ion_auth->register($username, $password, $email, $additional_data, array($ion_auth_level)) == 0) {
+			//it appears that ion_auth updates the user_groups table last, so last_insert id is the ID from that table, not the user_id,
+			//so we can't use it here. Instead, get the id out of the db based on the user's email, since that is a unique value.
+			//$id = $this->db->insert_id();	
+			$query = $this->db->select('id');
+			$query = $this->db->from('users');
+			$query = $this->db->where('email =', $email);
+			$q = $this->db->get();	
+			$dbdata = array_shift($q->result_array());
+			$id = $dbdata['id'];
+			error_log("here is id " . $id);	
+			error_log("successfully inserted " . $person_email);
+			error_log($email);
+			error_log($username);
+			error_log(print_r($additional_data,true));
+			//use the insert id to put the user into the person's table.
+			$data = array(
+				'person_id' => $id,
+				'person_first_name'=>$person_first_name,
+				'person_last_name'=>$person_last_name,
+				'person_email'=>$person_email,
+				'person_department'=>$person_department,
+				'person_hourly_rate'=>$person_hourly_rate,
+				'person_perm_id'=>$person_perms,
+				'person_type'=>$person_type,
+			);
+			error_log(print_r($data, true));
+			error_log("create invoices is " . $this->input->post('create_invoices'));
+			$this->db->insert('person', $data);
 			$create_projects = "0";
 			$view_rates = "0";
 			$create_invoices = "0";
-		} else if ($person_perms == "Project Manager") {
-			$create_projects = 0;
-			if ($this->input->post('create_projects') == "on") {
-				$create_projects = 1;
-			}	
-			$view_rates = 0;
-			if ($this->input->post('view_rates') == "on") {
-				$view_rates = 1;
+			if ($person_perms == "Administrator") {
+				$create_projects = "1";
+				$view_rates = "1";
+				$create_invoices = "1";
+			} else if ($person_perms == "Regular User") {
+				$create_projects = "0";
+				$view_rates = "0";
+				$create_invoices = "0";
+			} else if ($person_perms == "Project Manager") {
+				if ($this->input->post('create_projects') == "on") {
+					$create_projects = 1;
+				}	
+				if ($this->input->post('view_rates') == "on") {
+					$view_rates = 1;
+				}
+				if ($this->input->post('create_invoices') == "on") {
+					$create_invoices = 1;
+				}
 			}
-			$create_invoices = 0;
-			if ($this->input->post('create_invoices') == "on") {
-				$create_invoices = 1;
-			}
+			//update the permissions table with data submitted in the form.
+			$data = array(
+				'person_id' =>$id,
+				'person_perm_id' =>$person_perms,
+				'create_projects' => $create_projects,
+				'view_rates' => $view_rates,
+				'create_invoices' => $create_invoices
+			);
+			$this->db->insert('person_permissions', $data);
+			error_log(print_r($data, true));
 		}
-		$data = array(
-			'person_id' =>$id,
-			'person_perm_id' =>$person_perms,
-			'create_projects' => $create_projects,
-			'view_rates' => $view_rates,
-			'create_invoices' => $create_invoices
-		);
-		$this->db->insert('person_permissions', $data);
-		error_log(print_r($data, true));
-		
 	}
 	
 	function display_projects_for_person($person_id) {
 		//$sql = "SELECT * FROM " . TBL_PROJECT . " WHERE project_id IN (SELECT project_id FROM " . TBL_PROJECT_PERSON . " WHERE person_id = :person_id)";
-
+		error_log("Person id is " . $person_id);
 		$rows = array();
 		$query = $this->db->select('project.*');
 		$query = $this->db->from('project');
@@ -171,6 +197,19 @@ class Person_model extends CI_Model {
 
 	}
 	
+	function set_user_password() {
+		$id = $this->input->post('login');
+		$old = "12345";
+		$new = $this->input->post('password1');
+		error_log("got here " . $new . " and " . $id . " and " . $old);
+		if ($this->ion_auth->change_password($id, $old, $new) == 0) {
+			return 0;
+		} else {
+			return 1;
+		}
+		//update the password here
+	}
+	
 
 	function update_person($person_id) {
 		$person_first_name = $this->input->post('person-first-name');
@@ -180,53 +219,92 @@ class Person_model extends CI_Model {
 		$person_hourly_rate = $this->input->post('person-hourly-rate');
 		$person_perms = $this->input->post('person-perms');
 		$person_type = $this->input->post('person-type');
-		$data = array(
-			'person_first_name'=>$person_first_name,
-			'person_last_name'=>$person_last_name,
-			'person_email'=>$person_email,
-			'person_department'=>$person_department,
-			'person_hourly_rate'=>$person_hourly_rate,
-			'person_perm_id'=>$person_perms,
-			'person_type'=>$person_type,
-		);
-		error_log(print_r($data, true));
-		$this->db->where('person_id', $person_id);
-		$this->db->update('person', $data);
-		$create_projects = "";
-		$view_rates = "";
-		$create_invoices = "";
-		if ($person_perms == "Administrator") {
-			$create_projects = "1";
-			$view_rates = "1";
-			$create_invoices = "1";
-		} else if ($person_perms == "Regular User") {
+		$person_add_btn = $this->input->post('person-add-btn');
+		if ($person_add_btn == "Save Person") {
+			//update the person's information
+			$data = array(
+				'person_first_name'=>$person_first_name,
+				'person_last_name'=>$person_last_name,
+				'person_email'=>$person_email,
+				'person_department'=>$person_department,
+				'person_hourly_rate'=>$person_hourly_rate,
+				'person_perm_id'=>$person_perms,
+				'person_type'=>$person_type,
+			);
+			$this->db->where('person_id', $person_id);
+			$this->db->update('person', $data);
 			$create_projects = "0";
 			$view_rates = "0";
 			$create_invoices = "0";
-		} else if ($person_perms == "Project Manager") {
-			$create_projects = 0;
-			if ($this->input->post('create_projects') == "on") {
-				$create_projects = 1;
+			if ($person_perms == "Administrator") {
+				$create_projects = "1";
+				$view_rates = "1";
+				$create_invoices = "1";
+				$ion_auth_level = "1";
+			} else if ($person_perms == "Regular User") {
+				$create_projects = "0";
+				$view_rates = "0";
+				$create_invoices = "0";
+				$ion_auth_level = "2";
+			} else if ($person_perms == "Project Manager") {
+				if ($this->input->post('create_projects') == "on") {
+					$create_projects = 1;
+				}	
+				if ($this->input->post('view_rates') == "on") {
+					$view_rates = 1;
+				}
+				if ($this->input->post('create_invoices') == "on") {
+					$create_invoices = 1;
+				}
+				$ion_auth_level = "3";
 			}	
-			$view_rates = 0;
-			if ($this->input->post('view_rates') == "on") {
-				$view_rates = 1;
-			}
-			$create_invoices = 0;
-			if ($this->input->post('create_invoices') == "on") {
-				$create_invoices = 1;
+			//update the person's permission level
+			$data = array(
+				'person_id' =>$person_id,
+				'person_perm_id' =>$person_perms,
+				'create_projects' => $create_projects,
+				'view_rates' => $view_rates,
+				'create_invoices' => $create_invoices
+			);
+			$this->db->where('person_id', $person_id);
+			$this->db->update('person_permissions', $data);		
+			error_log(print_r($data, true));
+			//and update ion_auth (to change their user group)
+			$this->ion_auth->remove_from_group(NULL, $person_id);
+			$this->ion_auth->add_to_group($ion_auth_level, $person_id );
+		} elseif ($person_add_btn == "Save Projects") {
+			//update the user's projects based on the values in the input field
+			$projects = explode(",", $this->input->post("projectidselectname"));
+			$projects = array_unique($projects);
+			//delete all assigned project records first, then add the ones the administrator assigned.
+			$this->db->delete('project_person', array('person_id' => $person_id)); 
+			
+			foreach ($projects as $project) {
+				//get total hours out of the project table
+				$query = $this->db->select('project_budget_total_hours');
+				$query = $this->db->where('project_id', $project);
+				$q = $this->db->get('project');
+				$dbdata = array_shift($q->result_array());
+				$project_budget_total_hours = $dbdata['project_budget_total_hours'];
+				//get the assigned by value out of the person table
+				$query = $this->db->select('person_email');
+				$query = $this->db->from('person');
+				$query = $this->db->where('person_id =', $this->ion_auth->get_user_id());
+				$q = $this->db->get();	
+				$dbdata = array_shift($q->result_array());
+				$project_assigned_by = $dbdata['person_email'];
+				if ($project) {
+					$data = array( 
+						'project_id' =>$project,
+						'person_id' =>$person_id,
+						'project_assigned_by' => $project_assigned_by,
+						'total_budget_hours' => $project_budget_total_hours,
+					);
+				print_r($data);
+				$this->db->insert('project_person', $data);
+				}
 			}
 		}
-		$data = array(
-			'person_id' =>$person_id,
-			'person_perm_id' =>$person_perms,
-			'create_projects' => $create_projects,
-			'view_rates' => $view_rates,
-			'create_invoices' => $create_invoices
-		);
-		$this->db->where('person_id', $person_id);
-		$this->db->update('person_permissions', $data);		error_log(print_r($data, true));
-
 	}
 	
 	function delete_client($client_id) {

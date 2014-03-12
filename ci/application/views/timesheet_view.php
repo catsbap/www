@@ -69,7 +69,17 @@ function displayTimesheet($timesheet_aggregate) {
 	Timesheet::deleteTimesheet(390);
 */
 	?>
-	
+	<?
+	//this is only a temporary way to get timesheets working in codeigniter.
+	//currently, the old login process is in place and is being used to determine what person is trying to submit the timesheet.
+	//eventually, ion_auth (CI) will take this over and then this will get the login information from there.
+	if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"] != "") {
+		$person = Person::getByEmailAddress($_SESSION["logged_in"]);
+	} else {
+		error_log("Something is wrong here...this person is not logged in and you shouldn't be seeing this, timesheet.php.");
+		exit();
+	}
+?>
 	<div id="page-content" class="page-content">
 		<header class="page-header">
 			<h1 class="page-title"><?php echo date("F j, Y");?></h1>

@@ -130,7 +130,7 @@ $('#person-perms').change( function() {
 
 						
 		   				?><br/>
-		   				<input type="radio" name="person-type" value="employee" id="person-type" <?php echo set_radio('person-type','employee'); ?> /> Employee
+		   				<input type="radio" name="person-type" value="employee" id="person-type" <?php echo set_radio('person-type','employee'); ?> checked/> Employee
 		   				<input type="radio" name="person-type" value="contractor" id="person-type" <?php echo set_radio('person-type','contractor'); ?> /> Contractor
 		   				<br/>
 		   				
@@ -181,9 +181,10 @@ $('#person-perms').change( function() {
 						<input type="text" id="dropdown_value" name="dropdown-value" value="<?php echo set_value('dropdown-value', 'default'); ?>">
 						<p id="perm_ru" style="display: none;">This person can track time and expenses.</p>
 						<div id="perm_pm" style="display: none;">
-						<input type="checkbox" name="create_projects" id="create_projects" value="<?php echo set_value('create_projects');?>">Create projects for all clients<br>
-						<input type="checkbox" name="view_rates" id="view_notes" value="<?php echo set_value('view_notes');?>">View rates<br>
-						<input type="checkbox" name="create_invoices" id="create_invoices" value="<?php echo set_value('create_invoices');?>">Create invoices for projects they manage<br>
+						<!--input type="checkbox" name="create_projects" class="create_projects" >Create projects for all clients<br-->
+						<?php echo form_checkbox('create_projects', 'on', set_checkbox('create_projects', "on")); ?>Create projects for all clients<br>
+						<?php echo form_checkbox('view_rates', 'on', set_checkbox('view_rates', "on")); ?>View rates<br>
+						<?php echo form_checkbox('create_invoices', 'on', set_checkbox('create_invoices', "on")); ?>Create invoices for projects they manage<br>
 						</div>
 						<p id="perm_a" style="display: none;">This person can see all projects, invoices and reports in Time Tracker.</p>
 					</li>

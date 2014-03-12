@@ -43,7 +43,7 @@ class Timesheet_controller extends CI_Controller {
 		//currently, the old login process is in place and is being used to determine what person is trying to submit the timesheet.
 		//eventually, ion_auth (CI) will take this over and then this will get the login information from there.
 		if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"] != "") {
-			$data['person'] = = $this->Person_model->display_tasks($_SESSION["logged_in"]);
+			$data['person'] = = $this->Person_model->display_people_by_id($_SESSION["logged_in"]);
 		} else {
 			error_log("Something is wrong here...this person is not logged in and you shouldn't be seeing this, timesheet.php.");
 			exit();
