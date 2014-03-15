@@ -9,7 +9,6 @@ class Person_controller extends CI_Controller {
 		$this->base=$this->config->item('base_url');
 		$this->css=$this->config->item('css');
 		$this->load->helper('form');	
-		$this->load->library('form_validation');
         $this->load->library('javascript');
 		$this->data['library_src'] = $this->jquery->script();
 		$this->data['script_foot'] = $this->jquery->_compile();
@@ -86,7 +85,7 @@ class Person_controller extends CI_Controller {
 				);
 				
 				//send the user an email with a link inviting them to update their password.
-				//the password is originally set to "0" when the person is invited to register.
+				//the password is originally set to "12345" when the person is invited to register.
 				$this->email->initialize($config);
 				$this->load->library('email');
 				$this->email->set_newline("\r\n");
@@ -116,25 +115,9 @@ class Person_controller extends CI_Controller {
 	}
 	
 	function edit_person() {
+		$this->load->library('form_validation');
 		$person_id = $this->uri->segment(3);
-		$data['person'] = $this->Person_model->display_people_by_id($person_id);
-		$data['person_projects'] = $this->Person_model->display_projects_for_person($person_id);
-		$data['all_projects'] = $this->Person_model->display_projects();
-		$this->load->view('header_view');
-		$this->load->view('person_edit_view', $data);
-	}
-	
-
-	function update_person() {
-		//this is the form validation
-		$data = $this->data;
-		$person_id = $this->uri->segment(3);
-
-		 $data['success_email'] = "";
-		 $data['person'] = $this->Person_model->display_people_by_id($person_id);
-		 $data['person_projects'] = $this->Person_model->display_projects_for_person($person_id);
-		 $data['all_projects'] = $this->Person_model->display_projects();
-		 $this->form_validation->set_rules('person-first-name', 'person-first-name', 'required');
+		$this->form_validation->set_rules('person-first-name', 'person-first-name', 'required');
 		 $this->form_validation->set_rules('person-last-name', 'person-last-name', 'required');
 		 $this->form_validation->set_rules('person-email', 'person-email', 'trim|required|valid_email');
 		 $this->form_validation->set_rules('person-department', 'person-department');
@@ -146,6 +129,64 @@ class Person_controller extends CI_Controller {
 		 $this->form_validation->set_rules('view_notes', 'view_notes');
 		 $this->form_validation->set_rules('create_invoices', 'create_invoices');
 		 $this->form_validation->set_rules('projectidselectname', 'projectidselectname');
+		$data=$this->data;
+		$data['person'] = $this->Person_model->display_people_by_id($person_id);
+		$data['person_permissions']= $this->Person_model->display_person_perms_by_id($person_id);
+		$data['person_projects'] = $this->Person_model->display_projects_for_person($person_id);
+		$data['all_projects'] = $this->Person_model->display_projects();
+		//another bug fix because the admin login and ion_auth does not jibe
+		if ($person_id == 198) {
+			$person_id = 1;
+		}
+		$id = $person_id;
+		$verifyPasswordChanged = "12345";
+		//$this->ion_auth->verify($id, $verifyPasswordChanged);
+		if ($this->ion_auth->hash_password_db($id, $verifyPasswordChanged) !== TRUE)
+		{
+			$data["passwordChanged"] = 0;
+		} else {
+			$data["passwordChanged"] = 1;
+		}
+		$this->load->view('header_view');
+		$this->load->view('person_edit_view', $data);
+	}
+
+	function update_person() {
+		//this is the form validation
+		$this->load->library('form_validation');
+		$data = $this->data;
+		$person_id = $this->uri->segment(3);
+
+		 $data['success_email'] = "";
+		 $data['person'] = $this->Person_model->display_people_by_id($person_id);
+		 $data['person_projects'] = $this->Person_model->display_projects_for_person($person_id);
+		 $data['all_projects'] = $this->Person_model->display_projects();
+		 $data['person_permissions']= $this->Person_model->display_person_perms_by_id($person_id);
+		 $this->form_validation->set_rules('person-first-name', 'person-first-name', 'required');
+		 $this->form_validation->set_rules('person-last-name', 'person-last-name', 'required');
+		 $this->form_validation->set_rules('person-email', 'person-email', 'trim|required|valid_email');
+		 $this->form_validation->set_rules('person-department', 'person-department');
+		 $this->form_validation->set_rules('person-hourly-rate', 'person-hourly-rate');
+		 $this->form_validation->set_rules('person-perms', 'person-perms');
+		 $this->form_validation->set_rules('person-type', 'person-type','');
+		 $this->form_validation->set_rules('dropdown-value', 'dropdown-value');
+		 $this->form_validation->set_rules('create_projects', 'create_projects');
+		 $this->form_validation->set_rules('view_notes', 'view_notes');
+		 $this->form_validation->set_rules('create_invoices', 'create_invoices');
+		 $this->form_validation->set_rules('projectidselectname', 'projectidselectname');
+		 //another bug fix because the admin login and ion_auth does not jibe
+		if ($person_id == 198) {
+			$person_id = 1;
+		}
+		$id = $person_id;
+		$verifyPasswordChanged = "12345";
+		//$this->ion_auth->verify($id, $verifyPasswordChanged);
+		if ($this->ion_auth->hash_password_db($id, $verifyPasswordChanged) !== TRUE)
+		{
+			$data["passwordChanged"] = 0;
+		} else {
+			$data["passwordChanged"] = 1;
+		}
 
 
 		//image upload, not complete.

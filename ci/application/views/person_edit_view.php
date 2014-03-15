@@ -66,8 +66,8 @@ $(document).ready( function() {
 				$('#perm_a').show();
 			}
 	});
-//3/12 FIRST, UPDATE THIS SO THAT IT WORKS PROPERLY. 
-//SECOND, UPDATE THE RESEND INVITATION FEATURE AND MAKE SURE IT IS WORKING PROPERLY
+//3/12 FIRST, UPDATE THIS SO THAT the UI features WORK PROPERLY. 
+//3/14 SECOND, UPDATE THE RESEND INVITATION FEATURE AND MAKE SURE IT IS WORKING PROPERLY
 //THIRD WALK THROUGH TO MAKE SURE ALL VALUES ARE WORKING IN JS
 //TIMESHEETS
 	$('#assign_projects').click( function() {
@@ -105,14 +105,12 @@ $(document).ready( function() {
         	<fieldset class="client-details-entry">
 				<ul class="details-list client-details-list">
 		   			<li class="client-details-item name">
+		   						   			<?php echo validation_errors(); ?>
+
 		   				This person is a:
-		   				<?php 
-		   				//$row = Person::getEnumValues("person_type");																					  						$enumList = explode(",", str_replace("'", "", substr($row['COLUMN_TYPE'], 5, (strlen($row['COLUMN_TYPE'])-6))));
-			   			//foreach ($person_types as $type) {	?>
-			   				<!--input type="radio" name="person-type" value="<?php //echo $type->person_type?>" <?php //if ($type->person_type == "Employee") echo "checked";?>-->   <?php //echo $type->person_type ?>
 		   				<br/>
-		   				<input type="radio" name="person-type" value="employee" id="person-type" <?php echo set_radio('person-type','employee'); ?> /> Employee
-		   				<input type="radio" name="person-type" value="contractor" id="person-type" <?php echo set_radio('person-type','contractor'); ?> /> Contractor
+		   				<input type="radio" name="person-type" value="Employee" <?php echo set_radio('person-type','Employee', $person[0]->person_type == "Employee"); ?>/> Employee
+		   				<input type="radio" name="person-type" value="Contractor" <?php echo set_radio('person-type','Contractor', $person[0]->person_type == "Contractor"); ?>/> Contractor
 		   				<br/>
 		   				
 		   				
@@ -146,18 +144,20 @@ $(document).ready( function() {
 							'Administrator' => 'Administrator',
 						);
 							
-						echo form_dropdown('person-perms', $person_perms, '', 'id="person-perms"', set_value('person-perms')); ?>
-						<input type="text" id="dropdown_value" name="dropdown-value" value="<?php echo set_value('dropdown-value', 'default'); ?>">
+						//echo form_dropdown('person-perms', $person_perms, set_value('person-perms', $person[0]->person_perm_id)); 
+						echo form_dropdown('person-perms', $person_perms, set_value('person-perms', $person[0]->person_perm_id), 'id="person-perms"'); ?>
+						<input type="text" id="dropdown_value" name="dropdown-value" value="<?php echo set_value('dropdown-value', $person[0]->person_perm_id); ?>">
 						<p id="perm_ru" style="display: none;">This person can track time and expenses.</p>
 						<div id="perm_pm" style="display: none;">
-						<?php echo form_checkbox('create_projects', 'on', set_checkbox('create_projects', "on")); ?>Create projects for all clients<br>
-						<?php echo form_checkbox('view_rates', 'on', set_checkbox('view_rates', "on")); ?>View rates<br>
-						<?php echo form_checkbox('create_invoices', 'on', set_checkbox('create_invoices', "on")); ?>Create invoices for projects they manage<br>						
+						<?php echo form_checkbox('create_projects', 'on', set_checkbox('create_projects', 'on', $person_permissions[0]->create_projects == 1)); ?>Create projects for all clients<br>
+						<?php echo form_checkbox('view_rates', 'on', set_checkbox('view_rates', 'on', $person_permissions[0]->view_rates == 1)); ?>View rates<br>
+						<?php echo form_checkbox('create_invoices', 'on', set_checkbox('create_invoices', 'on', $person_permissions[0]->create_invoices == 1)); ?>Create invoices for projects they manage<br>						
 						</div>
 						<p id="perm_a" style="display: none;">This person can see all projects, invoices and reports in Time Tracker.</p>
 					</li>
 				</ul>
-
+        	</fieldset>
+    	</section>
 			
 				<fieldset class="client-details-entry">
 				<ul class="details-list client-details-submit">
@@ -246,7 +246,7 @@ $(document).ready( function() {
 	//if the password is not set up, resend the invitation. Otherwise, change the password.
 	//use the email here, since it is unique.
 	//$password_is_set = Person::isPasswordSet($person->getValue("person_email"));
-	//if (!$password_is_set) {
+	if (!$passwordChanged) {
 	?>
 			<h1 class="page-title">Resend <?php echo $person[0]->person_first_name?>'s Invitation</h1>
 			<ul class="details-list client-details-submit">
@@ -256,11 +256,13 @@ $(document).ready( function() {
 						 or <a class="" href="people.php" tabindex="11">Cancel</a>
 					</li>
 				</ul>
-	<?php //} else {?>
+	<?php } else {?>
 			<h1 class="page-title">Change Your Password</h1>
 	<input type="hidden" name="emailAddress" value="<?php //echo $person->getValue("person_email")?>"/>
 	<div style="width:30em;">
-    <label for="password1" class="required">Choose a password</label>
+	<label for="passwordOld" class="required">Old password</label>
+    <input type="password" name="passwordOld" id="passwordOld" value="" /><br/>
+    <label for="password1" class="required">New password</label>
     <input type="password" name="password1" id="password1" value="" /><br/>
     <label for="password2" class="required">Retype password</label>
     <input type="password" name="password2" id="password2" value="" /><br/>
@@ -274,7 +276,7 @@ $(document).ready( function() {
 						 or <a class="" href="people.php" tabindex="11">Cancel</a>
 					</li>
 				</ul>
-	<?php //} ?>	
+	<?php } ?>	
 	</header>
 	<div id='cow'>
 

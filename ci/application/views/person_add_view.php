@@ -3,6 +3,7 @@
 <?php echo $library_src;?>
 <script type="text/javascript" src="/time_tracker/ui/libraries/jquery.form.js"></script>
 <script type="text/javascript">
+//old, pre-jquery javascript
 //function FillBilling(f) {
     //window.alert(f);
     

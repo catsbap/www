@@ -47,6 +47,19 @@ class Person_model extends CI_Model {
 		return $rows;
 	}
 	
+	function display_person_perms_by_id($person_id) {
+		$rows = array();
+		$query = $this->db->select('*');
+		$query = $this->db->from('person_permissions');	
+		$query = $this->db->where('person_id =', $person_id);
+		$query = $this->db->get();	
+		foreach($query->result() as $row)
+		{    
+        $rows[] = $row; //add the fetched result to the result array;
+		}
+		return $rows;
+	}
+	
 	function display_person_types() {
 		$rows = array();
 		$query = $this->db->distinct('person_type');
@@ -113,7 +126,7 @@ class Person_model extends CI_Model {
 			'first_name' => $person_first_name,
 			'last_name' => $person_last_name,
 		);
-		//update the auth table with the user's email, but blank password. they will set it later when they receive the invitation email.
+		//insert record into the auth table with the user's email, but blank password. they will set it later when they receive the invitation email.
 		$id = "";
 
 		if (!$this->ion_auth->register($username, $password, $email, $additional_data, array($ion_auth_level)) == 0) {
@@ -126,11 +139,11 @@ class Person_model extends CI_Model {
 			$q = $this->db->get();	
 			$dbdata = array_shift($q->result_array());
 			$id = $dbdata['id'];
-			error_log("here is id " . $id);	
-			error_log("successfully inserted " . $person_email);
-			error_log($email);
-			error_log($username);
-			error_log(print_r($additional_data,true));
+			//error_log("here is id " . $id);	
+			//error_log("successfully inserted " . $person_email);
+			//error_log($email);
+			//error_log($username);
+			//error_log(print_r($additional_data,true));
 			//use the insert id to put the user into the person's table.
 			$data = array(
 				'person_id' => $id,
@@ -142,8 +155,8 @@ class Person_model extends CI_Model {
 				'person_perm_id'=>$person_perms,
 				'person_type'=>$person_type,
 			);
-			error_log(print_r($data, true));
-			error_log("create invoices is " . $this->input->post('create_invoices'));
+			//error_log(print_r($data, true));
+			//error_log("create invoices is " . $this->input->post('create_invoices'));
 			$this->db->insert('person', $data);
 			$create_projects = "0";
 			$view_rates = "0";
@@ -176,13 +189,13 @@ class Person_model extends CI_Model {
 				'create_invoices' => $create_invoices
 			);
 			$this->db->insert('person_permissions', $data);
-			error_log(print_r($data, true));
+			//error_log(print_r($data, true));
 		}
 	}
 	
 	function display_projects_for_person($person_id) {
 		//$sql = "SELECT * FROM " . TBL_PROJECT . " WHERE project_id IN (SELECT project_id FROM " . TBL_PROJECT_PERSON . " WHERE person_id = :person_id)";
-		error_log("Person id is " . $person_id);
+		//error_log("Person id is " . $person_id);
 		$rows = array();
 		$query = $this->db->select('project.*');
 		$query = $this->db->from('project');
@@ -201,7 +214,7 @@ class Person_model extends CI_Model {
 		$id = $this->input->post('login');
 		$old = "12345";
 		$new = $this->input->post('password1');
-		error_log("got here " . $new . " and " . $id . " and " . $old);
+		//error_log("got here " . $new . " and " . $id . " and " . $old);
 		if ($this->ion_auth->change_password($id, $old, $new) == 0) {
 			return 0;
 		} else {
@@ -236,6 +249,8 @@ class Person_model extends CI_Model {
 			$create_projects = "0";
 			$view_rates = "0";
 			$create_invoices = "0";
+			//initialize auth level to 2, regular user.
+			$ion_auth_level = "2";
 			if ($person_perms == "Administrator") {
 				$create_projects = "1";
 				$view_rates = "1";
@@ -268,10 +283,17 @@ class Person_model extends CI_Model {
 			);
 			$this->db->where('person_id', $person_id);
 			$this->db->update('person_permissions', $data);		
-			error_log(print_r($data, true));
+			//error_log(print_r($data, true));
 			//and update ion_auth (to change their user group)
-			$this->ion_auth->remove_from_group(NULL, $person_id);
-			$this->ion_auth->add_to_group($ion_auth_level, $person_id );
+			//this is a bug fix that takes care of ion_auth admin user id (1) being different from teddy administrator (198).
+			//this should not happen except during debugging.
+			if ($person_id == 198) {
+				$ion_auth_person_id = 1;
+			} else {
+				$ion_auth_person_id = $person_id;
+			}
+			$this->ion_auth->remove_from_group(NULL, $ion_auth_person_id);
+			$this->ion_auth->add_to_group($ion_auth_level, $ion_auth_person_id );
 		} elseif ($person_add_btn == "Save Projects") {
 			//update the user's projects based on the values in the input field
 			$projects = explode(",", $this->input->post("projectidselectname"));
@@ -293,6 +315,11 @@ class Person_model extends CI_Model {
 				$q = $this->db->get();	
 				$dbdata = array_shift($q->result_array());
 				$project_assigned_by = $dbdata['person_email'];
+				//this is a bug fix that takes care of ion_auth admin user id (1) being different from teddy administrator (198).
+				//this should not happen except during debugging.
+				if ($this->ion_auth->get_user_id() == 1) {
+					$project_assigned_by = "admin@admin.com";
+				}
 				if ($project) {
 					$data = array( 
 						'project_id' =>$project,
@@ -300,10 +327,59 @@ class Person_model extends CI_Model {
 						'project_assigned_by' => $project_assigned_by,
 						'total_budget_hours' => $project_budget_total_hours,
 					);
-				print_r($data);
-				$this->db->insert('project_person', $data);
+					//error_log(print_r($data),true);
+					$this->db->insert('project_person', $data);
 				}
 			}
+		} elseif ($person_add_btn == "Change Password") {
+			$query = $this->db->select('person_email');
+			$query = $this->db->from('person');
+			$query = $this->db->where('person_id =', $person_id);
+			$q = $this->db->get();	
+			$dbdata = array_shift($q->result_array());
+			$id = $dbdata['person_email'];			
+			//$old = "12345";
+			$old = $this->input->post('passwordOld');
+			$new = $this->input->post('password1');
+			//error_log("got here " . $new . " and " . $id . " and " . $old);
+			if ($this->ion_auth->change_password($id, $old, $new) == 0) {
+				return 0;
+			} else {
+				return 1;
+			}
+		} elseif ($person_add_btn == "Resend Invitation") {
+				$config = Array(
+				'protocol' => 'smtp',
+				'smtp_host' => 'ssl://smtp.googlemail.com',
+				'smtp_port' => 465,
+				'smtp_user' => 'testtrackmb@gmail.com',
+				'smtp_pass' => 'mediabarn',
+				'mailtype' => 'html',
+				'charset'   => 'iso-8859-1',
+				'starttls'  => true,
+				'validate' => false,
+				);
+				
+				//send the user an email with a link inviting them to update their password.
+				//the password is originally set to "12345" when the person is invited to register.
+				$this->email->initialize($config);
+				$this->load->library('email');
+				$this->email->set_newline("\r\n");
+
+				$this->email->from('testtrackmb@gmail.com', 'admin@timetracker.com');
+				//change this to use the email entered by the user.
+				$this->email->to('catsbap@gmail.com');
+				$this->email->subject('Email Test');
+				$key = urlencode($person_email);
+				$this->email->message('Click here to set up your Time Tracker account: ' . base_url()."index.php/reset_now_controller/index/" . $key);
+		
+				
+				if($this->email->send())	{
+		   			$data['success_email'] = "An email has been sent to this person with instructions for how to log in.";
+		   		} else{
+					show_error($this->email->print_debugger());
+				}		   
+
 		}
 	}
 	

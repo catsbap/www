@@ -127,7 +127,7 @@
 							'GU' => 'Guam',
 							'MP' => 'Northern Mariana Islands',
 							);
-							echo form_dropdown('client-state', $state_list, set_value('client-state'));
+							echo form_dropdown('client-state', $state_list, set_value('client-state', $client[0]->client_state));
 							?>
 
 						<label for="client-zip" class="client-details-label">Zip code:</label>
