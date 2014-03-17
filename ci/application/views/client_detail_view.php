@@ -5,7 +5,7 @@
 		<nav class="page-controls-nav">
 			<ul class="page-controls-list client">
 				<li class="page-controls-item link-btn"><a class="view-all-link" href="<?php echo "../edit_client/" . $client[0]->client_id ?>">Edit Client</a></li>
-				<li class="page-controls-item"><a class="view-all-link" href="clients.php">View All</a></li>
+				<li class="page-controls-item"><a class="view-all-link" href="../view_clients">View All</a></li>
 				<li class="page-controls-item"><a class="view-client-archive-link" href="client-archives.html">View Archives</a></li>
 			</ul>
 		</nav>
@@ -15,7 +15,7 @@
 			<img class="client-logo-img small" src="<?php echo "$this->base/uploads/" . $client[0]->client_logo_link ?>" title="Client/Company name logo" alt="Client/Company name logo" />
 		</figure>
 		<section class="client-detail l-col-80">
-		<?php print_r($client) ?>
+		<?php //print_r($client) ?>
 			<header class="client-details-header">
 				<h1 class="client-details-title"><?php echo $client[0]->client_name ?></h1>
 			</header>

@@ -51,6 +51,16 @@ class Client_model extends CI_Model {
 		return $query->result();
 	}
 	
+	function display_primary_contact($client_id) {
+		$query = $this->db->select('client.*');
+		$query = $this->db->from('client');
+		$query = $this->db->select('client_address.*');
+		$query = $this->db->join('client_address', 'client.client_id = client_address.client_id');
+		$query = $this->db->where('client.client_id =', $client_id);
+		$query = $this->db->get();	
+		return $query->result();
+	}
+	
 	function insert_client() {
 		$client_name = $this->input->post('client-name');
 		$client_phone = $this->input->post('client-phone');
@@ -122,9 +132,6 @@ class Client_model extends CI_Model {
 		$contact_name = $this->input->post('contact-name');
 		$client_city = $this->input->post('contact-title');
 		$contact_primary = $this->input->post('contact-primary');
-		if (!$contact_primary) {
-			$contact_primary = 0;
-		}
 		$contact_officePhone = $this->input->post('contact-officePhone'); 
 		$contact_mobilePhone = $this->input->post('contact-mobilePhone'); 
 		$contact_email = $this->input->post('contact-email');
@@ -157,8 +164,16 @@ class Client_model extends CI_Model {
 		//as active in the UI.
 		$this->db->where('client_id', $client_id);
 		$this->db->delete('contact');
+		//retrieve the number of contacts that came in from the UI.
 		$num_items = (count($contact_id));
 		for ($i=0; $i<$num_items; $i++) {
+		//handle setting up the radio buttons here, we need to handle blank checkboxes by putting them into an array. In the HTML, these checkboxes are displayed
+		//with their # ($i) and then sent through the post. Blank values are 0, existing values are 1.
+		if (!isset($contact_primary[$i])) {
+			$contact_primary[$i] = "0";
+		} else {
+			$contact_primary[$i] = "1";
+		}
 			$data = array(
 				'client_id' => $client_id,
 				'contact_id' => $contact_id[$i],
@@ -169,7 +184,7 @@ class Client_model extends CI_Model {
 				'contact_fax_number' => $contact_fax[$i]
 			);
 				$this->db->insert('contact', $data);
-				//error_log(print_r($data, true));
+				error_log(print_r($data, true));
 		}
 	}
 	

@@ -68,7 +68,7 @@ $(document).ready( function() {
 	});
 //3/12 FIRST, UPDATE THIS SO THAT the UI features WORK PROPERLY. 
 //3/14 SECOND, UPDATE THE RESEND INVITATION FEATURE AND MAKE SURE IT IS WORKING PROPERLY
-//THIRD WALK THROUGH TO MAKE SURE ALL VALUES ARE WORKING IN JS
+//3/15THIRD WALK THROUGH TO MAKE SURE ALL VALUES ARE WORKING IN JS
 //TIMESHEETS
 	$('#assign_projects').click( function() {
 		$("#projectidselectname").val($("#projectid").val() + "," + $("#projectidselectname").val());

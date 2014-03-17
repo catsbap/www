@@ -4,9 +4,9 @@
 		<h1 class="page-title">Edit Client Details</h1>
 		<nav class="page-controls-nav">
 			<ul class="page-controls-list client">
-				<li class="page-controls-item link-btn"><a class="add-client-link" href="client-add.php">+ Add Client</a></li>
+				<li class="page-controls-item link-btn"><a class="add-client-link" href="../display_client">+ Add Client</a></li>
 				<li class="page-controls-item"><a class="view-client-archive-link" href="client-archives.php">View Archives</a></li>
-				<li class="page-controls-item"><a class="view-all-link" href="clients.php">View All</a></li>
+				<li class="page-controls-item"><a class="view-all-link" href="../view_clients">View All</a></li>
 			</ul>
 		</nav>
 	</header>
@@ -16,7 +16,7 @@
 		
 		
 		<figure class="client-logo l-col-20">
-			<img class="client-logo-img small" id="image" src="/time_tracker/ci/uploads/default.jpg" title="Client/Company name logo" alt="Client/Company name logo" />
+			<img class="client-logo-img small" id="image" src="<?php echo "$this->base/uploads/" . $client[0]->client_logo_link ?>" title="Client/Company name logo" alt="Client/Company name logo" />
 			<fieldset class="client-logo-upload">
 				<legend class="client-logo-title">Upload Client Logo</legend>
 				<header class="client-logo-header">
@@ -131,7 +131,7 @@
 							?>
 
 						<label for="client-zip" class="client-details-label">Zip code:</label>
-						<input id="client-zip" name="client-zip" class="client-zip-input" type="text" tabindex="8" /><br />
+						<input id="client-zip" name="client-zip" class="client-zip-input" type="text" tabindex="8" value="<?php echo set_value('client-zip', $client[0]->client_zip); ?>"/><br />
 						<label for="client-country" class="client-details-label">Client's country:</label>
 						<select id="client-country" name="client-country" class="client-country-select" tabindex="9">
 							<option value="">Select client's country...</option>
@@ -169,6 +169,7 @@ echo form_dropdown('client_currency_index', $options, '1');
 			</header>
 
 				<?php
+				$i = 0;
 foreach ($contact as $contacts) {
 					?>
 					
@@ -188,14 +189,17 @@ foreach ($contact as $contacts) {
 						<label for="contact-primary" class="contact-details-label">This the primary contact: </label>
 
 						<?php 
-						$check_data = array(
-						'name'	=>	'contact-primary',
-						'id' => 'contact-primary',
-						'class'	=>	'contact-details-label',
-						'checked'	=>	TRUE,
-						);
+						//$check_data = array(
+						//'name'	=>	'contact-primary[]',
+						//'id' => 'contact-primary',
+						//'class'	=>	'contact-details-label',
+						//);
 						
-						echo form_checkbox($check_data); ?>
+						//echo form_checkbox($check_data); ?>
+						
+						<!--input name="contact-primary[<?php echo $i?>]" value="on" type="checkbox" <?php echo set_checkbox("contact-primary[$i]", "on", $contacts->contact_primary == 1) ?> id="contact-primary" class="contact-info-input"/-->
+						<?php echo form_checkbox("contact-primary[$i]", "on", set_checkbox("contact-primary[$i]", "on", $contacts->contact_primary == 1)); ?>
+						
 
 					</li>
 					<li class="client-details-item phoneNum">
@@ -219,6 +223,7 @@ foreach ($contact as $contacts) {
 				</ul>
 			</fieldset>
 			<?php 
+			$i++;
 			} 
 			?>
 			<fieldset id="contact-save" class="contact-details-entry">

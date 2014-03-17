@@ -1,4 +1,4 @@
-;
+
 $(document).ready( function() {
 	var $infoSyncBtn = $( '#contact-info-sync' );
 

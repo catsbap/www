@@ -1,4 +1,6 @@
 <?php
+//note...this is the general controller for clients, not just add.
+//should probably change the controller name so that it's more general.
 
 class Client_add_controller extends CI_Controller {
 	var $base;
@@ -39,7 +41,7 @@ class Client_add_controller extends CI_Controller {
 		 $this->form_validation->set_rules('client-phone', 'client-phone', 'numeric');
 		 $this->form_validation->set_rules('client-email', 'client-email', 'trim|required|valid_email');
 		 $this->form_validation->set_rules('client-fax', 'client-fax');
-		 $this->form_validation->set_rules('contact-primary', 'contact-primary');
+		 $this->form_validation->set_rules('contact-primary[]', 'contact-primary[]', 'required');
 		 $this->form_validation->set_rules('client-zip', 'client-zip', 'numeric');
 		 $this->form_validation->set_rules('client-city', 'client-city');
 		 $this->form_validation->set_rules('client-state', 'client-state');
@@ -126,7 +128,10 @@ class Client_add_controller extends CI_Controller {
 		$this->form_validation->set_rules('contact-email', 'contact-email');
 		$this->form_validation->set_rules('contact-fax', 'contact-fax');
 		$this->form_validation->set_rules('client_logo_link', 'client_logo_link');
-		$this->form_validation->set_rules('contact-primary', 'contact-primary');
+		//this will be okay for up to 50 contacts, then it will break.
+		for ($i=0; $i<50; $i++) {
+			$this->form_validation->set_rules("contact-primary[$i]", "contact-primary[$i]");
+		}
 
 
 				 
