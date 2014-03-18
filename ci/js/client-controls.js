@@ -143,7 +143,6 @@ $(document).ready( function() {
 		
 		
 		$( '#contact-save-btn' ).val( '+ Save Contacts' );
-		
 		evt.preventDefault();
 	});
 	

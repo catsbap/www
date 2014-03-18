@@ -198,7 +198,7 @@ foreach ($contact as $contacts) {
 						//echo form_checkbox($check_data); ?>
 						
 						<!--input name="contact-primary[<?php echo $i?>]" value="on" type="checkbox" <?php echo set_checkbox("contact-primary[$i]", "on", $contacts->contact_primary == 1) ?> id="contact-primary" class="contact-info-input"/-->
-						<?php echo form_checkbox("contact-primary[$i]", "on", set_checkbox("contact-primary[$i]", "on", $contacts->contact_primary == 1)); ?>
+						<?php echo form_checkbox("contact-primary[$i]", "on", set_checkbox("contact-primary[$i]", "on", $contacts->contact_primary == 1), "id=contact-primary", "class=contact-info-input"); ?>
 						
 
 					</li>

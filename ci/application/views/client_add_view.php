@@ -47,9 +47,8 @@ $(document).ready(function() {
 		<form action="<?php echo site_url('client_add_controller/insert_client')?>" id="form" method = "post" style="margin-bottom:50px;" enctype="multipart/form-data">
 		 
 		
-		
 		<figure class="client-logo l-col-20">
-			<img class="client-logo-img small" id="image" src="/time_tracker/ci/uploads/default.jpg" title="Client/Company name logo" alt="Client/Company name logo" />
+			<img class="client-logo-img small" id="image" src="<?php echo "$this->base/uploads/" . $client_image ?>" title="Client/Company name logo" alt="Client/Company name logo" />
 			<fieldset class="client-logo-upload">
 				<legend class="client-logo-title">Upload Client Logo</legend>
 				<header class="client-logo-header">
@@ -183,7 +182,7 @@ echo form_dropdown('client_currency_index', $options, '1');
 						<label for="contact-name" class="client-details-label">Your contact's name:</label>
 						<input id="contact-name" name="contact-name" class="contact-contact-info-input" type="text" tabindex="12" value="<?php echo set_value('contact-name'); ?>"/><br />
 						<label for="contact-primary" class="client-details-label">This the primary contact: </label>
-						<?php echo form_checkbox('contact-primary', '1', set_checkbox('contact-primary', '1')); ?>
+						<?php echo form_checkbox('contact-primary', 'on', set_checkbox('contact-primary', 'on', TRUE)); ?>
 
 						<!--input id="contact-primary" name="contact-primary" class="contact-info-input" type="checkbox" checked="checked" tabindex="13" value="1" /-->
 					</li>

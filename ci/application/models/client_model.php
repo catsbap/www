@@ -68,6 +68,10 @@ class Client_model extends CI_Model {
 		$client_fax = $this->input->post('client-fax');
 		$client_currency_index = $this->input->post('client_currency_index');
 		$client_logo_link = $this->input->post('client_logo_link');
+		//update with default if user has not uploaded an image
+		if ($client_logo_link == 0) {
+			$client_logo_link = "default.jpg";
+		}
 		$client_archived = $this->input->post('client-archived');
 		$client_address = $this->input->post('client-streetAddress');
 		$client_state =$this->input->post('client-state');

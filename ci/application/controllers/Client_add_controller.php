@@ -52,8 +52,10 @@ class Client_add_controller extends CI_Controller {
 		 $this->form_validation->set_rules('contact-mobilePhone', 'contact-mobilePhone');
 		 $this->form_validation->set_rules('contact-email', 'contact-email');
 		 $this->form_validation->set_rules('contact-fax', 'contact-fax');
-		 $this->form_validation->set_rules('client_logo_link', 'client_logo_link');
-		 
+		 $this->form_validation->set_rules('client_logo_link', 'default.jpg');
+		 //set up the default value for the client image
+		 $data['client_image'] = "default.jpg";
+			
 		 if ($this->form_validation->run() == FALSE) {
 			 $this->load->view('header_view');
 			 $this->load->view('client_add_view', $data);
@@ -79,6 +81,7 @@ class Client_add_controller extends CI_Controller {
 				print_r($_FILES["image"]["error"]);
 				print_r($_FILES["image"]);
 			}	
+			$data['client_image'] = $_FILES['image']['name'];
 			$this->Client_model->insert_client($data);
 			$this->load->view('header_view');
 			$this->load->view('client_add_view', $data);
