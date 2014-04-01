@@ -30,6 +30,7 @@ class Client_add_controller extends CI_Controller {
 	function display_client() {
 		$client_name = $this->input->post('client_name');
 		$data['client_id'] = $this->Client_model->getClientId($client_name);
+		$data['client_logo_link'] = "default.jpg";
 		$this->load->view('header_view');
 		$this->load->view('client_add_view', $data);
 	}
@@ -54,8 +55,9 @@ class Client_add_controller extends CI_Controller {
 		 $this->form_validation->set_rules('contact-fax', 'contact-fax');
 		 $this->form_validation->set_rules('client_logo_link', 'default.jpg');
 		 //set up the default value for the client image
-		 $data['client_image'] = "default.jpg";
-			
+		 $data['client_logo_link'] = $this->input->post('client_logo_link');
+			echo($this->input->post('client_logo_link'));
+		
 		 if ($this->form_validation->run() == FALSE) {
 			 $this->load->view('header_view');
 			 $this->load->view('client_add_view', $data);
@@ -63,25 +65,20 @@ class Client_add_controller extends CI_Controller {
 		 	$valid_exts = array('jpeg', 'jpg', 'png', 'gif'); // valid extensions
 		 	$max_size = 20000 * 1024; // max file size
 		 	$path = '/uploads/'; // upload directory
-
-		  		
-		  	//this should use the array value set above.
-		  	//set up the image and check it here. 
-		  	//this is not as robust as it should be!
+	
+			
+			//if there is a file to upload, check it to make sure it's the right file type. Then move it to the uploads directory.
 			if (isset($_FILES["image"]) and $_FILES["image"]["error"] == UPLOAD_ERR_OK) {
 				if ( $_FILES["image"]["type"] != "image/jpeg") {
 					error_log("File type isn't correct.");
 				} elseif ( !move_uploaded_file($_FILES["image"]["tmp_name"], "/Applications/MAMP/htdocs/time_tracker/ci/uploads/" . basename($_FILES["image"]["name"]))) {
 					error_log("Something went wrong uploading the file.");
 				} else {
-					$_POST["client_logo_link"] = $_FILES["image"]["name"];
+					//the post value should be the uploaded file if all went well.
+					$data['client_logo_link'] = $_FILES["image"]["name"];
+					$_POST['client_logo_link'] = $_FILES["image"]["name"];
 				}
-			} else {
-				echo 'Bad request!';
-				print_r($_FILES["image"]["error"]);
-				print_r($_FILES["image"]);
-			}	
-			$data['client_image'] = $_FILES['image']['name'];
+			}
 			$this->Client_model->insert_client($data);
 			$this->load->view('header_view');
 			$this->load->view('client_add_view', $data);
@@ -116,6 +113,8 @@ class Client_add_controller extends CI_Controller {
 		$client_id = $this->uri->segment(3);
 		$data['client'] = $this->Client_model->display_clients_by_id($client_id);
 		$data['contact'] = $this->Client_model->display_contacts_by_client_id($client_id);
+		$data['client_logo_link'] = $data['client'][0]->client_logo_link;
+		$_POST['client_logo_link'] = $data['client'][0]->client_logo_link;
 		$this->form_validation->set_rules('client-name', 'client-name', 'required');
 		$this->form_validation->set_rules('client-phone', 'client-phone', 'numeric');
 		$this->form_validation->set_rules('client-email', 'client-email', 'trim|required|valid_email');
@@ -147,22 +146,19 @@ class Client_add_controller extends CI_Controller {
 		 	$path = '/uploads/'; // upload directory
 
 		  		
-		  	//this should use the array value set above.
-		  	//set up the image and check it here. 
-		  	//this is not as robust as it should be!
+		  	//if there is a file to upload, check it to make sure it's the right file type. Then move it to the uploads directory.
 			if (isset($_FILES["image"]) and $_FILES["image"]["error"] == UPLOAD_ERR_OK) {
 				if ( $_FILES["image"]["type"] != "image/jpeg") {
 					error_log("File type isn't correct.");
 				} elseif ( !move_uploaded_file($_FILES["image"]["tmp_name"], "/Applications/MAMP/htdocs/time_tracker/ci/uploads/" . basename($_FILES["image"]["name"]))) {
 					error_log("Something went wrong uploading the file.");
 				} else {
-					$_POST["client_logo_link"] = $_FILES["image"]["name"];
+					//the post value should be the uploaded file if all went well.
+					$data['client_logo_link'] = $_FILES["image"]["name"];
+					$_POST['client_logo_link'] = $_FILES["image"]["name"];
 				}
-			} else {
-				//echo 'Bad request!';
-				//print_r($_FILES["image"]["error"]);
-				//print_r($_FILES["image"]);
-			}	
+
+			} 
 			$this->Client_model->update_client($client_id);
 			$this->load->view('header_view');
 			$this->load->view('client_edit_view', $data);

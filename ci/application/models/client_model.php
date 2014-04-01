@@ -69,9 +69,9 @@ class Client_model extends CI_Model {
 		$client_currency_index = $this->input->post('client_currency_index');
 		$client_logo_link = $this->input->post('client_logo_link');
 		//update with default if user has not uploaded an image
-		if ($client_logo_link == 0) {
+		if ($client_logo_link == "") {
 			$client_logo_link = "default.jpg";
-		}
+		} 
 		$client_archived = $this->input->post('client-archived');
 		$client_address = $this->input->post('client-streetAddress');
 		$client_state =$this->input->post('client-state');
@@ -96,7 +96,7 @@ class Client_model extends CI_Model {
 			'client_logo_link'=>$client_logo_link,
 			'client_archived'=>$client_archived
 		);
-		error_log(print_r($data, true));
+		//error_log(print_r($data, true));
 		$this->db->insert('client', $data);
 		$id = $this->db->insert_id();		
 		error_log("ID IS " . $id);
@@ -108,7 +108,7 @@ class Client_model extends CI_Model {
 			'client_city' => $client_city
 		);
 		$this->db->insert('client_address', $data);
-		error_log(print_r($data, true));
+		//error_log(print_r($data, true));
 		$data = array(
 			'client_id' =>$id,
 			'contact_name' =>$contact_name,
@@ -118,7 +118,7 @@ class Client_model extends CI_Model {
 			'contact_fax_number' => $contact_fax
 		);
 		$this->db->insert('contact', $data);
-		error_log(print_r($data, true));
+		//error_log(print_r($data, true));
 	}
 	
 	function update_client($client_id) {
@@ -150,7 +150,6 @@ class Client_model extends CI_Model {
 			'client_logo_link'=>$client_logo_link,
 			'client_archived'=>$client_archived
 		);
-		//error_log(print_r($data, true));
 		$this->db->where('client_id', $client_id);
 		$this->db->update('client', $data);
 		$data = array(
@@ -169,18 +168,23 @@ class Client_model extends CI_Model {
 		$this->db->where('client_id', $client_id);
 		$this->db->delete('contact');
 		//retrieve the number of contacts that came in from the UI.
-		$num_items = (count($contact_id));
+		$num_items = (count($contact_name));
+				error_log("client_model, 173: " . $num_items);
+				error_log(print_r($_POST, true));
 		for ($i=0; $i<$num_items; $i++) {
 		//handle setting up the radio buttons here, we need to handle blank checkboxes by putting them into an array. In the HTML, these checkboxes are displayed
 		//with their # ($i) and then sent through the post. Blank values are 0, existing values are 1.
 		if (!isset($contact_primary[$i])) {
+		
 			$contact_primary[$i] = "0";
+			error_log("0");
 		} else {
 			$contact_primary[$i] = "1";
+			error_log("1");
 		}
 			$data = array(
 				'client_id' => $client_id,
-				'contact_id' => $contact_id[$i],
+				//'contact_id' => $contact_id[$i],
 				'contact_name' =>$contact_name[$i],
 				'contact_primary' => $contact_primary[$i],
 				'contact_office_number' => $contact_officePhone[$i],
@@ -188,6 +192,7 @@ class Client_model extends CI_Model {
 				'contact_fax_number' => $contact_fax[$i]
 			);
 				$this->db->insert('contact', $data);
+				error_log("data 1");
 				error_log(print_r($data, true));
 		}
 	}

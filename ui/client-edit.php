@@ -251,7 +251,7 @@
 					?>
 					
 			<fieldset id="contact-details" class="contact-details-entry">
-				<!-- <legend class="contact-details-title">Edit contact details:</legend> -->
+				<!--<legend class="contact-details-title">Edit contact details:</legend> -->
 				<header class="contact-details-header">
 					<h1 class="contact-details-title">Edit contact details:</h1>
 					<h4 class="required">= Required</h4>
@@ -261,6 +261,8 @@
 						<li class="client-details-item name">
 						<label for="contact-name" class="contact-details-label required">Your contact's name:</label>
 						<input id="contact-name" name="contact-name[]" class="contact-info-input" type="text" value="<?php echo $contacts->getValueEncoded("contact_name")?>" /><br />
+						</li>
+						<li class="client-details-item primary">
 						<label for="contact-primary" class="contact-details-label">This the primary contact: </label>
 						<input id="contact-primary" name="contact-primary[<?php echo $i?>]" class="contact-info-input" type="checkbox" <?php setChecked($contacts, "contact_primary", "1") ?> />
 

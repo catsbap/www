@@ -48,7 +48,9 @@ $(document).ready(function() {
 		 
 		
 		<figure class="client-logo l-col-20">
-			<img class="client-logo-img small" id="image" src="<?php echo "$this->base/uploads/" . $client_image ?>" title="Client/Company name logo" alt="Client/Company name logo" />
+			<img class="client-logo-img small" id="image" src="<?php echo "$this->base/uploads/" . $client_logo_link ?>" title="Client/Company name logo" alt="Client/Company name logo" />
+					<input id="client_logo_link" type="hidden" name="client_logo_link" value="<?php echo $client_logo_link ?>"/>
+
 			<fieldset class="client-logo-upload">
 				<legend class="client-logo-title">Upload Client Logo</legend>
 				<header class="client-logo-header">

@@ -12,19 +12,18 @@
 	</header>
 			<? $client_id = $this->uri->segment(3);?>
 			<form action="<?php echo site_url("client_add_controller/update_client/$client_id")?>" id="form" method = "post" style="margin-bottom:50px;" enctype="multipart/form-data">
-		 
 		
 		
 		<figure class="client-logo l-col-20">
-			<img class="client-logo-img small" id="image" src="<?php echo "$this->base/uploads/" . $client[0]->client_logo_link ?>" title="Client/Company name logo" alt="Client/Company name logo" />
+			<img class="client-logo-img small" src="<?php echo "$this->base/uploads/" . $client[0]->client_logo_link ?>" title="Client/Company name logo" alt="Client/Company name logo" />
 			<fieldset class="client-logo-upload">
 				<legend class="client-logo-title">Upload Client Logo</legend>
 				<header class="client-logo-header">
 					<h1 class="client-logo-title">Upload Client Logo</h1>
 				</header>
 				<img style="display:none" id="loader" src="/time_tracker/ci/uploads/ajax-loader.gif" alt="Loading...." title="Loading...." />
-
-		 <input id="uploadImage" type="file" accept="image/*" name="image" />
+		<input id="client_logo_link" type="hidden" name="client_logo_link" value="<?php echo "$this->base/uploads/" . $client[0]->client_logo_link ?>"/>
+		 <input id="client_logo_file" type="file" accept="image/*" name="image" />
 		 <input id="button" type="button" value="Upload">
 			</fieldset>
 		</figure>
@@ -167,40 +166,35 @@ echo form_dropdown('client_currency_index', $options, '1');
 			<header class="details-header contact-details-header">
 				<h1 class="client-details-title">Contacts</h1>
 			</header>
-
+			
 				<?php
 				$i = 0;
+				//print_r($contact);
 foreach ($contact as $contacts) {
 					?>
 					
-			<fieldset id="contact-details" class="contact-details-entry">
-				<!-- <legend class="contact-details-title">Edit contact details:</legend> -->
-				<header class="contact-details-header">
+			
+						<fieldset id="contact-details" class="contact-details-entry">
+			<header class="contact-details-header">
 					<h1 class="contact-details-title">Edit contact details:</h1>
 					<h4 class="required">= Required</h4>
 				</header>
-				<!-- <h4 class="required">= Required</h4> -->
 				<ul class="details-list client-details-list">
 						<li class="client-details-item name">
-						<label for="contact-name" class="contact-details-label required">Your contact's name:</label>
-						<input id="contact-name" name="contact-name[]" class="contact-info-input" type="text" value="<?php echo set_value('contact-name', $contacts->contact_name) ?>"/><br />
-						<label for="contact-id" class="contact-details-label">Contact ID:</label>
-						<input id="contact-id" name="contact-id[]" class="contact-details-label" type="text" value="<?php echo set_value('contact-id', $contacts->contact_id) ?>"/><br />
+						
+						<input id="contact-id" name="contact-id[<?php echo $i?>]" class="contact-details-input" type="hidden" value="<?php echo set_value('contact-id', $contacts->contact_id) ?>"/><br />
+						</li>
+						<li class="client-details-item contactPrimary"
 						<label for="contact-primary" class="contact-details-label">This the primary contact: </label>
 
-						<?php 
-						//$check_data = array(
-						//'name'	=>	'contact-primary[]',
-						//'id' => 'contact-primary',
-						//'class'	=>	'contact-details-label',
-						//);
 						
-						//echo form_checkbox($check_data); ?>
-						
-						<!--input name="contact-primary[<?php echo $i?>]" value="on" type="checkbox" <?php echo set_checkbox("contact-primary[$i]", "on", $contacts->contact_primary == 1) ?> id="contact-primary" class="contact-info-input"/-->
-						<?php echo form_checkbox("contact-primary[$i]", "on", set_checkbox("contact-primary[$i]", "on", $contacts->contact_primary == 1), "id=contact-primary", "class=contact-info-input"); ?>
+						<?php echo form_checkbox("contact-primary[$i]", "1",  set_checkbox("contact-primary[$i]", "1", $contacts->contact_primary . $i == 1), "id=\"contact-primary\" class=\"contact-info-input\""); ?>
 						
 
+					</li>
+					<li class="client-details-item contactId">
+					<label for="contact-name" class="contact-details-label required">Your contact's name:</label>
+					<input id="contact-name" name="contact-name[]" class="contact-info-input" type="text" value="<?php echo set_value('contact-name', $contacts->contact_name) ?>"/><br />
 					</li>
 					<li class="client-details-item phoneNum">
 						<label for="contact-officePhone" class="contact-details-label">Office phone:</label>
@@ -220,12 +214,15 @@ foreach ($contact as $contacts) {
 						<label for="cancel-contact-link" class="contact-details-label">Need to remove contact?</label>
 						<a id="cancel-contact-link" class="cancel-action-link" href="#" tabindex="19">Remove contact</a>
 					</li>
-				</ul>
-			</fieldset>
+					</ul>
+</fieldset>
+
 			<?php 
 			$i++;
 			} 
+			
 			?>
+										
 			<fieldset id="contact-save" class="contact-details-entry">
 				<ul class="details-list contact-details-submit">
 					<li class="client-details-item add-additional">

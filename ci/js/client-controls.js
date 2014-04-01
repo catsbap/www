@@ -1,5 +1,6 @@
 
 $(document).ready( function() {
+	//this is the checkbox for client same as contact
 	var $infoSyncBtn = $( '#contact-info-sync' );
 
 	$infoSyncBtn.click( function() {
@@ -24,14 +25,22 @@ $(document).ready( function() {
 	var contactCtr = 0;
 	var incrementIDs = function( i, attr ) {
 		//console.log(!isNaN(parseInt( attr.charAt( attr.length - 1 ) )));
-		//alert(attr);
+		//alert(attr.charAt(attr.length - 1));
+		//RRRRRRRRRRRRRRRRRRR
+		//ALRIGHT, I GIVE UP ON THIS.
+		//I HAVE NO IDEA HOW THIS IS SUPPOSED TO WORK, 
+		//COME BACK LATER AND TRY TO COMMENT IT.
+		//alert(parseInt( attr.charAt( attr.length - 1)));
 		if ( !isNaN(parseInt( attr.charAt( attr.length - 1 ) ) ) ) {
 			attr = attr.substring( 0, attr.lastIndexOf( '-' ) );
+			alert(attr);
 		}
 		return attr += "-" + contactCtr;
 	};
 	
+	//get the primary contacts and select the one clicked, uncheck the rest. This is based on the .contact-details-class
 	$( '#contact-primary' ).click( function( evt ) {
+		alert("y");
 		var $primeContacts = $( '.contact-details-entry input[type="checkbox"]' );
 		$primeContacts.each( function( index ) {
 			$( this ).prop( 'checked', false );
@@ -39,7 +48,9 @@ $(document).ready( function() {
 		$( this ).prop( 'checked', true );
 	});
 	
+	//look for the #contact_details ID.
 	var $contactInputs = $( '#contact-details' );
+	//grab the ids
 	$contactInputs.attr( 'id', incrementIDs )
 		.find( 'input, a' )
 		.each( function( index ) {
@@ -51,6 +62,7 @@ $(document).ready( function() {
 			$( this ).attr( 'for', incrementIDs );
 	});
 
+	//use the .cancel_additional link
 	var $cancelContact = $( '.cancel-additional' )
 		.click( function( evt ) {
 			var $updatePrime;
@@ -78,6 +90,7 @@ $(document).ready( function() {
 					attr = attr.substring( 0, attr.lastIndexOf( '-' ) );
 					attr += "-" + idNum;
 					//console.log(attr);
+					//alert(attr);
 					return attr;
 				})
 				.find( 'input, a' )
@@ -86,6 +99,7 @@ $(document).ready( function() {
 						idNum = parseInt( attr.slice( attr.lastIndexOf( '-' ) + 1 ) ) - 1;
 						attr = attr.substring( 0, attr.lastIndexOf( '-' ) );
 						attr += "-" + idNum;
+						//alert(attr);
 						//console.log(attr);
 						return attr;
 					})
@@ -107,6 +121,7 @@ $(document).ready( function() {
 			$cancelContact.addClass( 'disabled' );
 		}
 
+	//add additional
 	$( '#add-additional-link' ).click( function( evt ) {
 	//alert("X");
 		contactCtr = $( '.contact-details-entry' ).not( '#contact-save' ).length;
