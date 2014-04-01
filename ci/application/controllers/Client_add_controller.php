@@ -56,7 +56,6 @@ class Client_add_controller extends CI_Controller {
 		 $this->form_validation->set_rules('client_logo_link', 'default.jpg');
 		 //set up the default value for the client image
 		 $data['client_logo_link'] = $this->input->post('client_logo_link');
-			echo($this->input->post('client_logo_link'));
 		
 		 if ($this->form_validation->run() == FALSE) {
 			 $this->load->view('header_view');
