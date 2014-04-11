@@ -19,6 +19,20 @@ class Task_model extends CI_Model {
 		$rows[] = $row;
 		}
 		return $rows;
+	}
+	function display_tasks_for_project($project_id) {
+		$rows = array();		
+		$query = $this->db->select('project_task.*');
+		$query = $this->db->from('project_task');
+		$query = $this->db->select('task.*');
+		$query = $this->db->join('task', 'task.task_id = project_task.task_id');
+		$this->db->where('project_task.project_id =', $project_id);
+		$query = $this->db->get();	
+		foreach($query->result() as $row)
+		{
+		$rows[] = $row;
+		}
+		return $rows;
 	}	
 	
 	function display_archived_tasks() {

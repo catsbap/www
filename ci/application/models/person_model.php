@@ -34,6 +34,22 @@ class Person_model extends CI_Model {
 		return $rows;
 	}
 	
+
+	function display_people_for_project($project_id) {
+		$rows = array();
+		$query = $this->db->select('project_person.*');
+		$query = $this->db->from('project_person');
+		$query = $this->db->select('person.*');
+		$query = $this->db->join('person', 'person.person_id = project_person.person_id');	
+		$query = $this->db->where('project_person.project_id =', $project_id);
+		$query = $this->db->get();	
+		foreach($query->result() as $row)
+		{    
+        $rows[] = $row; //add the fetched result to the result array;
+		}
+		return $rows;
+	}
+	
 	function display_person_perms() {
 		$rows = array();
 		$query = $this->db->distinct('person_perm_id');

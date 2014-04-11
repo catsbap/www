@@ -79,7 +79,7 @@
 					foreach($projects as $project) { 
 						//$clientName = Client::getClientNameById($project->getValueEncoded("client_id")); ?>
 						<tr>
-							<td><a class="project-info-name-link" href="<?php echo "project-detail.php?project_id=" . $project->project_id ?>" title="View project details"><?php echo $project->project_name?></a></td>
+							<td><a class="project-info-name-link" href="<?php echo "project_detail/" . $project->project_id ?>" title="View project details"><?php echo $project->project_name?></a></td>
 							<td><a class="client-info-contact-link" href="<?php echo "$this->base/index.php/client_add_controller/client_detail/$project->client_id" ?>" title="View client details"><?php echo  $project->client_name?></a></td>
 							<td>x Hours/y budget</td>
 							<!--td><input name="select-project" class="archive-checkbox" type="checkbox" value="<?php //echo $project->getValueEncoded('project_id'); ?>" title="Select project" /><td-->

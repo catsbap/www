@@ -166,6 +166,7 @@ class Client_model extends CI_Model {
 		//and then added here as one group from those remaining
 		//as active in the UI.
 		$this->db->where('client_id', $client_id);
+		//delete all the contacts first then re-insert them.
 		$this->db->delete('contact');
 		//retrieve the number of contacts that came in from the UI.
 		$num_items = (count($contact_name));

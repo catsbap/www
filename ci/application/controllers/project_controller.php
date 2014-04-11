@@ -41,6 +41,35 @@ class Project_controller extends CI_Controller {
 			$this->load->view('projects_view', $data);
 		}
 	
+	function project_detail() {
+			$project_id = $this->uri->segment(3);
+			$data['project'] = $this->Project_model->display_project_by_id($project_id);
+			//get the relevent client info for this project
+			$client_id = $data['project'][0]->client_id;
+			$data['clients'] = $this->Client_model->display_clients_by_id($client_id);
+			$data['tasks'] = $this->Task_model->display_tasks_for_project($project_id);
+			$data['people'] = $this->Person_model->display_people_for_project($project_id);
+			$this->load->view('header_view');
+			$this->load->view('projects_detail_view', $data);
+		}	
+		
+	
+	function edit_project() {
+		$project_id = $this->uri->segment(3);
+		$data['project'] = $this->Project_model->display_project_by_id($project_id);
+		//get the relevent client info for this project
+		$client_id = $data['project'][0]->client_id;
+		$data['clients'] = $this->Client_model->display_clients_by_id($client_id);
+		$data['all_clients'] = $this->Client_model->display_clients();
+		$data['all_tasks'] = $this->Task_model->display_tasks();
+		$data['all_people'] = $this->Person_model->display_people();
+		$data['tasks'] = $this->Task_model->display_tasks_for_project($project_id);
+		$data['people'] = $this->Person_model->display_people_for_project($project_id);
+		$this->load->view('header_view');
+		$this->load->view('project_edit_view', $data);
+	}	
+	
+	
 	function view_project() {
 		$data['projects'] = $this->Project_model->display_projects_and_clients();
 		$data['clients'] = $this->Client_model->display_clients();
@@ -52,6 +81,7 @@ class Project_controller extends CI_Controller {
 		
 	function insert_project() {
 		//this is the form validation
+		//this function needs to be modified to insert people into the project_person and project_task table.
 		 $data = $this->data;
 		 $this->form_validation->set_rules('project-name', 'project-name', 'required|is_unique[client.client_name]');
 		 $this->form_validation->set_rules('project-code', 'project_code', 'numeric');
@@ -84,32 +114,54 @@ class Project_controller extends CI_Controller {
 	}
 
 	
-	function update_task() {
+	function update_project() {
+		//KEEP WORKING ON THIS WHEN TIME
 		//this is the form validation
-		$task_hourly_rate = $this->input->post('task-hourly-rate');
-		$task_bill_by_default = $this->input->post('task-bill-by-default');
-		$task_common = $this->input->post('task-common');
-		$task_archived = $this->input->post('task-archived');
-		$task_id = $this->input->post('task_id');
-		if ($task_id) {
+		//this function needs to be modified to insert people into the project_person and project_task table.
+		$project_id = $this->uri->segment(3);
+		
+		$data = $this->data;
+		 $this->form_validation->set_rules('project-name', 'project-name', 'required');
+		 $this->form_validation->set_rules('project-code', 'project_code', 'numeric');
+		 $this->form_validation->set_rules('project-notes', 'project-notes');
+		 $this->form_validation->set_rules('project_invoice_by', 'project_invoice_by');
+		 $this->form_validation->set_rules('project_budget_by', 'project_budget_by');
+		 $this->form_validation->set_rules('task_id', 'task_id');
+		 $this->form_validation->set_rules('client_id', 'client_id');
+		 $this->form_validation->set_rules('person_id', 'person_id');
+		 $this->form_validation->set_rules('person_ids', 'person_ids');
+		if ($project_id) {
 			$data['processType'] = "E";
 		} else {
 			$data['processType'] = "A";
 		}
-		echo $this->input->post('task_name');
 		$data['func'] = $this->input->post('func');
-		$data['tasks'] = $this->Task_model->display_tasks();
-		 $this->form_validation->set_rules('task-id', 'task-id');
-		 $this->form_validation->set_rules('task-name', 'task-name');
-		 $this->form_validation->set_rules('task-hourly-rate', 'task-hourly-rate');
-		 $this->form_validation->set_rules('task-bill-by-default', 'task-bill-by-default');
-		 $this->form_validation->set_rules('task-common', 'task-common');
-		 $this->form_validation->set_rules('task-archived', 'task-archived');
-		 
-		 		 
-		$this->Task_model->update_task($task_id);
-		$this->load->view('header_view');
-		$this->load->view('tasks_view', $data);
+		if ($this->form_validation->run() == FALSE) {
+			$data['project'] = $this->Project_model->display_project_by_id($project_id);
+			//get the relevent client info for this project
+			$client_id = $data['project'][0]->client_id;
+			$data['clients'] = $this->Client_model->display_clients_by_id($client_id);
+			$data['all_clients'] = $this->Client_model->display_clients();
+			$data['all_tasks'] = $this->Task_model->display_tasks();
+			$data['all_people'] = $this->Person_model->display_people();
+			$data['tasks'] = $this->Task_model->display_tasks_for_project($project_id);
+			$data['people'] = $this->Person_model->display_people_for_project($project_id);
+			$this->load->view('header_view');
+			$this->load->view('project_edit_view', $data);
+		} else {
+			$this->Project_model->update_project($project_id);
+			$this->Project_model->update_project_person($project_id);
+			$data['project'] = $this->Project_model->display_project_by_id($project_id);
+			//get the relevent client info for this project
+			$client_id = $data['project'][0]->client_id;
+			$data['clients'] = $this->Client_model->display_clients_by_id($client_id);
+			$data['all_clients'] = $this->Client_model->display_clients();
+			$data['all_tasks'] = $this->Task_model->display_tasks();
+			$data['all_people'] = $this->Person_model->display_people();
+			$data['tasks'] = $this->Task_model->display_tasks_for_project($project_id);
+			$data['people'] = $this->Person_model->display_people_for_project($project_id);
+			$this->load->view('header_view');
+			$this->load->view('project_edit_view', $data);
+		}
 	}
-
 }
