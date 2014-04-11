@@ -687,7 +687,7 @@ function editProject() {
 				if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"] != "") {
 						$project_assigned_by = Person::getByEmailAddress($_SESSION["logged_in"]);
 				} else {
-						error_log("Something is wrong here...this person is not logged in and you shouldn't be seeing this, timesheet.php.");
+						error_log("Something is wrong here...this person is not logged in and you shouldn't be seeing this");
 						exit();
 				}
 			if ($person_id) {
