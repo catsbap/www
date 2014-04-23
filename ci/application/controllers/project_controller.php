@@ -108,6 +108,8 @@ class Project_controller extends CI_Controller {
 			$data['tasks'] = $this->Task_model->display_tasks();
 			$data['people'] = $this->Person_model->display_people();
 		 	$this->Project_model->insert_project($data);
+		 	$this->Project_model->insert_project_person();
+			$this->Project_model->insert_project_task();
 			$this->load->view('header_view');
 			$this->load->view('project_add_view', $data);
 		}
@@ -115,7 +117,6 @@ class Project_controller extends CI_Controller {
 
 	
 	function update_project() {
-		//KEEP WORKING ON THIS WHEN TIME
 		//this is the form validation
 		//this function needs to be modified to insert people into the project_person and project_task table.
 		$project_id = $this->uri->segment(3);
@@ -151,6 +152,9 @@ class Project_controller extends CI_Controller {
 		} else {
 			$this->Project_model->update_project($project_id);
 			$this->Project_model->update_project_person($project_id);
+			$this->Project_model->update_project_task($project_id);
+			$this->Project_model->update_task_hourly_rate();
+			$this->Project_model->update_person_hourly_rate();
 			$data['project'] = $this->Project_model->display_project_by_id($project_id);
 			//get the relevent client info for this project
 			$client_id = $data['project'][0]->client_id;
