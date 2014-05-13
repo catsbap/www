@@ -11,15 +11,16 @@
 	
 	//protect this page
 	checklogin();
-	
+	*/
 	//get the value off the url for timesheet_id
-	$processType = "A";
+	/*$processType = "A";
 	if (isset($_GET["timesheet_id"]) && $_GET["timesheet_id"] == "") {
 		$processType = "A";
 	} elseif (isset($_GET["timesheet_id"])) {
 		$processType = "E";
 	}
 	
+		
 	if (isset($_POST["func"])) {
 		if ($_POST["func"] == "saveTimesheet") {
 			//error_log(">>>>>>  save timesheet");
@@ -38,7 +39,7 @@
 	}
 	
 	
-	
+
 function displayTimesheet($timesheet_aggregate) {
 	//error_log("HERE IS THE POST!!!!!!!!!!!!!!!!!!");
 	//error_log(print_r($_POST, true));
@@ -60,9 +61,9 @@ function displayTimesheet($timesheet_aggregate) {
 		error_log("Something is wrong here...this person is not logged in and you shouldn't be seeing this, timesheet.php.");
 		exit();
 	}
-	*/
 	
-	/*	Timesheet::deleteTimesheet(356);
+	
+	/*Timesheet::deleteTimesheet(356);
 	Timesheet::deleteTimesheet(384);
 	Timesheet::deleteTimesheet(385);
 	Timesheet::deleteTimesheet(386);
@@ -73,13 +74,14 @@ function displayTimesheet($timesheet_aggregate) {
 	//this is only a temporary way to get timesheets working in codeigniter.
 	//currently, the old login process is in place and is being used to determine what person is trying to submit the timesheet.
 	//eventually, ion_auth (CI) will take this over and then this will get the login information from there.
-	if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"] != "") {
-		$person = Person::getByEmailAddress($_SESSION["logged_in"]);
-	} else {
-		error_log("Something is wrong here...this person is not logged in and you shouldn't be seeing this, timesheet.php.");
-		exit();
-	}
+	//if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"] != "") {
+	//	$person = Person::getByEmailAddress($_SESSION["logged_in"]);
+	//} else {
+	//	error_log("Something is wrong here...this person is not logged in and you shouldn't be seeing this, timesheet.php.");
+	//	exit();
+	//}
 ?>
+<?php print_r($projects)?>
 	<div id="page-content" class="page-content">
 		<header class="page-header">
 			<h1 class="page-title"><?php echo date("F j, Y");?></h1>
@@ -102,19 +104,22 @@ function displayTimesheet($timesheet_aggregate) {
 					<section id="timesheet-info" class="entity-detail">
 						<ul class="details-list entity-details-list timesheet">
 							<li class="entity-details-item name project">
-								<label for="project_name" <?php validateField("project_name", $missingFields)?> class="entity-details-label">Project:</label>
+								<label for="project_name" <?php //validateField("project_name", $missingFields)?> class="entity-details-label">Project:</label>
 								<select id="project-name" name="project_name" class="project-name-select" tabindex="1">
 									<?php //this may be moved to JS
-										list($projectsForPerson) = Project_Person::getProjectsForPerson($person->getValue("person_id"));
+										//list($projectsForPerson) = Project_Person::getProjectsForPerson($person->getValue("person_id"));
 										//$first = 31;
-										foreach ($projectsForPerson as $projectPerson) {
-											$client = Client::getClient( $projectPerson->getValue("client_id") ); ?>
-											<option value="<?php echo $projectPerson->getValue("project_id"); ?>"><span><?php echo $projectPerson->getValue("project_name"); ?></span> (<?php echo $client->getValue("client_name"); ?>)</option>
+										foreach ($projects as $projectPerson) {
+										//////////////////////////////
+										///THIS IS WHERE YOU LEFT OFF YOU NEED
+										///TO GET THE PROJECT OUT OF THE PROJECT TABLE
+											//$client = Client::getClient( $projectPerson->getValue("client_id") ); ?>
+											<option value="<?php echo $projectPerson->project_id ?>"><span><?php //echo $projectPerson->project_name ?></span> (<?php //echo $client->getValue("client_name"); ?>)</option>
 									<?php }	?> 
 								</select>
 							</li>
 							<li class="entity-details-item hourly-rate task">
-								<label for="task_name" <?php validateField("task_name", $missingFields)?> class="entity-details-label">Task:</label>
+								<label for="task_name" <?php //validateField("task_name", $missingFields)?> class="entity-details-label">Task:</label>
 								<select id="task-name" name="task_name" class="task-name-select" tabindex="1">
 								</select>
 							</li>
@@ -137,7 +142,7 @@ function displayTimesheet($timesheet_aggregate) {
 				</span>
 				
 			</nav>
-			<table id="timesheet-tasks-list" class="entity-table timesheet tablesorter" data-person_id="<?php echo $person->getValue('person_id'); ?>">
+			<table id="timesheet-tasks-list" class="entity-table timesheet tablesorter" data-person_id="<?php //echo $person->getValue('person_id'); ?>">
 				<thead>
 					<tr>
 						<th class="task-name"></th>
@@ -182,7 +187,7 @@ function displayTimesheet($timesheet_aggregate) {
 </html>		
 
 <?php
-}
+//}
 
 function saveTimesheet($processType) {
 	error_log("POST: " . $_POST["timesheetItems"] );

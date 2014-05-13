@@ -8,7 +8,7 @@ class Timesheet_item_model extends CI_Model {
 	}
 	
 		
-	function get_persons_projects($) {
+	function get_persons_projects() {
 		$rows = array();		
 		$query = $this->db->select('task.*');
 		$query = $this->db->from('task');

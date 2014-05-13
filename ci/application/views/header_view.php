@@ -22,7 +22,7 @@
 	<h1 class="site-title">Time Tracker</h1>
 	<nav id="site-nav" class="site-nav">
 		<ul id="site-menu" class="site-menu">
-			<li class="site-menu-item"><a class="site-menu-link" href="/time_tracker/ui/timesheet.php">Timesheets</a></li>
+			<li class="site-menu-item"><a class="site-menu-link" href="/time_tracker/ci/timesheet.php">Timesheets</a></li>
 			<li class="site-menu-item"><a class="site-menu-link" href="/time_tracker/ci/index.php/report/index/<?php echo date("Y-m-d", strtotime("last monday", strtotime(date("Y-m-d"))));?>/<?php echo date("Y-m-d", strtotime("this sunday", strtotime(date("Y-m-d"))));?>/clients/week">Reports</a></li>
 			<li class="site-menu-item"><a class="site-menu-link" href="#">Invoices</a></li>
 			<li class="site-menu-item"><a class="site-menu-link" href="/time_tracker/ui/clients.php">Manage</a></li>
@@ -42,7 +42,7 @@
 	<nav id="section-nav" class="section-nav timesheets">
 		<h1 class="section-nav-title">Timesheets: </h1>
 		<ul class="section-menu">
-			<li class="section-menu-item"><a class="section-menu-link" href="/time_tracker/ui/timesheet.php">Time</a></li>
+			<li class="section-menu-item"><a class="section-menu-link" href="<?php echo "$this->base/index.php/timesheet_controller/display_timesheet"?>">Time</a></li>
 			<!--li class="section-menu-item"><a class="section-menu-link" href="#">Expenses</a></li-->
 			<li class="section-menu-item"><a class="section-menu-link" href="/time_tracker/ui/timesheet_submitted.php">Pending Approval</a></li>
 			<li class="section-menu-item"><a class="section-menu-link" href="/time_tracker/ui/timesheet_unsubmitted.php">Unsubmitted</a></li>

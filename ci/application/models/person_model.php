@@ -76,6 +76,19 @@ class Person_model extends CI_Model {
 		return $rows;
 	}
 	
+	function display_person_by_email($person_email) {
+		$rows = array();
+		$query = $this->db->select('*');
+		$query = $this->db->from('person');	
+		$query = $this->db->where('person_email =', $person_email);
+		$query = $this->db->get();	
+		foreach($query->result() as $row)
+		{    
+        $rows[] = $row; //add the fetched result to the result array;
+		}
+		return $rows;
+	}
+	
 	function display_person_types() {
 		$rows = array();
 		$query = $this->db->distinct('person_type');
@@ -405,6 +418,7 @@ class Person_model extends CI_Model {
 	
 	function delete_contact($contact_id) {
 		//$this->db->delete('contact', array('contact_id' => $contact_id)); 
+		//stub
 	}
 
 }

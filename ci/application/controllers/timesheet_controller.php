@@ -39,13 +39,20 @@ class Timesheet_controller extends CI_Controller {
 	}
 	
 	function display_timesheet() {
-		//this is only a temporary way to get timesheets working in codeigniter.
-		//currently, the old login process is in place and is being used to determine what person is trying to submit the timesheet.
-		//eventually, ion_auth (CI) will take this over and then this will get the login information from there.
-		if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"] != "") {
-			$data['person'] = = $this->Person_model->display_people_by_id($_SESSION["logged_in"]);
+		//get out the logged in user based on their email from ion_auth
+		//this is to allow login in dev. remove beyond.
+		$this_user = $this->session->userdata( 'email' );
+		if ($this_user == "admin@admin.com") {
+			$this_user = "catsbap@gmail.com";
+		}
+		if ($this_user) {
+			if ($this_user == "catsbap@gmail.com") {
+				$data['person'] = 198;	
+			} else {
+				$data['person'] = $this->Person_model->display_person_by_email($this_user);
+			}
 		} else {
-			error_log("Something is wrong here...this person is not logged in and you shouldn't be seeing this, timesheet.php.");
+			echo("Something is wrong here...this person is not logged in and you shouldn't be seeing this, timesheet.php.");
 			exit();
 		}
 		$task_id = $this->input->post('task_id');
@@ -53,7 +60,9 @@ class Timesheet_controller extends CI_Controller {
 			$data['processType'] = "E";
 			$data['func'] = $this->input->post('func');
 			//error_log("here is func above" . $this->input->post('func'));
-			$data['tasks'] = $this->Task_model->display_tasks();
+			$data['projects'] = $this->Project_person_model->display_projects($project_id);
+			error_log("Here is the project");
+			error_log(print_r($data['projects'], true));
 			
 			$this->form_validation->set_rules('task-id', 'task-id');
 			$this->form_validation->set_rules('task-name', 'task-name');
@@ -61,12 +70,15 @@ class Timesheet_controller extends CI_Controller {
 			$this->form_validation->set_rules('task-bill-by-default', 'task-bill-by-default');
 			$this->form_validation->set_rules('task-common', 'task-common');
 			$this->form_validation->set_rules('task-archived', 'task-archived');
-			$this->Task_model->update_task($task_id);
+			//$this->Task_model->update_task($task_id);
 		} else {
 			$data['processType'] = "A";
 			$data['func'] = $this->input->post('func');
 			error_log("here is func" . $this->input->post('func'));
-			$data['tasks'] = $this->Task_model->display_tasks();
+			$data['projects'] = $this->Project_person_model->display_projects($data['person']);
+			error_log("Here is the project");
+			error_log(print_r($data['projects'], true));
+			//$data['tasks'] = $this->Task_model->display_tasks();
 			$this->form_validation->set_rules('task-id', 'task-id');
 			$this->form_validation->set_rules('task-name', 'task-name');
 			$this->form_validation->set_rules('task-hourly-rate', 'task-hourly-rate');
@@ -76,10 +88,10 @@ class Timesheet_controller extends CI_Controller {
 			//only update the task if the user is adding the task,
 			//so there is a value in the func variable in the post.
 			if ($this->input->post('func')) {
-				$this->Task_model->insert_task();
+				//$this->Task_model->insert_task();
 			}
 			$this->load->view('header_view');
-			$this->load->view('tasks_view', $data);
+			$this->load->view('timesheet_view', $data);
 		}
 	}	
 	

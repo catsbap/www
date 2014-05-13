@@ -36,6 +36,19 @@ class Project_model extends CI_Model {
 		return $rows;
 	}	
 	
+	function get_project_id_by_name($project_name) {
+		$rows = array();		
+		$query = $this->db->select('project.project_id');
+		$query = $this->db->from('project');
+		$this->db->where('project_name =', $project_name);
+		$query = $this->db->get();	
+		foreach($query->result() as $row)
+		{
+		$rows[] = $row;
+		}
+		return $rows;
+	}
+	
 	function display_project_by_id($project_id) {
 		$rows = array();		
 		$query = $this->db->select('project.*');
@@ -87,6 +100,51 @@ class Project_model extends CI_Model {
 		error_log(print_r($data, true));
 		$this->db->insert('project', $data);
 	}
+	
+	function insert_project_person() {
+		error_log(print_r($_POST, true));
+		$project_name = $this->input->post('project-name');
+		$person_id = $this->input->post('person_id');
+		$project_assigned_by = $this->session->userdata( 'email' );
+		
+		$project_id = $this->get_project_id_by_name($project_name);
+		$people = explode(',', $person_id);
+		$people = array_unique($people);
+		foreach ($people as $person) {
+			if ($person) {
+				$data = array(
+					'project_id'=>$project_id[0]->project_id,
+					'person_id'=>$person,
+					'project_assigned_by'=>$project_assigned_by,
+					'total_budget_hours'=>$this->input->post("$person" . "_hours_per_person"),
+				);
+				$this->db->insert('project_person', $data);
+			}
+		}
+	}
+	
+	function insert_project_task() {
+		error_log(print_r($_POST, true));
+		$project_name = $this->input->post('project-name');
+		$task_id = $this->input->post('task_id');
+		
+		$project_id = $this->get_project_id_by_name($project_name);
+
+		$tasks = explode(',', $task_id);
+		//update this so that the values inserted are unique.
+		$tasks = array_unique($tasks);
+		foreach ($tasks as $task) {
+			if ($task) {
+				$data = array(
+					'project_id'=>$project_id[0]->project_id,
+					'task_id'=>$task,
+					'total_budget_hours'=>$this->input->post("$task" . "_hours_per_task"),
+				);
+				$this->db->insert('project_task', $data);
+			}
+		}
+	}
+
 
 	function update_project($project_id) {
 		$project_name = $this->input->post('project-name');
@@ -137,11 +195,12 @@ class Project_model extends CI_Model {
 		
 		
 		$people = explode(',', $person_id);
+		//update this so that the values inserted are unique.
+		$people = array_unique($people);
 		$this->db->where('project_id', $project_id);
 		$this->db->delete('project_person');
 		foreach ($people as $person) {
 			if ($person) {
-				error_log("hwew " . $person);
 				$data = array(
 					'project_id'=>$project_id,
 					'person_id'=>$person,
@@ -151,6 +210,60 @@ class Project_model extends CI_Model {
 				$this->db->where('project_id', $project_id);
 				error_log(print_r($data,true));
 				$this->db->insert('project_person', $data);
+			}
+		}
+	}
+	
+	function update_project_task($project_id) {
+		error_log(print_r($_POST, true));
+		$task_id = $this->input->post('task_id');
+		
+		
+		$tasks = explode(',', $task_id);
+		//update this so that the values inserted are unique.
+		$tasks = array_unique($tasks);
+		$this->db->where('project_id', $project_id);
+		$this->db->delete('project_task');
+		foreach ($tasks as $task) {
+			if ($task) {
+				$data = array(
+					'project_id'=>$project_id,
+					'task_id'=>$task,
+					'total_budget_hours'=>$this->input->post("$task" . "_hours_per_task"),
+				);
+				$this->db->where('project_id', $project_id);
+				error_log(print_r($data,true));
+				$this->db->insert('project_task', $data);
+			}
+		}
+	}
+	
+	function update_task_hourly_rate() {
+		$task_id = $this->input->post('task_id');
+		$tasks = explode(',', $task_id);
+		foreach ($tasks as $task) {
+			if ($task) {
+				$task_hourly_rate = $this->input->post("$task" . "_task_hourly_rate");
+				$data = array(
+					'task_hourly_rate'=>$task_hourly_rate,
+				);
+				$this->db->where('task_id', $task);
+				$this->db->update('task', $data);
+			}
+		}
+	}
+	
+	function update_person_hourly_rate() {
+		$person_id = $this->input->post('person_id');
+		$people = explode(',', $person_id);
+		foreach ($people as $person) {
+			if ($person) {
+				$person_hourly_rate = $this->input->post("$person" . "_person_hourly_rate");
+				$data = array(
+					'person_hourly_rate'=>$person_hourly_rate,
+				);
+				$this->db->where('person_id', $person);
+				$this->db->update('person', $data);
 			}
 		}
 	}

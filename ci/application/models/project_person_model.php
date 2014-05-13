@@ -1,18 +1,31 @@
 <?php
 //queries for main report
 
-class Timesheet_model extends CI_Model {
+class Project_person_model extends CI_Model {
 	
 	function __construct() {
 		parent::__construct();
 	}
 	
 		
-	function display_tasks() {
+	function display_person_id($person_email) {
 		$rows = array();		
-		$query = $this->db->select('task.*');
-		$query = $this->db->from('task');
-		$this->db->where('task_archived', 0);
+		$query = $this->db->select('person.person_id');
+		$query = $this->db->from('person');
+		$this->db->where('person_email', $person_email);
+		$query = $this->db->get();	
+		foreach($query->result() as $row)
+		{
+		$rows[] = $row;
+		}
+		return $rows;
+	}
+	
+	function display_projects($person_id) {
+		$rows = array();		
+		$query = $this->db->select('project_person.*');
+		$query = $this->db->from('project_person');
+		$this->db->where('person_id', $person_id);
 		$query = $this->db->get();	
 		foreach($query->result() as $row)
 		{
