@@ -30,7 +30,33 @@ class Timesheet_controller extends CI_Controller {
 		if (!$this->ion_auth->logged_in())
 		{
 			redirect('auth/login');
-		}
+		} else {
+			//breaking the MVC model here to save time.
+			//this is just pulling the func value from JS and then redirecting
+			//to the model to save the timesheet if the user clicked the save button.
+			if (isset($_POST["func"])) {
+				if ($_POST["func"] == "saveTimesheet") {
+					error_log(">>>>>>  save timesheet");
+					if (isset($_POST["proc_type"])) {
+						$processType = $_POST["proc_type"];
+						$timesheet_items = $_POST["timesheetItems"];
+						$delete_items = $_POST["deleteItems"];
+						//error_log(print_r($_POST, true));
+						//timesheet_submitted variable must be coming from somewhere else.
+						//add this back later, for now simply set it to 0.
+						$timesheet_submitted = "0";
+						//$timesheet_submitted = $_POST["timesheet_submitted"];
+						error_log("KJHLKJH");
+						error_log(print_r($delete_items,true));
+						redirect('timesheet_controller/save_timesheet?timesheet_items=' . utf8_encode($timesheet_items) . '&delete_items=' . utf8_encode($delete_items) . '&timesheet_submitted=' . utf8_encode($timesheet_submitted));
+					}
+				}
+			} else {
+				if (isset($_POST["save_timesheet_button"]) and $_POST["save_timesheet_button"] == "Save Timesheet") {
+					redirect('timesheet_controller/save_timesheet');
+				}
+			}
+		}	
 	}
 	
 	
@@ -41,6 +67,9 @@ class Timesheet_controller extends CI_Controller {
 	function display_timesheet() {
 		//get out the logged in user based on their email from ion_auth
 		//this is to allow login in dev. remove beyond.
+		
+
+
 		$this_user = $this->session->userdata( 'email' );
 		if ($this_user == "admin@admin.com") {
 			$this_user = "catsbap@gmail.com";
@@ -59,11 +88,11 @@ class Timesheet_controller extends CI_Controller {
 		if ($task_id) {
 			$data['processType'] = "E";
 			$data['func'] = $this->input->post('func');
-			//error_log("here is func above" . $this->input->post('func'));
-			$data['projects'] = $this->Project_person_model->display_projects($project_id);
-			error_log("Here is the project");
-			error_log(print_r($data['projects'], true));
-			
+			error_log("here is func above" . $this->input->post('func'));
+			$data['projects'] = $this->Project_person_model->display_projects_and_clients($data['person']);
+			//error_log("Here is the project");
+			//error_log(print_r($data['projects'], true));
+			//I really don't think we're validating anything here, since the data is called from the DB.
 			$this->form_validation->set_rules('task-id', 'task-id');
 			$this->form_validation->set_rules('task-name', 'task-name');
 			$this->form_validation->set_rules('task-hourly-rate', 'task-hourly-rate');
@@ -75,9 +104,7 @@ class Timesheet_controller extends CI_Controller {
 			$data['processType'] = "A";
 			$data['func'] = $this->input->post('func');
 			error_log("here is func" . $this->input->post('func'));
-			$data['projects'] = $this->Project_person_model->display_projects($data['person']);
-			error_log("Here is the project");
-			error_log(print_r($data['projects'], true));
+			$data['projects'] = $this->Project_person_model->display_projects_and_clients($data['person']);
 			//$data['tasks'] = $this->Task_model->display_tasks();
 			$this->form_validation->set_rules('task-id', 'task-id');
 			$this->form_validation->set_rules('task-name', 'task-name');
@@ -95,31 +122,99 @@ class Timesheet_controller extends CI_Controller {
 		}
 	}	
 	
-	function update_timesheet() {
-		$task_hourly_rate = $this->input->post('task-hourly-rate');
-		$task_bill_by_default = $this->input->post('task-bill-by-default');
-		$task_common = $this->input->post('task-common');
-		$task_archived = $this->input->post('task-archived');
-		$task_id = $this->input->post('task_id');
-		if ($task_id) {
-			$data['processType'] = "E";
-		} else {
-			$data['processType'] = "A";
-		}
-		echo $this->input->post('task_name');
-		$data['func'] = $this->input->post('func');
-		$data['tasks'] = $this->Task_model->display_tasks();
-		 $this->form_validation->set_rules('task-id', 'task-id');
-		 $this->form_validation->set_rules('task-name', 'task-name');
-		 $this->form_validation->set_rules('task-hourly-rate', 'task-hourly-rate');
-		 $this->form_validation->set_rules('task-bill-by-default', 'task-bill-by-default');
-		 $this->form_validation->set_rules('task-common', 'task-common');
-		 $this->form_validation->set_rules('task-archived', 'task-archived');
+	function save_timesheet() {
 		 
-		 		 
-		$this->Task_model->update_task($task_id);
-		$this->load->view('header_view');
-		$this->load->view('tasks_view', $data);
+		//it needs to be inserted into the DB here.
+		//because we are breaking the MVC model when the user first comes in,
+		//we need to get the post data off of the URL (get).
+		$timesheet_items = json_decode($this->input->get('timesheet_items'));
+		$delete_items = json_decode($this->input->get('delete_items'));
+		$timesheet_submitted = json_decode($this->input->get("timesheet_submitted"));
+		//delete function
+		error_log(">>>>>> delete_items: " . count($delete_items));
+	
+		if ($delete_items) {
+			foreach($delete_items as $delete_item) {
+				error_log(">>>>>>>" . $delete_item->person_id . ", " . $delete_item->project_id . ", " . $delete_item->task_id . ", " .  $delete_item->timesheet_date);
+				$deltsi = array(
+					"timesheet_item_id" => $delete_item->timesheet_item_id,
+					"person_id" => $delete_item->person_id,
+					"timesheet_date" => $delete_item->timesheet_date,
+					"task_id" => $delete_item->task_id,
+					"project_id" => $delete_item->project_id,
+					"timesheet_hours" => $delete_item->timesheet_hours,
+					"timesheet_notes" => $delete_item->timesheet_notes,
+				);
+				$delobject = new stdClass();
+		
+				foreach ($deltsi as $key => $value)
+				{
+					$delobject->$key = $value;
+				}
+				$this->Timesheet_model->deleteTimesheetItem($delobject);
+				//$deltsi->deleteTimesheetItem($deltsi);
+		}
 	}
 
+		
+		foreach($timesheet_items as $timesheet_item) {
+			$data['tsi'] = $this->Timesheet_model->getTimesheetItemForDatePersonProjectTask($timesheet_item->timesheet_date, $timesheet_item->person_id, $timesheet_item->project_id, $timesheet_item->task_id);
+			//error_log("+++ " . $data['tsi']);
+			if ( $data['tsi'] ) {
+				$tsi = $data['tsi'];
+				$tsi = array(
+					"timesheet_item_id" => $timesheet_item->timesheet_item_id,
+					"person_id" => $timesheet_item->person_id,
+					"timesheet_date" => $timesheet_item->timesheet_date,
+					"task_id" => $timesheet_item->task_id,
+					"project_id" => $timesheet_item->project_id,
+					"timesheet_hours" => $timesheet_item->timesheet_hours,
+					"timesheet_notes" => null
+				);
+				$object = new stdClass();
+		
+				foreach ($tsi as $key => $value)
+				{
+					$object->$key = $value;
+				}
+				$this->Timesheet_model->updateTimesheetItem($object, $timesheet_item->timesheet_item_id);
+				//old code from pre-migration to CI
+				/*$tsi->setValue("timesheet_item_id", preg_replace("/[^ 0-9]/", "", $timesheet_item->timesheet_item_id));
+				$tsi->setValue("person_id", preg_replace("/[^ 0-9]/", "", $timesheet_item->person_id));
+				$tsi->setValue("timesheet_date", preg_replace("/[^ \-\_a-zA-Z0-9]/", "", $timesheet_item->timesheet_date));
+				$tsi->setValue("task_id", preg_replace("/[^ 0-9]/", "", $timesheet_item->task_id));
+				$tsi->setValue("project_id", preg_replace("/[^ 0-9]/", "", $timesheet_item->project_id));
+				$tsi->setValue("timesheet_hours", preg_replace("/[^ \.\:[0-9]]/", "", $timesheet_item->timesheet_hours));
+				$tsi->setValue("timesheet_notes", preg_replace("/[^ \-\_a-zA-Z0-9]/", "", $timesheet_item->timesheet_notes));
+				$tsi->updateTimesheetItem($timesheet_item->timesheet_item_id);*/
+			} else {
+				//insert
+				$newtsi = array(
+					"timesheet_item_id" => $timesheet_item->timesheet_item_id,
+					"person_id" => $timesheet_item->person_id,
+					"timesheet_date" => $timesheet_item->timesheet_date,
+					"task_id" => $timesheet_item->task_id,
+					"project_id" => $timesheet_item->project_id,
+					"timesheet_hours" => $timesheet_item->timesheet_hours,
+					"timesheet_notes" => null
+				);
+				$object = new stdClass();
+		
+				foreach ($newtsi as $key => $value)
+				{
+					$object->$key = $value;
+				}
+				$this->Timesheet_model->insertTimesheetItem($object, $timesheet_item->timesheet_item_id);
+				
+			//	error_log(print_r($timesheet_item, TRUE));
+			}
+		}
+		if ( $timesheet_submitted == 1 ) {
+			Timesheet::submitTimesheet($timesheet_item->timesheet_item_id);
+			$message = " and submitted for approval";
+			error_log("timesheet submitted" );
+		} else {
+			$message = "";
+		}
+	}
 }

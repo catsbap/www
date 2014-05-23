@@ -1,5 +1,7 @@
 <?php
 //queries for main report
+//THIS FILE ISN'T WORKING, PROBABLY BECAUSE OF A NAMING PROBLEM.
+//TIMESHEET ITEM FUNCTIONS ARE IN TIMESHEET.
 
 class Timesheet_item_model extends CI_Model {
 	
@@ -8,6 +10,20 @@ class Timesheet_item_model extends CI_Model {
 	}
 	
 		
+	function getTimesheetItems($timesheet_item_id) {
+		$rows = array();		
+		$query = $this->db->select('timesheet_item.*');
+		$query = $this->db->from('timesheet_item');
+		$this->db->where('timesheet_item_id', $timesheet_item_id);
+		$query = $this->db->get();	
+		foreach($query->result() as $row)
+		{
+		$rows[] = $row;
+		}
+		return $rows;
+	}
+
+	
 	function get_persons_projects() {
 		$rows = array();		
 		$query = $this->db->select('task.*');

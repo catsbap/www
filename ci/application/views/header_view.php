@@ -15,6 +15,8 @@
 	<script src="/time_tracker/ui/libraries/jquery.tablesorter.widgets.min.js" type="text/javascript"></script> <!--This should only be loaded for projects.php -->
 	<script src="/time_tracker/ui/libraries/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script> <!--This should only be loaded for projects.php -->
 	<script src="/time_tracker/ui/libraries/purl.js" type="text/javascript"></script> <!--This should only be loaded for projects.php -->
+		<script src="/time_tracker/ui/libraries/numeral.min.js"></script>
+
 </head>
 
 <body>

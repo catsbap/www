@@ -339,7 +339,7 @@ function returnTimesheetsJSON($id, $collection, $startDate, $endDate) {
 	//error_log(">>> " . $timesheets);
 
 	error_log("++++");
-	//error_log(count($timesheets));
+	error_log(count($timesheets));
 	$timesheetJSON = array();
 	foreach ($timesheets as $timesheet) {
 		error_log("####>> " . $timesheet->getValue("timesheet_id"));

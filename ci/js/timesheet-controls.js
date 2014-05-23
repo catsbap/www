@@ -1,4 +1,4 @@
-;
+3;
 var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 var monthsNarrow = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -121,14 +121,15 @@ function getTimesheet( id, week ) {
 		.end()
 		.find( 'tfoot td.total, tfoot td.week-total' )
 		.text( "" );
-	
+		
 	$.get( "/time_tracker/ci/index.php/data_controller/returnJSON", getData )
 		.done( function( data ) {
+
 			console.log( " data: " + data );
 			timesheet = $.parseJSON( data );
 			$( "#timesheet-tasks-list" ).data( "timesheet_id", timesheet[0].timesheet_id );
 			$( "#timesheet-tasks-list" ).data( "timesheet_submitted", timesheet[0].timesheet_submitted );
-			//console.log( "saved timesheet_id: " + $( "#timesheet-tasks-list" ).data( "timesheet_id" ) );
+			console.log( "saved timesheet_id: " + $( "#timesheet-tasks-list" ).data( "timesheet_id" ) );
 			var tsItems = timesheet[0].timesheet_items;
 			
 			if ( timesheet[0].timesheet_items.length > 0 ) {
@@ -190,14 +191,13 @@ function saveTimesheet( elem, deleteRow ) {
 	var personId = $( "#timesheet-tasks-list" ).data( "person_id" );
 	var dates = [];
 	var thisWeek = getWeekBookends( $( "#timesheet-tasks-list" ).data( "timesheet_start" ) );
-	//console.log("HERE" + $( "#timesheet-tasks-list" ).data( "timesheet_start" ));
 	for ( var d = 0; d < 7; d++ ) {
 		dates[d] = new Date($( "#timesheet-tasks-list" ).data( "timesheet_start" ));
-		//console.log("Just making sure" + dates[d]);
+		console.log("Just making sure" + dates[d]);
 		dates[d].setDate( thisWeek.start.getDate() + d );
-		//console.log("Just making sure" + dates[d]);
+		console.log("Just making sure" + dates[d]);
 	}
-	//console.log("AND NOW " + dates);
+	console.log("AND NOW " + dates);
 	var tsItems = [];
 	
 	$tsTable.find( 'input' ).not( '.remove' )
@@ -240,9 +240,11 @@ function saveTimesheet( elem, deleteRow ) {
 	} else {
 		var deleteItems = 0;
 	}
-	//console.log(deleteItems);
+console.log("delete these:");
+console.log(deleteItems);
 	
-	$.post( "timesheet.php", {
+	//Updated 4-16, this post should go to codeigniter
+	$.post( "display_timesheet", {
 			func: "saveTimesheet",
 			proc_type: "A",
 			timesheetItems: JSON.stringify( tsItems ),
@@ -300,7 +302,7 @@ function getTasksForProject( id ) {
 }
 
 function addTimesheetRow( row ) {
-	//console.log(row.timesheet_days.length);
+	//console.log("ackber" + row.timesheet_days.length);
 	$timeInput = $( '<input type="text" class="time-entry-input" />' );
 	$deleteRow = $( '<a href="#" class="ui-button delete">x</a>' );
 	$table = $( "#timesheet-tasks-list tbody" );
@@ -576,6 +578,7 @@ $( function() {
 		.change( function( evt ) {
 			getTasksForProject( $( this ).val() );
 		})
+		
 	$( '#add-ts-entry-modal' )
 		.dialog({
 			autoOpen: false,
@@ -583,6 +586,8 @@ $( function() {
 			height: 360,
 			width: 600,
 			modal: true,
+				
+
 			buttons: {
 				"+ Add Row": function() {
 					var rowInfo = {
@@ -600,7 +605,7 @@ $( function() {
 			},
 			close: function() {
 				
-		        //console.log("close modal");
+		        console.log("close modal");
 		    }
 		});
 	
@@ -619,6 +624,7 @@ $( function() {
 
 		
 		evt.preventDefault();
+		
 	});
 	
 });

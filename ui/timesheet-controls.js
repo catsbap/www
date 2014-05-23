@@ -128,7 +128,7 @@ function getTimesheet( id, week ) {
 			timesheet = $.parseJSON( data );
 			$( "#timesheet-tasks-list" ).data( "timesheet_id", timesheet[0].timesheet_id );
 			$( "#timesheet-tasks-list" ).data( "timesheet_submitted", timesheet[0].timesheet_submitted );
-			//console.log( "saved timesheet_id: " + $( "#timesheet-tasks-list" ).data( "timesheet_id" ) );
+			console.log( "saved timesheet_id: " + $( "#timesheet-tasks-list" ).data( "timesheet_id" ) );
 			var tsItems = timesheet[0].timesheet_items;
 			
 			if ( timesheet[0].timesheet_items.length > 0 ) {

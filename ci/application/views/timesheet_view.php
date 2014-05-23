@@ -20,26 +20,29 @@
 		$processType = "E";
 	}
 	
-		
+	
 	if (isset($_POST["func"])) {
 		if ($_POST["func"] == "saveTimesheet") {
-			//error_log(">>>>>>  save timesheet");
+			error_log(">>>>>>  save timesheet");
 			if (isset($_POST["proc_type"])) {
 				$processType = $_POST["proc_type"];
-				echo saveTimesheet($processType);
+				error_log("This needs to be moved to codeigniter.");
+				//echo saveTimesheet($processType);
 			}
 		}
 	} else {
 		if (isset($_POST["save_timesheet_button"]) and $_POST["save_timesheet_button"] == "Save Timesheet") {
-			saveTimesheet($processType);
+			echo "you're trying to save a timesheet";
+			//saveTimesheet($processType);
 		} else {
-			include('header.php'); //add header.php to page moved to only be called when page is rendered so it's not sent back when page saved via JS/Ajax
-			displayTimesheet(new Timesheet(array()), new Timesheet_Item(array()));
+			//include('header.php'); //add header.php to page moved to only be called when page is rendered so it's not sent back when page saved via JS/Ajax
+			echo "you want to show a timesheet.";
+			//displayTimesheet(new Timesheet(array()), new Timesheet_Item(array()));
 		}
 	}
 	
 	
-
+/*
 function displayTimesheet($timesheet_aggregate) {
 	//error_log("HERE IS THE POST!!!!!!!!!!!!!!!!!!");
 	//error_log(print_r($_POST, true));
@@ -81,7 +84,7 @@ function displayTimesheet($timesheet_aggregate) {
 	//	exit();
 	//}
 ?>
-<?php print_r($projects)?>
+<?php //print_r($person)?>
 	<div id="page-content" class="page-content">
 		<header class="page-header">
 			<h1 class="page-title"><?php echo date("F j, Y");?></h1>
@@ -94,7 +97,7 @@ function displayTimesheet($timesheet_aggregate) {
 			</nav>
 		</header>
 		<div id="add-ts-entry-modal" class="entity-detail" title="Add Time Entry">
-			<form id="ts-entry-input-form" action="timesheets.php" method="post" enctype="multipart/form-data">
+			<form id="ts-entry-input-form" action="display_timesheet" method="post" enctype="multipart/form-data">
 				<input id="proc-type" type="hidden" name="action" value="<?php echo $processType ?>"/>
 				<fieldset class="entity-details-entry  modal">
 					<header class="entity-details-header timesheet">
@@ -110,11 +113,8 @@ function displayTimesheet($timesheet_aggregate) {
 										//list($projectsForPerson) = Project_Person::getProjectsForPerson($person->getValue("person_id"));
 										//$first = 31;
 										foreach ($projects as $projectPerson) {
-										//////////////////////////////
-										///THIS IS WHERE YOU LEFT OFF YOU NEED
-										///TO GET THE PROJECT OUT OF THE PROJECT TABLE
-											//$client = Client::getClient( $projectPerson->getValue("client_id") ); ?>
-											<option value="<?php echo $projectPerson->project_id ?>"><span><?php //echo $projectPerson->project_name ?></span> (<?php //echo $client->getValue("client_name"); ?>)</option>
+										?>
+											<option value="<?php echo $projectPerson->project_id ?>"><span><?php echo $projectPerson->project_name ?></span> (<?php echo $projectPerson->client_name ?>)</option>
 									<?php }	?> 
 								</select>
 							</li>
@@ -142,7 +142,7 @@ function displayTimesheet($timesheet_aggregate) {
 				</span>
 				
 			</nav>
-			<table id="timesheet-tasks-list" class="entity-table timesheet tablesorter" data-person_id="<?php //echo $person->getValue('person_id'); ?>">
+			<table id="timesheet-tasks-list" class="entity-table timesheet tablesorter" data-person_id="<?php echo $person; ?>">
 				<thead>
 					<tr>
 						<th class="task-name"></th>
@@ -189,7 +189,7 @@ function displayTimesheet($timesheet_aggregate) {
 <?php
 //}
 
-function saveTimesheet($processType) {
+/*function saveTimesheet($processType) {
 	error_log("POST: " . $_POST["timesheetItems"] );
 	$timesheet_items = json_decode($_POST["timesheetItems"]);
 	$delete_items = json_decode($_POST["deleteItems"]);
@@ -254,7 +254,7 @@ function saveTimesheet($processType) {
 
 	return "Timesheet saved" . $message . ".";
 }
- 
+ */
 function saveTimesheetOld() {
 
 	//****************************************************************//

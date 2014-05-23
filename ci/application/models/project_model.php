@@ -7,6 +7,15 @@ class Project_model extends CI_Model {
 		parent::__construct();
 	}
 	
+	function getProjectName($project_id) {
+		//$rows = array();		
+		$query = $this->db->select('project.project_name');
+		$query = $this->db->from('project');
+		$this->db->where('project_id', $project_id);
+		$query = $this->db->get();	
+		$row = $query->row(); 
+		return $row;
+	}
 		
 	function display_projects() {
 		$rows = array();		

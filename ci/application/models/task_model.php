@@ -7,7 +7,17 @@ class Task_model extends CI_Model {
 		parent::__construct();
 	}
 	
-		
+	function getTaskName($task_id) {
+		//$rows = array();		
+		$query = $this->db->select('task.task_name');
+		$query = $this->db->from('task');
+		$this->db->where('task_id', $task_id);
+		$query = $this->db->get();	
+		$row = $query->row(); 
+		return $row;
+	}
+	
+	
 	function display_tasks() {
 		$rows = array();		
 		$query = $this->db->select('task.*');
