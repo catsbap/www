@@ -99,7 +99,6 @@ if (isset($_GET["func"])) {
 		} else {
 			$endDate = "";
 		}
-		error_log("XXXXXXXXXXXX" . $startDate);
 		echo returnTimesheetsJSON($id, $collection, $startDate, $endDate);
 	}
 

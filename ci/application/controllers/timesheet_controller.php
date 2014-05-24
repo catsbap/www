@@ -46,8 +46,8 @@ class Timesheet_controller extends CI_Controller {
 						//add this back later, for now simply set it to 0.
 						$timesheet_submitted = "0";
 						//$timesheet_submitted = $_POST["timesheet_submitted"];
-						error_log("KJHLKJH");
-						error_log(print_r($delete_items,true));
+						//error_log("KJHLKJH");
+						//error_log(print_r($delete_items,true));
 						redirect('timesheet_controller/save_timesheet?timesheet_items=' . utf8_encode($timesheet_items) . '&delete_items=' . utf8_encode($delete_items) . '&timesheet_submitted=' . utf8_encode($timesheet_submitted));
 					}
 				}
@@ -67,9 +67,6 @@ class Timesheet_controller extends CI_Controller {
 	function display_timesheet() {
 		//get out the logged in user based on their email from ion_auth
 		//this is to allow login in dev. remove beyond.
-		
-
-
 		$this_user = $this->session->userdata( 'email' );
 		if ($this_user == "admin@admin.com") {
 			$this_user = "catsbap@gmail.com";
@@ -79,6 +76,9 @@ class Timesheet_controller extends CI_Controller {
 				$data['person'] = 198;	
 			} else {
 				$data['person'] = $this->Person_model->display_person_by_email($this_user);
+				$data['person'] = $data['person'][0]->person_id;
+				error_log("HERE IS THE ARRAY");
+				error_log(print_r($data['person'], true));
 			}
 		} else {
 			echo("Something is wrong here...this person is not logged in and you shouldn't be seeing this, timesheet.php.");
@@ -93,12 +93,12 @@ class Timesheet_controller extends CI_Controller {
 			//error_log("Here is the project");
 			//error_log(print_r($data['projects'], true));
 			//I really don't think we're validating anything here, since the data is called from the DB.
-			$this->form_validation->set_rules('task-id', 'task-id');
+			/*$this->form_validation->set_rules('task-id', 'task-id');
 			$this->form_validation->set_rules('task-name', 'task-name');
 			$this->form_validation->set_rules('task-hourly-rate', 'task-hourly-rate');
 			$this->form_validation->set_rules('task-bill-by-default', 'task-bill-by-default');
 			$this->form_validation->set_rules('task-common', 'task-common');
-			$this->form_validation->set_rules('task-archived', 'task-archived');
+			$this->form_validation->set_rules('task-archived', 'task-archived');*/
 			//$this->Task_model->update_task($task_id);
 		} else {
 			$data['processType'] = "A";
@@ -106,12 +106,12 @@ class Timesheet_controller extends CI_Controller {
 			error_log("here is func" . $this->input->post('func'));
 			$data['projects'] = $this->Project_person_model->display_projects_and_clients($data['person']);
 			//$data['tasks'] = $this->Task_model->display_tasks();
-			$this->form_validation->set_rules('task-id', 'task-id');
+			/*$this->form_validation->set_rules('task-id', 'task-id');
 			$this->form_validation->set_rules('task-name', 'task-name');
 			$this->form_validation->set_rules('task-hourly-rate', 'task-hourly-rate');
 			$this->form_validation->set_rules('task-bill-by-default', 'task-bill-by-default');
 			$this->form_validation->set_rules('task-common', 'task-common');
-			$this->form_validation->set_rules('task-archived', 'task-archived');
+			$this->form_validation->set_rules('task-archived', 'task-archived');*/
 			//only update the task if the user is adding the task,
 			//so there is a value in the func variable in the post.
 			if ($this->input->post('func')) {

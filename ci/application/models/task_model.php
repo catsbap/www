@@ -30,6 +30,20 @@ class Task_model extends CI_Model {
 		}
 		return $rows;
 	}
+	
+	function display_tasks_archive($archive_flag) {
+		$rows = array();		
+		$query = $this->db->select('task.*');
+		$query = $this->db->from('task');
+		$this->db->where('task_archived', $archive_flag);
+		$query = $this->db->get();	
+		foreach($query->result() as $row)
+		{
+		$rows[] = $row;
+		}
+		return $rows;
+	}
+	
 	function display_tasks_for_project($project_id) {
 		$rows = array();		
 		$query = $this->db->select('project_task.*');
@@ -50,6 +64,19 @@ class Task_model extends CI_Model {
 		$query = $this->db->select('task.*');
 		$query = $this->db->from('task');
 		$this->db->where('task_archived', 1);
+		$query = $this->db->get();	
+		foreach($query->result() as $row)
+		{
+		$rows[] = $row;
+		}
+		return $rows;
+	}
+	
+	function display_common_tasks() {
+		$rows = array();		
+		$query = $this->db->select('task.*');
+		$query = $this->db->from('task');
+		$this->db->where('task_common', 1);
 		$query = $this->db->get();	
 		foreach($query->result() as $row)
 		{

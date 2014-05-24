@@ -40,8 +40,66 @@ class Data_controller extends CI_Controller {
 		$startDate = $this->input->get('startDate', TRUE);
 		$endDate = $this->input->get('endDate', TRUE);
 		if ($func == "returnTasksJSON") {
-			$this->load->model('Task_model', '', TRUE);
-			$data['tasks'] = $this->Task_model->display_archived_tasks();
+		$this->load->model('Task_model', '', TRUE);
+
+		
+		/******/
+			//Returns Task object as JSON encoded object for jQuery to use
+			if ($collection == "project") {
+				if ($id != "") {
+					//$tasks = Project_Task::getTasksForProject($id);
+					$data['tasks'] = $this->Task_model->display_tasks_for_project($id);
+				} else {
+					//$tasks = Task::getTasks(0);
+					$data['tasks'] = $this->Task_model->display_tasks();
+				}
+				
+				//$tasks = $data['tasks']
+
+			} else if ($collection == "common") {
+				$data['tasks'] = $this->Task_model->display_common_tasks();
+				//$tasks = $data['tasks'];
+		
+			//this condition was commented out when moved to CI, leave it out.
+			} else if ($collection == "person") {
+				if ($id != "") {
+					//$tasks = Project_Person::getPeopleForProject($id);
+				} else {
+					//$tasks = Person::getPeople();
+				}
+	
+			} else if (($collection == "task") && ($id != "")) {
+				$tasks = array();
+				$data['tasks'] = $this->Task_model->display_tasks();
+				//print_r(Task::getTask($id));
+			} else {
+				if ( $archiveFlag != "" ) {
+					$data['tasks'] = $this->Task_model->display_tasks_archive($archiveFlag);
+				} else {
+					$data['tasks'] = $this->Task_model->display_tasks_archive(0);
+				}
+		
+				//$tasks = $data['tasks';
+			}
+	
+	//print_r($tasks);
+	
+//	$taskJSON = array();
+//	foreach ($tasks as $task) {
+//		$taskJSON[] = array(
+//			"task_id" => $task->getValue("task_id"),
+//			"task_name" => $task->getValue("task_name"),
+//			"task_hourly_rate" => $task->getValue("task_hourly_rate"),
+//			"task_bill_by_default" => $task->getValue("task_bill_by_default"),
+//			"task_common" => $task->getValue("task_common"),
+//			"task_archived" => $task->getValue("task_archived")
+//		);
+//	}
+//	return json_encode($taskJSON);
+	/********************/	
+		
+		
+			//$data['tasks'] = $this->Task_model->display_archived_tasks();
 			//error_log(print_r($data['tasks'], true));
 			echo json_encode($data['tasks']);
 		} elseif ($func == "returnClientJSON") {

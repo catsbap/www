@@ -276,13 +276,13 @@ function saveTimesheetOld() {
 	$person=Person::getByEmailAddress($_SESSION["logged_in"]);
 	//list($timesheet_ids) = Timesheet::getTimesheetIds($person->getValueEncoded("person_id"));
 	//**WE CAN PEOBABLY REMOVE THIS, IT IS ONLY HERE SO THAT WE COULD LOOP THROUGH THE ARRAY.***/
-	list($timesheet_ids) = Timesheet::getTimesheetByPersonForDate($person->getValueEncoded("person_id"), $timesheet_date);
+	/*list($timesheet_ids) = Timesheet::getTimesheetByPersonForDate($person->getValueEncoded("person_id"), $timesheet_date);*/
 			
 	//We're getting the values from the database, so task_id, project_id and person_id follow the field_name_$tid_$i style here.
 	
 	//**WE SHOULD ONLY NEED ONE LOOP HERE, SINCE WE DON'T HAVE TO DISTINGUISH BETWEEN THE UN-ADDED AND ADDED TIMESHEETS THIS WAY ANYMORE.
 	//**WE SHOULD BE ABLE TO COMMENT OUT THIS CODE.
-	foreach ($timesheet_ids as $timesheet_id) {
+/*	foreach ($timesheet_ids as $timesheet_id) {
 		$tid = $timesheet_id->getValueEncoded("timesheet_id");
 		$timesheet[$tid] = new Timesheet( array(
 		//CHECK REG SUBS!!
@@ -313,7 +313,7 @@ function saveTimesheetOld() {
 			//store the timesheet items in an array.
 			$timesheet_item_aggregate[] = $timesheet_item[$tid][$i];
 		}
-	} 
+	} */
 		//debug code to check arrays after the values have been pulled
 		//error_log("timesheet aggregate");
 		//error_log(print_r($timesheet_aggregate,true));
@@ -328,7 +328,7 @@ function saveTimesheetOld() {
 	//and not field_name_$tid_$i style. If we keep this UI in any way, I will fight it later. 11/16
 	
 	//**WE DON'T NEED A "#TID" VALUE ANYMORE. WE DO NEED THE TIMESHEET ID, OR SOME OTHER WAY TO SET THE PROCESSTYPE (IF WE STILL EVEN NEED TO DO THAT HERE**//
-	if	(isset($_POST["person_id_#"])) {
+	/*if	(isset($_POST["person_id_#"])) {
 		$tid = "#";
 		$timesheet[$tid] = new Timesheet( array(
 		//CHECK REG SUBS!!
@@ -341,10 +341,10 @@ function saveTimesheetOld() {
 		));
 		
 		$timesheet_aggregate[] = $timesheet[$tid];
-		
+		*/
 		//create the timesheet detail object ($timesheet_item), all of the values are blank, since this timesheet is not in the db yet.
 	
-		for ($i=0; $i<7; $i++) {
+		/*for ($i=0; $i<7; $i++) {
 			$timesheet_item[$tid][$i] = new Timesheet_Item( array(
 				//CHECK REG SUBS!!
 				"timesheet_item_id" => isset($_POST["timesheet_item_id_$tid"."_$i"]) ? preg_replace("/[^ \-\_a-zA-Z0-9]/", "", $_POST["timesheet_item_id_$tid"."_$i"]) : "",
@@ -363,7 +363,7 @@ function saveTimesheetOld() {
 	error_log(print_r($_POST,true));
 	error_log("here are the timesheet aggregate");
 	error_log(print_r($timesheet_aggregate,true));
-	error_log(print_r($timesheet_item_aggregate, true));
+	error_log(print_r($timesheet_item_aggregate, true));*/
 	
 
 		//**ADD OR EDIT THE TIMESHEETS BASED ON THE PROCESS TYPE***//
@@ -379,7 +379,7 @@ function saveTimesheetOld() {
 //**GET THE PROCESS TYPE IN ONE WAY OR ANOTHER
 //**I AM NOT 100% SURE HOW THIS WILL COME IN SO IT WILL BE JUST BASED ON THE GET HERE.
 //***TIMESHEET_OBJECT USED TO BE THE OBJECT WE WERE UPDATING OR ADDING WHEN IT WAS BROUGHT IN FROM THE UI WITH PHP.
-	if ($processType = "E") {
+/*	if ($processType = "E") {
 		//UPDATE TIMESHEET
 		error_log("<br><br>timesheet doesn't exist.");
 		$timesheet_object->getValueEncoded("person_id");
@@ -400,6 +400,6 @@ function saveTimesheetOld() {
 		$timesheet_object->insertTimesheetItem($timesheet_object->getValueEncoded("person_id"), $lastInsertId[0]);
 	}	
 			displayTimesheet($timesheet_aggregate, $timesheet_item_aggregate);
-}
+*/}
 
 ?>
