@@ -217,4 +217,16 @@ class Timesheet_controller extends CI_Controller {
 			$message = "";
 		}
 	}
+	
+	function pending_approval() {
+		$this->load->view('header_view');
+	}
+	
+	function unsubmitted() {
+		$this->load->view('header_view');
+	}
+	
+	function archive() {
+		$this->load->view('header_view');
+	}
 }

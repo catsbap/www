@@ -38,7 +38,7 @@
         <td>Name</td><td>Budget</td><td>Spent</td><td>Budget Left</td>
     </tr>
 
-<?php foreach($budget_tasks as $row){
+<?php foreach($task_fees as $row){
 	//if ($row->project_budget_total_fees > 0) {	?> 
     	<tr><td><?php echo $row->project_name?></td><td><?php echo $row->budget?> Hours </td><td><?php echo $row->rate?> Hours</td><td><?php echo $row->hours_left?> (<?php echo $row->budget_percentage?>)</td>
 		</tr>
@@ -47,7 +47,7 @@
 <tr bgcolor="lightgrey";>
         <td>Name</td><td>Budget</td><td>Spent</td><td>Budget Left</td>
     </tr>
-<?php foreach($budget_persons as $row){
+<?php foreach($person_fees as $row){
 	//if ($row->project_budget_total_fees > 0) {	?> 
     	<tr><td><?php echo $row->project_name?></td><td><?php echo $row->budget?> Hours </td><td><?php echo $row->rate?> Hours</td><td><?php echo $row->hours_left?> (<?php echo $row->budget_percentage?>)</td>
 		</tr>

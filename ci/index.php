@@ -19,7 +19,7 @@
  *
  */
 	define('ENVIRONMENT', 'development');
-	error_log("hertl");
+	//error_log("hertl");
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING
