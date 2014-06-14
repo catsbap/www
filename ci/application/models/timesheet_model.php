@@ -36,6 +36,32 @@ class Timesheet_model extends CI_Model {
 		return $rows;
 	}
 	
+	function getSubmittedTimesheets($submitted_value, $approved_value) {
+		$rows = array();		
+		$query = $this->db->select('timesheet.*');
+		$query = $this->db->from('timesheet');
+		$this->db->where('timesheet_submitted', $submitted_value);
+		$this->db->where('timesheet_approved', $approved_value);
+		$query = $this->db->get();	
+		foreach($query->result() as $row)
+		{
+		$rows[] = $row;
+		}
+		return $rows;
+	}
+	
+	function getTimesheetDatesByTimesheetId($timesheet_id) {
+		$rows = array();		
+		$query = $this->db->select('timesheet.*');
+		$query = $this->db->from('timesheet');
+		$this->db->where('timesheet_id', $timesheet_id);
+		$query = $this->db->get();	
+		foreach($query->result() as $row)
+		{
+		$rows[] = $row;
+		}
+		return $rows;
+	}
 	
 	function insertTimesheet($person_id, $timesheet_start_date, $timesheet_end_date) {
 		$data = array(
