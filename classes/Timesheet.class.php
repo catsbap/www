@@ -63,7 +63,7 @@ class Timesheet extends DataObject {
 		}
 	}
 	
-	//get all of the timesheet info for a specific timesheet. This should probably be renamed
+	//get all of the timesheet info for a specific timesheet. This should probably be renamed since it doesn't just get dates
 	public function getTimesheetDatesByTimesheetId($timesheet_id) {
 		$conn=parent::connect();
 		$sql="SELECT * FROM " . TBL_TIMESHEET . " WHERE timesheet_id = :timesheet_id";
