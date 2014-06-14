@@ -214,5 +214,9 @@ pip-log.txt
 #Mr Developer
 .mr.developer.cfg
 
-###configure time_tracker
+###configure time_tracker local/host servers
 config.php
+common.php
+database.php
+Loader.php
+
