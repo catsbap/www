@@ -219,7 +219,18 @@ class Timesheet_controller extends CI_Controller {
 	}
 	
 	function pending_approval() {
-		$this->load->view('header_view');
+		$group = $this->ion_auth->get_users_groups()->row()->id;
+		if ($group != 3) {
+			$this->load->vies('header_view');
+		} else {
+			$data['timesheets'] = $this->Timesheet_model->getSubmittedTimesheets(1, 0);
+			foreach ($data['timesheets'] as $timesheet) {
+				$data['timesheet_dates'] = $this->Timesheet_model->getTimesheetDatesByTimesheetId($timesheet->timesheet_id);
+				$data['person'] = $this->Person_model->display_people_by_id($timesheet->person_id);
+			}
+			$this->load->view('header_view');
+			$this->load->view('timesheet_approval_view', $data);
+		}
 	}
 	
 	function unsubmitted() {
